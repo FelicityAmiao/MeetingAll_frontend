@@ -2,11 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
+const helloPage = () => import('../components/HelloWorld')
 
 const routes = [
   {
-    path: '/example',
-    component: resolve => require(['@/view/example'], resolve)
+    path: '/',
+    component: helloPage
   }
 ]
 
