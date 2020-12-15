@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
-const loginPage = () => import('../views/Login');
+const loginPage = () => import('../views/Login')
 
 const routes = [
   {

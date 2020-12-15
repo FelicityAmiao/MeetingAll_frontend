@@ -42,30 +42,30 @@
 
 <script>
 export default {
-  name: "Login",
-  data() {
+  name: 'Login',
+  data () {
     return {
       loading: false,
       loginForm: {
-        username: "admin",
-        password: "123",
-        code: ""
+        username: 'admin',
+        password: '123',
+        code: ''
       },
       checked: true,
       rules: {
         username: [
-          { required: true, message: "Pls input username", trigger: "blur" }
+          { required: true, message: 'Pls input username', trigger: 'blur' }
         ],
-        password: [{ required: true, message: "Pls input password", trigger: "blur" }]
+        password: [{ required: true, message: 'Pls input password', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
-    submitLogin() {
-      
+    submitLogin () {
+
     }
   }
-};
+}
 </script>
 
 <style>
