@@ -15,7 +15,14 @@
     "element-ui": "^2.14.1",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9",
-    "vuex": "^3.6.0"
+    "vuex": "^3.6.0",
+    "vue-loader": "15.7.2",
+    "style-loader": "1.0.1",
+    "css-loader": "3.2.0",
+    "babel-core": "6.26.3",
+    "babel-loader": "7.1.5",
+    "babel-preset-env": "1.7.0",
+    "recorder-core": "*"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
