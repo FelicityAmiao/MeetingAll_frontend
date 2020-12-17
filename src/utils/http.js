@@ -3,7 +3,6 @@ import * as qs from 'qs'
 
 const http = axios.create({
   baseURL: '/api',
-  transformResponse: [(data) => JSON.parse(data)],
   timeout: 300000,
   withCredentials: false
 })

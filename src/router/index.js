@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import ASR from '../components/ASR'
 
 Vue.use(VueRouter)
 const loginPage = () => import('../views/login')
@@ -13,6 +14,10 @@ const routes = [
   {
     path: '/recorder',
     component: loginPage
+  },
+  {
+    path: '/ASR',
+    component: ASR
   }
 ]
 
