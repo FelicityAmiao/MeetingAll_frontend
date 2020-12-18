@@ -3,11 +3,15 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 const loginPage = () => import('../views/Login')
+const highFrequencyWordPage = () => import('../views/HighFrequencyWord')
 
 const routes = [
   {
     path: '/',
     component: loginPage
+  }, {
+    path: '/highfrequencyword',
+    component: highFrequencyWordPage
   }
 ]
 
