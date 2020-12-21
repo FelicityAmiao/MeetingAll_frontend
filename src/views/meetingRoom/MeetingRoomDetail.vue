@@ -82,7 +82,7 @@ export default {
       return _.isEqual(status, 'busy')
     },
     newMeeting () {
-      this.dialogVisible = true;
+      this.dialogVisible = true
     }
   },
   watch: {
