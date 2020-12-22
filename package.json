@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start:dev":  "set NODE_ENV=dev&&node server/index.js",
+    "start:prod":  "export NODE_ENV=prod&&node server/index.js"
   },
   "dependencies": {
     "@vue/eslint-config-standard": "^4.0.0",

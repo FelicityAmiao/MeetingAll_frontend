@@ -1,8 +1,7 @@
 const configCrossOriginProxy = (app) => {
   const baseUrl = {
-    dev: 'http://localhost:8099',
-    int: 'https://crbc-cargo-release-dom-int-dcosu.cosu.dh2.cargosmart.online',
-    prod: 'https://crbc-cargo-release-dom.cosu.dh2.cargosmart.online'
+    dev: 'http://localhost:8077',
+    prod: 'http://121.89.203.245:8077'
   }
   const mode = process.env.NODE_ENV
   const proxy = require('http-proxy-middleware')
