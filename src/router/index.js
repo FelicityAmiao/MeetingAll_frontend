@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ASR from '../components/ASR'
 import MeetingRoom from '../views/meetingRoom/MeetingRoomPage'
-import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail';
+import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail'
+import MyMeeting from '../views/MyMeeting/MyMetting'
 
 Vue.use(VueRouter)
 const loginPage = () => import('../views/login')
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/meetingRoomDetail',
     component: MeetingRoomDetail
+  },
+  {
+    path: '/myMeeting',
+    component: MyMeeting
   }
 ]
 
