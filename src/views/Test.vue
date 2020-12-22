@@ -1,6 +1,7 @@
 <template>
   <div>
-    {{greetLanguage}}
+    {{greetLanguage}}<br>
+    Test Webhook
   </div>
 </template>
 
@@ -16,7 +17,7 @@ export default {
   },
   async mounted () {
     const temp = await getTest()
-    this.greetLanguage = 'Call backend test api success!, the return result is: ' + temp.data
+    this.greetLanguage = 'Call backend test api success, the return result is: ' + temp.data
   }
 }
 </script>
