@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import ASR from '../components/ASR'
 import MeetingRoom from '../views/meetingRoom/MeetingRoomPage'
 import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail'
+import MyMeeting from '../views/MyMeeting/MyMetting'
 import Home from '../views/Home'
 import Test from '../views/Test'
 
@@ -46,6 +47,10 @@ const routes = [
     children: [
       { path: 'meetingRoom', component: MeetingRoom }
     ]
+  },
+  {
+    path: '/myMeeting',
+    component: MyMeeting
   },
   {
     path: '/test',
