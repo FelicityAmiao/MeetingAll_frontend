@@ -35,6 +35,7 @@ export default {
           this.$router.push('/home/meetingRoom')
           break
         case 2:
+          this.$router.push('/home/myMeeting')
           break
         case 3:
           break

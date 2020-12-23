@@ -25,7 +25,7 @@
       label="状态"
       width="180">
       <template slot-scope="scope">
-        <el-tag v-if="!scope.row.status" type="danger">已结束</el-tag>
+        <el-tag v-if="scope.row.finished" type="danger">已结束</el-tag>
         <el-tag v-else type="success">未开始</el-tag>
       </template>
     </el-table-column>
@@ -35,7 +35,7 @@
           size="mini"
           @click="handleEdit(scope.$index, scope.row)">编辑
         </el-button>
-        <el-button v-show="scope.row.status"
+        <el-button v-show="!scope.row.finished"
                    size="mini" type="primary"
                    icon="el-icon-caret-right"
                    @click="handleRecord(scope.$index, scope.row)">录音
@@ -45,13 +45,13 @@
           title="Tips"
           trigger="hover"
           :content="scope.row.tipContent">
-          <el-button v-show="!scope.row.status" slot="reference"
+          <el-button v-show="scope.row.finished" slot="reference"
                      size="mini"
                      type="success"
                      @click="handleReport(scope.$index, scope.row)">报告
           </el-button>
         </el-popover>
-        <el-button v-show="scope.row.status"
+        <el-button v-show="!scope.row.finished"
                    size="mini"
                    type="danger"
                    @click="handleDelete(scope.$index, scope.row)">删除
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import _ from 'lodash'
 
 export default {
@@ -129,9 +128,7 @@ export default {
       console.log(index, row)
     },
     timeFormatter (row) {
-      let startTime = row.time[0]
-      let endTime = row.time[1]
-      return moment(startTime).format('YYYY-MM-DD HH:mm:ss') + '-' + moment(endTime).format('YYYY-MM-DD HH:mm:ss')
+      return row.startTime + '-' + row.endTime
     },
     formatterLanguage (row) {
       let type = ''

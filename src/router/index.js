@@ -45,7 +45,8 @@ const routes = [
     path: '/home',
     component: Home,
     children: [
-      { path: 'meetingRoom', component: MeetingRoom }
+      { path: 'meetingRoom', component: MeetingRoom },
+      { path: 'myMeeting', component: MyMeeting }
     ]
   },
   {

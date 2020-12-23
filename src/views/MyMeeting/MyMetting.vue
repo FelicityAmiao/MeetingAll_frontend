@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <el-container>
-      <el-aside>
+      <el-header>
         <el-row>
           <label style="float: left;font-size: 18px">状态</label>
         </el-row>
@@ -11,9 +11,6 @@
               <el-tag>全部</el-tag>
             </el-badge>
           </el-col>
-          <el-col :span="spanNum"></el-col>
-        </el-row>
-        <el-row>
           <el-col :span="spanNum">
             <el-badge :value="meetingCount.finished">
               <el-tag type="danger">已结束</el-tag>
@@ -24,14 +21,11 @@
               <el-tag type="success">未开始</el-tag>
             </el-badge>
           </el-col>
+          <el-col :span="spanNum">
+            <el-button icon="el-icon-circle-plus" type="primary" @click="openAddDialog">添加会议</el-button>
+          </el-col>
         </el-row>
-        <br>
-        <br>
-        <br>
-        <el-row>
-          <el-button icon="el-icon-circle-plus" type="primary" @click="openAddDialog">添加会议</el-button>
-        </el-row>
-      </el-aside>
+      </el-header>
       <el-main>
         <meeting-info :meetings="meetings" @openEditDialog="openEditDialog($event)"
                       @deleteItem="deleteItem($event)"></meeting-info>
@@ -73,6 +67,8 @@
 
 <script>
 import MeetingInfo from './MeetingInfo'
+import moment from 'moment'
+import { _delete, get, post } from '../../utils/http'
 
 export default {
   name: 'MyMetting',
@@ -80,14 +76,14 @@ export default {
   data () {
     return {
       dialogTitle: '添加房间',
-      spanNum: 9,
+      spanNum: 6,
       showAddDialog: false,
       newMeeting: {
-        meetingId: 1,
+        meetingId: '',
         room: [],
         language: '',
         time: '',
-        status: 1
+        finished: false
       },
       languageTypes: [
         { name: '普通话', value: 1 },
@@ -124,43 +120,29 @@ export default {
             { value: 2, label: 'Room2' }
           ]
         }],
-      meetings: [
-        {
-          room: [2, 1],
-          language: 1,
-          time: [new Date(2020, 10, 10, 10, 10), new Date(2020, 10, 10, 11, 10)],
-          status: 0
-        },
-        {
-          room: [1, 1],
-          language: 2,
-          time: [new Date(2020, 10, 10, 8, 0), new Date(2020, 10, 10, 10, 0)],
-          status: 0
-        },
-        {
-          room: [4, 2],
-          language: 1,
-          time: [new Date(2020, 12, 23, 10, 10), new Date(2020, 12, 23, 11, 10)],
-          status: 1
-        },
-        {
-          room: [3, 1],
-          language: 3,
-          time: [new Date(2020, 12, 25, 10, 10), new Date(2020, 12, 25, 11, 10)],
-          status: 1
-        }]
+      meetings: []
     }
   },
   computed: {
     meetingCount: function () {
       return {
         total: this.meetings.length,
-        notBegin: _.filter(this.meetings, ['status', 1]).length,
-        finished: _.filter(this.meetings, ['status', 0]).length
+        notBegin: _.filter(this.meetings, ['finished', false]).length,
+        finished: _.filter(this.meetings, ['finished', true]).length
       }
     }
   },
+  mounted () {
+    this.loadAllMeetings()
+  },
   methods: {
+    loadAllMeetings: function () {
+      let userId = '1'
+      let url = `http://localhost:8077/api/myMeeting/${userId}`
+      get(url).then((response) => {
+        this.meetings = response.data
+      })
+    },
     openAddDialog: function () {
       this.showAddDialog = true
       this.dialogTitle = '添加会议'
@@ -172,11 +154,20 @@ export default {
     saveMeeting: function () {
       let currMeeting = {}
       _.assign(currMeeting, this.newMeeting)
-      if (this.dialogTitle === '添加会议') {
-        this.meetings.push(currMeeting)
-      } else {
-        this.meetings[this.newMeeting.index] = currMeeting
-      }
+      currMeeting.startTime = moment(currMeeting.time[0]).format('YYYY-MM-DD HH:mm:ss')
+      currMeeting.endTime = moment(currMeeting.time[1]).format('YYYY-MM-DD HH:mm:ss')
+      currMeeting.userId = '1'
+      let url = 'http://localhost:8077/api/myMeeting'
+      post(url, currMeeting).then((response) => {
+        let a = response.data
+        if (a.length !== 0) {
+          this.meetings = a
+        } else {
+          this.errMessage('Update meeting failed!')
+        }
+      }).catch(() => {
+        this.errMessage('Update meeting failed!')
+      })
       this.showAddDialog = false
       this.$refs['newMeeting'].resetFields()
     },
@@ -189,7 +180,25 @@ export default {
       this.newMeeting = row
     },
     deleteItem: function (row) {
-      this.meetings.splice(row.index, 1)
+      let userId = '1'
+      let url = `http://localhost:8077/api/myMeeting/${userId}/${row.meetingId}`
+      _delete(url).then((response) => {
+        let a = response.data
+        if (a.length !== 0) {
+          this.meetings = a
+        } else {
+          this.errMessage('Delete meeting failed!')
+        }
+      }).catch(() => {
+        this.errMessage('Delete meeting failed!')
+      })
+    },
+    errMessage: function (msg) {
+      this.$message({
+        showClose: true,
+        message: msg,
+        type: 'error'
+      })
     }
   }
 }
