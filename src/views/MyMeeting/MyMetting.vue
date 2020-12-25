@@ -69,6 +69,7 @@
 import MeetingInfo from './MeetingInfo'
 import moment from 'moment'
 import { _delete, get, post } from '../../utils/http'
+import _ from 'lodash'
 
 export default {
   name: 'MyMetting',

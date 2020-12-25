@@ -6,6 +6,7 @@ import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail'
 import MyMeeting from '../views/MyMeeting/MyMetting'
 import Home from '../views/Home'
 import Test from '../views/Test'
+import MeetingRecords from '../views/meetingRecords/MeetingRecords'
 
 Vue.use(VueRouter)
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -46,7 +47,8 @@ const routes = [
     component: Home,
     children: [
       { path: 'meetingRoom', component: MeetingRoom },
-      { path: 'myMeeting', component: MyMeeting }
+      { path: 'myMeeting', component: MyMeeting },
+      { path: 'meetingRecords', component: MeetingRecords }
     ]
   },
   {
