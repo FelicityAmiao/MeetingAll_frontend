@@ -47,6 +47,7 @@ const routes = [
     component: Home,
     children: [
       { path: 'meetingRoom', component: MeetingRoom },
+      { path: 'meetingRoomDetail', component: MeetingRoomDetail },
       { path: 'myMeeting', component: MyMeeting },
       { path: 'meetingRecords', component: MeetingRecords }
     ]

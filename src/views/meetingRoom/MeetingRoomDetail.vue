@@ -1,21 +1,16 @@
 <template>
   <div class='meeting-room-detail'>
-    <el-col class='card-group' :span='5' v-for='(item, index) in meetingRoomDetail.meetingRoomList' :key='index'>
+    <el-col class='card-group' :span='5' v-for='(item, index) in meetingRoomDetail' :key='index'>
       <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>
         <div slot='header' class='card-header'>
           <el-row>
-            <el-col :span='20'><span>{{item.name}}</span></el-col>
+            <el-col :span='20'><span>{{item.room}}</span></el-col>
             <el-col :span='4' class='meeting-room-status'><div :class='`status-icon ${isBusyStatus(item.currentStatus) ? "icon-background-red" : "icon-background-green"}`'/></el-col>
           </el-row>
-          <div v-if='isBusyStatus(item.currentStatus)'>
-            <div class='meeting-time-range'>{{item.currentMeetingStartTime}} - {{item.currentMeetingEndTime}}<div/>
-           </div>
-          </div>
         </div>
         <div class='card-body' @mouseenter='visible = true' @mouseleave='visible = false'>
           <transition name='el-fade-in-linear'>
             <el-row class='card-tool-bar' v-show='visible'>
-              <el-col :span='2' class='tool-bar-icon'><i class='el-icon-plus' @click='newMeeting(item)'/></el-col>
               <el-col :span='2' class='tool-bar-icon'><i class='el-icon-switch-button'/></el-col>
             </el-row>
           </transition>
@@ -47,39 +42,12 @@ export default {
     return {
       visible: false,
       dialogVisible: false,
-      meetingRoomDetail: {
-        meetingRoomList: [
-          {
-            name: 'Room1',
-            currentStatus: 'busy',
-            currentMeetingStartTime: '17:00:00',
-            currentMeetingEndTime: '17:30',
-            meetings: [
-              {
-                startTime: '',
-                endTime: ''
-              }
-            ]
-          },
-          {
-            name: 'Room2',
-            currentStatus: 'free',
-            currentMeetingStartTime: '',
-            currentMeetingEndTime: '',
-            meetings: [
-              {
-                startTime: '',
-                endTime: ''
-              }
-            ]
-          }
-        ]
-      }
+      meetingRoomDetail: []
     }
   },
   methods: {
     isBusyStatus (status) {
-      return _.isEqual(status, 'busy')
+      return _.isEqual(status, '1')
     },
     newMeeting () {
       this.dialogVisible = true
@@ -89,7 +57,7 @@ export default {
     '$route.query.meetingRoomDetail': {
       immediate: true,
       handler: function (value) {
-        // this.meetingRoomDetail = value
+        this.meetingRoomDetail = value
         console.log(value)
       }
     }

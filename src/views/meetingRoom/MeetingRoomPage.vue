@@ -15,47 +15,34 @@
 </template>
 
 <script>
+import {queryMeetingRoomList} from '../../service/meetingRoom/index'
+
 export default {
   name: 'MeetingRoomPage',
   data () {
     return {
-      officeList: ['B5-3F', 'B5-5F', 'B6-3F', 'B6-5F']
+      officeList: [],
+      meetingRoomGroup: {}
     }
   },
+  created () {
+    this.queryMeetingRoomList()
+  },
   methods: {
-    selectMeetingRoom (room) {
+    async queryMeetingRoomList () {
+      let result = await queryMeetingRoomList()
+      if (result) {
+        this.meetingRoomGroup = _.groupBy(result, 'office')
+        this.officeList = _.keys(this.meetingRoomGroup)
+      }
+      console.log(this.officeList);
+    },
+    selectMeetingRoom (office) {
+      const meetingRoomDetail = this.meetingRoomGroup[office]
       this.$router.push({
-        path: '/meetingRoomDetail',
+        path: '/home/meetingRoomDetail',
         query: {
-          meetingRoomDetail: {
-            office: room,
-            meetingRoomList: [
-              {
-                name: 'Room1',
-                currentStatus: 'free',
-                currentMeetingStartTime: '2020-12-22T17:00:00+08:00',
-                currentMeetingEndTime: '2020-12-22T17:30:00+08:00',
-                meetings: [
-                  {
-                    startTime: '',
-                    endTime: ''
-                  }
-                ]
-              },
-              {
-                name: 'Room2',
-                currentStatus: 'free',
-                currentMeetingStartTime: '',
-                currentMeetingEndTime: '',
-                meetings: [
-                  {
-                    startTime: '',
-                    endTime: ''
-                  }
-                ]
-              }
-            ]
-          }
+          meetingRoomDetail
         }
       })
     }
