@@ -32,13 +32,13 @@
                 <el-tag v-else>{{meeting.status}}</el-tag>
               </el-form-item>
               <el-form-item>
-                <el-button type='warning' @click='openEditDialog'>编辑</el-button>
-                <el-button type='primary' @click='startRecord' icon='el-icon-caret-right'>录音</el-button>
-                <el-button type='success' @click='generateReport'>生成报告</el-button>
+                <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
+                <el-button v-show='meeting.status==="新建"' type='primary' @click='startRecord' icon='el-icon-caret-right'>录音</el-button>
+                <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
               </el-form-item>
             </el-col>
             <el-col :span='16'>
-              <el-form-item>
+              <el-form-item v-show='meeting.status==="新建"'>
                 <recorder></recorder>
               </el-form-item>
             </el-col>
