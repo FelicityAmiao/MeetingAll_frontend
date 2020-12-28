@@ -8,7 +8,7 @@
     <el-main>
       <el-table
         :data='tableData'
-        :default-sort = '{prop: &apos;date&apos;, order: &apos;descending&apos;}'
+        :default-sort = '{prop: "date", order: "descending"}'
         border
         style='width: 100%'>
         <el-table-column

@@ -69,7 +69,7 @@ export default {
   props: {
     meetings: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data () {

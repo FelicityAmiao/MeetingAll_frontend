@@ -28,7 +28,7 @@
       </el-header>
       <el-main>
         <meeting-info :meetings='meetings' @openEditDialog='openEditDialog($event)'
-                      @deleteItem='deleteItem($event)'></meeting-info>
+                      @deleteItem='deleteItem($event)'/>
       </el-main>
     </el-container>
     <el-dialog :title='dialogTitle' :visible.sync='showAddDialog' :before-close='resetForm' center>
@@ -37,7 +37,7 @@
           <el-cascader
             v-model='newMeeting.room'
             :options='roomOptions'
-            @change='handleChange'></el-cascader>
+            @change='handleChange'/>
         </el-form-item>
         <el-form-item label='语言类型' prop='language'>
           <el-select v-model='newMeeting.language'>
@@ -53,7 +53,7 @@
             range-separator='至'
             start-placeholder='开始时间'
             end-placeholder='结束时间'
-            :default-time='[&apos;09:00:00&apos;, &apos;12:00:00&apos;]'>
+            :default-time='["09:00:00", "12:00:00"]'>
           </el-date-picker>
         </el-form-item>
       </el-form>
