@@ -12,18 +12,10 @@
         border
         style='width: 100%'>
         <el-table-column
-          prop='room'
-          label='会议室'>
-        </el-table-column>
-        <el-table-column
-          prop='language'
-          label='语言'>
-        </el-table-column>
-        <el-table-column
-          prop='date'
-          label='日期'
-          sortable
-          width='150'>
+          v-for='item in tableHeader'
+          :prop='item.key'
+          :key='item.key'
+          :label='item.value'>
         </el-table-column>
         <el-table-column
           prop='status'
@@ -34,6 +26,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop='operation'
           label='操作'>
           <template slot-scope='scope'>
             <el-button @click='downloadReport(scope.row)' type='text' size='small'>下载报告</el-button>
@@ -98,11 +91,15 @@ export default {
         for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
           this.tableData.push({
             audioAddress: this.allData[i].audioAddress,
-            date: this.allData[i].date,
+            startDate: this.allData[i].startDate,
             language: formatterLanguage(this.allData[i].language),
             reportAddress: this.allData[i].reportAddress,
             room: formatterRoomNum(this.allData[i].room),
-            status: this.allData[i].status
+            status: this.allData[i].status,
+            subject: this.allData[i].subject,
+            startTime: this.allData[i].startTime,
+            endTime: this.allData[i].endTime,
+            duration: this.allData[i].duration
           });
         }
       });
@@ -116,7 +113,16 @@ export default {
       tableData: [],
       allData: [],
       total: 0,
-      pageSize: 10
+      pageSize: 10,
+      tableHeader: [
+        { key: 'room', value: '会议室' },
+        { key: 'subject', value: '会议主题' },
+        { key: 'language', value: '语言' },
+        { key: 'startDate', value: '会议日期' },
+        { key: 'startTime', value: '开始时间' },
+        { key: 'endTime', value: '结束时间' },
+        { key: 'duration', value: '耗时' }
+      ]
     };
   },
 
