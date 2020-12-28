@@ -28,7 +28,7 @@
           prop='operation'
           label='操作'>
           <template slot-scope='scope'>
-            <el-button @click='downloadReport(scope.row)' type='text' size='small'>下载报告</el-button>
+            <el-button @click='downloadReport(scope.row)' type='text' size='small' :disabled='scope.row.reportAddress == null'>下载报告</el-button>
             <el-button @click='downloadAudio(scope.row)' type='text' size='small'>下载录音</el-button>
           </template>
         </el-table-column>
@@ -56,12 +56,12 @@ export default {
   name: 'MeetingRecords',
   methods: {
     downloadReport (row) {
-      let url = row.reportAddress;
-      window.open(url, '_blank');
+      let url = 'files/download/' + row.reportAddress;
+      get(url);
     },
     downloadAudio (row) {
-      let url = row.audioAddress;
-      window.open(url, '_blank');
+      let url = 'files/download/' + row.audioAddress;
+      get(url);
     },
     convertTableRecord (record) {
       return {
