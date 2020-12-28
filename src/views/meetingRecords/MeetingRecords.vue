@@ -56,12 +56,12 @@ export default {
   name: 'MeetingRecords',
   methods: {
     downloadReport (row) {
-      let url = 'files/download/' + row.reportAddress;
-      get(url);
+      let url = 'http://localhost:8081/api/files/download/' + row.reportAddress;
+      window.open(url);
     },
     downloadAudio (row) {
-      let url = 'files/download/' + row.audioAddress;
-      get(url);
+      let url = 'http://localhost:8081/api/files/download/' + row.audioAddress;
+      window.open(url);
     },
     convertTableRecord (record) {
       return {
