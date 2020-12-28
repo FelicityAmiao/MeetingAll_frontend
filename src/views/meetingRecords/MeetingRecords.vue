@@ -21,8 +21,7 @@
           prop='status'
           label='状态'>
           <template slot-scope='scope'>
-            <el-tag v-if='scope.row.finished' type='danger'>已结束</el-tag>
-            <el-tag v-else type='success'>未开始</el-tag>
+            <el-tag type='success'>{{scope.row.status}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -58,11 +57,11 @@ export default {
   methods: {
     downloadReport (row) {
       let url = row.reportAddress;
-      console.log(url);
+      window.open(url, '_blank');
     },
     downloadAudio (row) {
       let url = row.audioAddress;
-      console.log(url);
+      window.open(url, '_blank');
     },
     handleSizeChange (val) {
       this.pageSize = val;
