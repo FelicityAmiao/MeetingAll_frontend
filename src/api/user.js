@@ -1,4 +1,4 @@
-import { _delete, get, post } from '../utils/http'
+import { _delete, get, post } from '../utils/http';
 
 /*
 * Using example:
@@ -15,16 +15,16 @@ deleteUser('123').then(res => {
 })
 * */
 
-const prefix = '/user'
+const prefix = '/user';
 
 export function getUser (requestParam) {
-  return get(`${prefix}/path1`, requestParam)
+  return get(`${prefix}/path1`, requestParam);
 }
 
 export function postUser (requestBody) {
-  return post(`${prefix}/path2`, requestBody)
+  return post(`${prefix}/path2`, requestBody);
 }
 
 export function deleteUser (id) {
-  return _delete(`${prefix}/path3/${id}`)
+  return _delete(`${prefix}/path3/${id}`);
 }

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _ from 'lodash';
 export default {
   name: 'MeetingRoomDetail',
   data () {
@@ -43,26 +43,26 @@ export default {
       visible: false,
       dialogVisible: false,
       meetingRoomDetail: []
-    }
+    };
   },
   methods: {
     isBusyStatus (status) {
-      return _.isEqual(status, '1')
+      return _.isEqual(status, '1');
     },
     newMeeting () {
-      this.dialogVisible = true
+      this.dialogVisible = true;
     }
   },
   watch: {
     '$route.query.meetingRoomDetail': {
       immediate: true,
       handler: function (value) {
-        this.meetingRoomDetail = value
-        console.log(value)
+        this.meetingRoomDetail = value;
+        console.log(value);
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

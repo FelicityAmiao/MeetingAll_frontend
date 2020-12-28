@@ -1,22 +1,22 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import ASR from '../components/ASR'
-import MeetingRoom from '../views/meetingRoom/MeetingRoomPage'
-import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail'
-import MyMeeting from '../views/MyMeeting/MyMetting'
-import Home from '../views/Home'
-import Test from '../views/Test'
-import MeetingRecords from '../views/meetingRecords/MeetingRecords'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import ASR from '../components/ASR';
+import MeetingRoom from '../views/meetingRoom/MeetingRoomPage';
+import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail';
+import MyMeeting from '../views/MyMeeting/MyMetting';
+import Home from '../views/Home';
+import Test from '../views/Test';
+import MeetingRecords from '../views/meetingRecords/MeetingRecords';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
-const originalPush = VueRouter.prototype.push
+const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
-const loginPage = () => import('../views/login')
-const highFrequencyWordPage = () => import('../views/HighFrequencyWord')
-const recorderPage = () => import('../views/recorder')
+  return originalPush.call(this, location).catch(err => err);
+};
+const loginPage = () => import('../views/login');
+const highFrequencyWordPage = () => import('../views/HighFrequencyWord');
+const recorderPage = () => import('../views/recorder');
 
 const routes = [
   {
@@ -60,11 +60,11 @@ const routes = [
     path: '/test',
     component: Test
   }
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   routes
-})
+});
 
-export default router
+export default router;

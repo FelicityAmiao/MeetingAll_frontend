@@ -1,39 +1,39 @@
 <template>
   <div>
     <el-form
-      :rules="rules"
-      ref="loginForm"
-      v-loading="loading"
-      element-loading-text="Login..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
-      :model="loginForm"
-      class="loginContainer"
+      :rules='rules'
+      ref='loginForm'
+      v-loading='loading'
+      element-loading-text='Login...'
+      element-loading-spinner='el-icon-loading'
+      element-loading-background='rgba(0, 0, 0, 0.8)'
+      :model='loginForm'
+      class='loginContainer'
     >
-      <h3 class="loginTitle">Login</h3>
-      <el-form-item prop="username">
+      <h3 class='loginTitle'>Login</h3>
+      <el-form-item prop='username'>
         <el-input
-          size="normal"
-          type="text"
-          v-model="loginForm.username"
-          auto-complete="off"
-          placeholder="Pls input username"
-        ></el-input>
+          size='normal'
+          type='text'
+          v-model='loginForm.username'
+          auto-complete='off'
+          placeholder='Pls input username'
+        />
       </el-form-item>
-      <el-form-item prop="password">
+      <el-form-item prop='password'>
         <el-input
-          size="normal"
-          type="password"
-          v-model="loginForm.password"
-          auto-complete="off"
-          placeholder="Pls input password"
-        ></el-input>
+          size='normal'
+          type='password'
+          v-model='loginForm.password'
+          auto-complete='off'
+          placeholder='Pls input password'
+        />
       </el-form-item>
       <el-button
-        size="normal"
-        type="primary"
-        style="width: 100%;"
-        @click="submitLogin"
+        size='normal'
+        type='primary'
+        style='width: 100%;'
+        @click='submitLogin'
         >Login</el-button
       >
     </el-form>
@@ -58,14 +58,14 @@ export default {
         ],
         password: [{ required: true, message: 'Pls input password', trigger: 'blur' }]
       }
-    }
+    };
   },
   methods: {
     submitLogin () {
 
     }
   }
-}
+};
 </script>
 
 <style scoped>
