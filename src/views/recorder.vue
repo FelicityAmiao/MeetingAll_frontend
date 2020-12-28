@@ -81,7 +81,7 @@
                 <textarea
                   v-if='obj.down64Val'
                   v-model='obj.down64Val'
-                />
+                ></textarea>
               </span>
             </template>
           </div>
@@ -118,6 +118,7 @@
 import Recorder from 'recorder-core';
 // 需要使用到的音频格式编码引擎的js文件统统加载进来，这些引擎文件会比较大
 import 'recorder-core/src/engine/mp3';
+import 'recorder-core/src/engine/wav';
 import 'recorder-core/src/engine/mp3-engine';
 // 可选的扩展
 import 'recorder-core/src/extensions/waveview';
@@ -126,7 +127,7 @@ export default {
     return {
       Rec: Recorder,
 
-      type: 'mp3',
+      type: 'wav',
       bitRate: 16,
       sampleRate: 16000,
       rec: 0,
