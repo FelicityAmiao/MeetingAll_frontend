@@ -1,7 +1,6 @@
 const languageTypes = [
-  { name: '普通话', value: 1 },
-  { name: '英文', value: 2 },
-  { name: '普通话+英文', value: 3 }
+  { name: '普通话+英文', value: 1 },
+  { name: '粤语', value: 2 }
 ];
 
 const formatterLanguage = (index) => {

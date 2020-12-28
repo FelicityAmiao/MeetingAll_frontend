@@ -24,7 +24,7 @@
       placeholder='高频词显示'
       v-model='highFrequencyWords'>
     </el-input>
-    <el-button style='margin-left: 10px;' size='small' type='primary' @click='highlightKeyWord' :disabled='disabled'>高亮高频词</el-button>
+    <el-button style='margin-left: 10px;' size='small' type='primary' @click='highlightKeyWord' >高亮高频词</el-button>
     <div id='result' v-show='highlighted'>
       高亮高频词之后的doc:<el-link type='primary' size='large' :href='downloadLink'>{{wholeFileName}} 点击下载</el-link>
     </div>
@@ -79,8 +79,7 @@ export default {
       });
     },
     highlightKeyWord () {
-      let fileType = this.$data.fileName.substr(this.$data.fileName.indexOf('.') + 1);
-      let url = 'http://localhost:8077/api/sentence/' + this.$data.fileName.substring(0, this.$data.fileName.indexOf('.')) + '/' + fileType;
+      let url = '/sentence';
       this.$data.highFrequencyWords = '';
       get(url).then((response) => {
         this.wholeFileName = response.data;
