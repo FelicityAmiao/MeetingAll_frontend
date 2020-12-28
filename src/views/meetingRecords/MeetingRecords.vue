@@ -1,20 +1,31 @@
 <template>
   <el-container>
-    <el-header>
-      <el-row>
-        <label style='float: left;font-size: 18px'>{{title}}</label>
-      </el-row>
-    </el-header>
     <el-main>
+      <el-row class='demo-autocomplete'>
+        <el-col :span='20'>
+          <label style='float: left;font-size: 18px'>{{title}}</label>
+        </el-col>
+        <el-col :span='4'>
+          <el-input
+            placeholder='主题、语言或状态'
+            prefix-icon='el-icon-search'
+            v-model='search'
+            size='small'
+            style='float: left;font-size: 18px'
+            @input='filter'>
+          </el-input>
+        </el-col>
+      </el-row>
       <el-table
         :data='tableData'
-        :default-sort = '{prop: "date", order: "descending"}'
+        :default-sort = '{prop: "startDate", order: "descending"}'
         border
         style='width: 100%'>
         <el-table-column
           v-for='item in tableHeader'
           :prop='item.key'
           :key='item.key'
+          :sortable='item.key == "startDate"'
           :label='item.value'>
         </el-table-column>
         <el-table-column
@@ -28,8 +39,8 @@
           prop='operation'
           label='操作'>
           <template slot-scope='scope'>
-            <el-button @click='downloadReport(scope.row)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null'>下载报告</el-button>
-            <el-button @click='downloadAudio(scope.row)' icon='el-icon-service' type='text' size='small' :disabled='scope.row.audioAddress == null'>下载录音</el-button>
+            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null'>下载报告</el-button>
+            <el-button @click='download(scope.row.audioAddress)' icon='el-icon-service' type='text' size='small' :disabled='scope.row.audioAddress == null'>下载录音</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -55,12 +66,8 @@ import { formatterLanguage } from '../../utils/language';
 export default {
   name: 'MeetingRecords',
   methods: {
-    downloadReport (row) {
-      let url = 'http://localhost:8081/api/files/download/' + row.reportAddress;
-      window.open(url);
-    },
-    downloadAudio (row) {
-      let url = 'http://localhost:8081/api/files/download/' + row.audioAddress;
+    download (address) {
+      let url = 'http://localhost:8081/api/files/download/' + address;
       window.open(url);
     },
     convertTableRecord (record) {
@@ -77,6 +84,23 @@ export default {
         duration: record.duration
       };
     },
+    filter () {
+      if (this.search == null || this.search === '') {
+        this.handleCurrentChange(this.currentPage);
+      } else {
+        this.tableData = [];
+        let count = 0;
+        for (let i = 0; i < this.allData.length; i++) {
+          let record = this.allData[i];
+          if (count < this.pageSize &&
+            (record.subject.toLowerCase().includes(this.search.toLowerCase()) ||
+              formatterLanguage(record.language).toLowerCase().includes(this.search.toLowerCase()) ||
+              record.status.toLowerCase().includes(this.search.toLowerCase()))) {
+            this.tableData.push(this.convertTableRecord(record));
+          }
+        }
+      }
+    },
     handleSizeChange (val) {
       this.pageSize = val;
       this.tableData = [];
@@ -85,7 +109,7 @@ export default {
         this.tableData.push(this.convertTableRecord(this.allData[i]));
       }
     },
-    handleCurrentChange: function (val) {
+    handleCurrentChange: function (val, filter) {
       this.currentPage = val;
       this.tableData = [];
       let count = this.total < this.pageSize * val ? this.total : this.pageSize * val;
@@ -116,6 +140,7 @@ export default {
       allData: [],
       total: 0,
       pageSize: 10,
+      search: '',
       tableHeader: [
         { key: 'room', value: '会议室' },
         { key: 'subject', value: '会议主题' },
