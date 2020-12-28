@@ -63,12 +63,26 @@ export default {
       let url = row.audioAddress;
       window.open(url, '_blank');
     },
+    convertTableRecord (record) {
+      return {
+        audioAddress: record.audioAddress,
+        startDate: record.startDate,
+        language: formatterLanguage(record.language),
+        reportAddress: record.reportAddress,
+        room: formatterRoomNum(record.room),
+        status: record.status,
+        subject: record.subject,
+        startTime: record.startTime,
+        endTime: record.endTime,
+        duration: record.duration
+      };
+    },
     handleSizeChange (val) {
       this.pageSize = val;
       this.tableData = [];
       let count = this.total < this.pageSize * val ? this.total : this.pageSize * this.currentPage;
       for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
-        this.tableData.push(this.allData[i]);
+        this.tableData.push(this.convertTableRecord(this.allData[i]));
       }
     },
     handleCurrentChange: function (val) {
@@ -76,7 +90,7 @@ export default {
       this.tableData = [];
       let count = this.total < this.pageSize * val ? this.total : this.pageSize * val;
       for (let i = this.pageSize * (val - 1); i < count; i++) {
-        this.tableData.push(this.allData[i]);
+        this.tableData.push(this.convertTableRecord(this.allData[i]));
       }
     },
     loadMeetingRecords: function () {
@@ -88,18 +102,7 @@ export default {
         that.total = response.data.length;
         let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
         for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
-          this.tableData.push({
-            audioAddress: this.allData[i].audioAddress,
-            startDate: this.allData[i].startDate,
-            language: formatterLanguage(this.allData[i].language),
-            reportAddress: this.allData[i].reportAddress,
-            room: formatterRoomNum(this.allData[i].room),
-            status: this.allData[i].status,
-            subject: this.allData[i].subject,
-            startTime: this.allData[i].startTime,
-            endTime: this.allData[i].endTime,
-            duration: this.allData[i].duration
-          });
+          this.tableData.push(this.convertTableRecord(this.allData[i]));
         }
       });
     }
