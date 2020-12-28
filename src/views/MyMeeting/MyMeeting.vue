@@ -8,32 +8,41 @@
       </el-header>
       <el-main>
         <el-form v-show='showMeeting' ref='meeting' :model='meeting' label-width='100px'>
-          <el-form-item label='会议主题'>
-            {{meeting.subject}}
-          </el-form-item>
-          <el-form-item label='会议室'>
-            {{meeting.roomStr}}
-          </el-form-item>
-          <el-form-item label='语言类型'>
-            {{meeting.languageStr}}
-          </el-form-item>
-          <el-form-item label='日期'>
-            {{meeting.createTime}}
-          </el-form-item>
-          <el-form-item label='会议时间'>
-            {{meeting.time}}
-          </el-form-item>
-          <el-form-item label='状态'>
-            <el-tag v-if='meeting.status==="新建"' type='success'>{{meeting.status}}</el-tag>
-            <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>{{meeting.status}}
-            </el-tag>
-            <el-tag v-else>{{meeting.status}}</el-tag>
-          </el-form-item>
-          <el-form-item>
-            <el-button type='warning' @click='openEditDialog'>编辑</el-button>
-            <el-button type='primary' @click='startRecord' icon='el-icon-caret-right'>录音</el-button>
-            <el-button type='success' @click='generateReport'>生成报告</el-button>
-          </el-form-item>
+          <el-row>
+            <el-col :span='8'>
+              <el-form-item label='会议主题'>
+                {{meeting.subject}}
+              </el-form-item>
+              <el-form-item label='会议室'>
+                {{meeting.roomStr}}
+              </el-form-item>
+              <el-form-item label='语言类型'>
+                {{meeting.languageStr}}
+              </el-form-item>
+              <el-form-item label='日期'>
+                {{meeting.createTime}}
+              </el-form-item>
+              <el-form-item label='会议时间'>
+                {{meeting.time}}
+              </el-form-item>
+              <el-form-item label='状态'>
+                <el-tag v-if='meeting.status==="新建"' type='success'>{{meeting.status}}</el-tag>
+                <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>{{meeting.status}}
+                </el-tag>
+                <el-tag v-else>{{meeting.status}}</el-tag>
+              </el-form-item>
+              <el-form-item>
+                <el-button type='warning' @click='openEditDialog'>编辑</el-button>
+                <el-button type='primary' @click='startRecord' icon='el-icon-caret-right'>录音</el-button>
+                <el-button type='success' @click='generateReport'>生成报告</el-button>
+              </el-form-item>
+            </el-col>
+            <el-col :span='16'>
+              <el-form-item>
+                <recorder></recorder>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </el-main>
     </el-container>
@@ -68,9 +77,11 @@ import { get, post } from '../../utils/http';
 import _ from 'lodash';
 import { formatterLanguage, languageTypes } from '../../utils/language';
 import { formatterRoomNum, roomOptions } from '../../utils/room';
+import recorder from '../recorder';
 
 export default {
-  name: 'MyMetting',
+  name: 'MyMeeting',
+  components: { recorder },
   data () {
     return {
       dialogTitle: '会议信息',
@@ -105,13 +116,16 @@ export default {
       let url = `/myMeeting/${userId}`;
       get(url).then((response) => {
         if (response.data !== '') {
-          this.meeting = response.data;
-          this.meeting.languageStr = formatterLanguage(this.meeting.language);
-          this.meeting.roomStr = formatterRoomNum(this.meeting.room);
-          this.meeting.time = this.formatterMeetingTime(this.meeting);
+          this.formatterMeeting(response.data);
           this.showMeeting = true;
         }
       });
+    },
+    formatterMeeting: function (res) {
+      this.meeting = res;
+      this.meeting.languageStr = formatterLanguage(this.meeting.language);
+      this.meeting.roomStr = formatterRoomNum(this.meeting.room);
+      this.meeting.time = this.formatterMeetingTime(this.meeting);
     },
     formatterMeetingTime: function (meeting) {
       let val = '';
@@ -140,9 +154,7 @@ export default {
       post(url, currMeeting).then((response) => {
         let a = response.data;
         if (a !== '') {
-          this.meeting = a;
-          this.meeting.languageStr = formatterLanguage(this.meeting.language);
-          this.meeting.roomStr = formatterRoomNum(this.meeting.room);
+          this.formatterMeeting(response.data);
           this.showMeeting = true;
         } else {
           this.errMessage('Update meeting failed!');
@@ -157,6 +169,11 @@ export default {
       console.log(value);
     },
     generateReport: function (value) {
+      get(`/myMeeting/report/${this.meeting.meetingId}`).then((response) => {
+        this.formatterMeeting(response.data);
+      }).catch(() => {
+        this.errMessage('Failed!');
+      });
       console.log(value);
     },
     openEditDialog: function () {
