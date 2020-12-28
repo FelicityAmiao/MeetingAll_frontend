@@ -7,43 +7,53 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-form v-show='showMeeting' ref='meeting' :model='meeting' label-width='100px'>
-          <el-row>
-            <el-col :span='8'>
-              <el-form-item label='会议主题'>
-                {{meeting.subject}}
-              </el-form-item>
-              <el-form-item label='会议室'>
-                {{meeting.roomStr}}
-              </el-form-item>
-              <el-form-item label='语言类型'>
-                {{meeting.languageStr}}
-              </el-form-item>
-              <el-form-item label='日期'>
-                {{meeting.createTime}}
-              </el-form-item>
-              <el-form-item label='会议时间'>
-                {{meeting.time}}
-              </el-form-item>
-              <el-form-item label='状态'>
+        <el-card style='width: 50%;margin: auto;'>
+          <div slot='header' style='margin: auto;width: fit-content;'>
+            <span>{{meeting.subject}}</span>
+          </div>
+          <!--            <el-form-item label='会议主题'>-->
+          <!--              {{meeting.subject}}-->
+          <!--            </el-form-item>-->
+          <div>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>会议室</el-col>
+              <el-col :span='6'>{{meeting.roomStr}}</el-col>
+            </el-row>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>语言类型</el-col>
+              <el-col :span='6'>{{meeting.languageStr}}</el-col>
+            </el-row>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>日期</el-col>
+              <el-col :span='6'>{{meeting.startDate}}</el-col>
+            </el-row>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>会议时间</el-col>
+              <el-col :span='6'>{{meeting.time}}</el-col>
+            </el-row>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>耗时</el-col>
+              <el-col :span='6'>{{meeting.duration}}</el-col>
+            </el-row>
+            <el-row type='flex' class='row-bg' justify='center'>
+              <el-col :span='6'>状态</el-col>
+              <el-col :span='6'>
                 <el-tag v-if='meeting.status==="新建"' type='success'>{{meeting.status}}</el-tag>
-                <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>{{meeting.status}}
+                <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>
+                  {{meeting.status}}
                 </el-tag>
                 <el-tag v-else>{{meeting.status}}</el-tag>
-              </el-form-item>
-              <el-form-item>
-                <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
-                <el-button v-show='meeting.status==="新建"' type='primary' @click='startRecord' icon='el-icon-caret-right'>录音</el-button>
-                <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
-              </el-form-item>
-            </el-col>
-            <el-col :span='16'>
-              <el-form-item v-show='meeting.status==="新建"'>
-                <recorder></recorder>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
+              </el-col>
+            </el-row>
+          </div>
+          <div style='float: right;margin: 10px'>
+            <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
+            <el-button v-show='meeting.status==="新建"' type='primary' @click='startRecord' icon='el-icon-caret-right'>
+              录音
+            </el-button>
+            <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
+          </div>
+        </el-card>
       </el-main>
     </el-container>
     <el-dialog :title='dialogTitle' :visible.sync='showAddDialog' :before-close='resetForm' center>
@@ -133,7 +143,7 @@ export default {
         val += meeting.startTime;
       }
       if (meeting.endTime !== null) {
-        val += '-';
+        val += ' - ';
         val += meeting.endTime;
       }
       return val;
@@ -193,5 +203,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .el-row {
+    margin-bottom: 10px;
+  }
 </style>
