@@ -12,7 +12,7 @@
         border
         style='width: 100%'>
         <el-table-column
-          prop='meetingRoom'
+          prop='room'
           label='会议室'>
         </el-table-column>
         <el-table-column
@@ -58,6 +58,8 @@
 
 <script>
 import { get } from '../../utils/http';
+import { formatterRoomNum } from '../../utils/room';
+import { formatterLanguage } from '../../utils/language';
 export default {
   name: 'MeetingRecords',
   methods: {
@@ -94,7 +96,14 @@ export default {
         that.total = response.data.length;
         let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
         for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
-          this.tableData.push(this.allData[i]);
+          this.tableData.push({
+            audioAddress: this.allData[i].audioAddress,
+            date: this.allData[i].date,
+            language: formatterLanguage(this.allData[i].language),
+            reportAddress: this.allData[i].reportAddress,
+            room: formatterRoomNum(this.allData[i].room),
+            status: this.allData[i].status
+          });
         }
       });
     }
