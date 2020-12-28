@@ -48,12 +48,36 @@
           </div>
           <div style='float: right;margin: 10px'>
             <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
+            <el-button type='primary' @click='startRecord' icon='el-icon-caret-right'>开始录音</el-button>
+            <el-button type='primary' @click='stopRecord' icon='el-icon-caret-right'>结束录音</el-button>
             <el-button v-show='meeting.status==="新建"' type='primary' @click='startRecord' icon='el-icon-caret-right'>
               录音
             </el-button>
             <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
           </div>
         </el-card>
+        <div class='mainBox'>
+        <div
+          v-if='showVoiceWave'
+          style='height:100px;width:300px;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
+          class='ctrlProcessWave'
+        ></div>
+        <!-- <div
+          style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
+        >
+          <div
+            class='ctrlProcessX'
+            style='height:40px;background:#0B1;position:absolute;'
+            :style='{ width: powerLevel + "%" }'
+          ></div>
+          <div
+            class='ctrlProcessT'
+            style='padding-left:50px; line-height:40px; position: relative;'
+          >
+            {{ duration + "/" + powerLevel }}
+          </div>
+        </div> -->
+      </div>
       </el-main>
     </el-container>
     <el-dialog :title='dialogTitle' :visible.sync='showAddDialog' :before-close='resetForm' center>
@@ -87,11 +111,15 @@ import { get, post } from '../../utils/http';
 import _ from 'lodash';
 import { formatterLanguage, languageTypes } from '../../utils/language';
 import { formatterRoomNum, roomOptions } from '../../utils/room';
-import recorder from '../recorder';
+
+import Recorder from 'recorder-core';
+import 'recorder-core/src/engine/mp3';
+import 'recorder-core/src/engine/wav';
+import 'recorder-core/src/engine/mp3-engine';
+import 'recorder-core/src/extensions/waveview';
 
 export default {
   name: 'MyMeeting',
-  components: { recorder },
   data () {
     return {
       dialogTitle: '会议信息',
@@ -114,7 +142,21 @@ export default {
         status: ''
       },
       languageTypes: languageTypes,
-      roomOptions: roomOptions
+      roomOptions: roomOptions,
+
+      dialogInt: null,
+      wave: null,
+      Rec: Recorder,
+
+      type: 'wav',
+      bitRate: 16,
+      sampleRate: 16000,
+      rec: 0,
+      duration: 0,
+      powerLevel: 0,
+      recOpenDialogShow: 0,
+      voiceRecord: null,
+      showVoiceWave: false
     };
   },
   mounted () {
@@ -175,9 +217,6 @@ export default {
       this.showAddDialog = false;
       this.$refs['newMeeting'].resetFields();
     },
-    startRecord: function (value) {
-      console.log(value);
-    },
     generateReport: function (value) {
       get(`/myMeeting/report/${this.meeting.meetingId}`).then((response) => {
         this.formatterMeeting(response.data);
@@ -197,6 +236,100 @@ export default {
         message: msg,
         type: 'error'
       });
+    },
+    startRecord: function () {
+      var _this = this;
+      var rec = (this.rec = Recorder({
+        type: _this.type,
+        bitRate: _this.bitRate,
+        sampleRate: _this.sampleRate,
+        onProcess: function (buffers, powerLevel, duration, sampleRate) {
+          _this.duration = duration;
+          _this.powerLevel = powerLevel;
+          _this.wave.input(buffers[buffers.length - 1], powerLevel, sampleRate);
+        }
+      }));
+      _this.dialogInt = setTimeout(function () {
+        _this.$message.error('录音需要获取录音权限');
+      }, 8000);
+      rec.open(
+        function () {
+          clearInterval(_this.dialogInt);
+          _this.showVoiceWave = true;
+          _this.$nextTick(() => {
+            _this.wave = Recorder.WaveView({ elem: '.ctrlProcessWave' });
+          });
+          if (!_this.rec) {
+            this.reclog('未打开录音', 1);
+            return;
+          }
+          _this.rec.start();
+          let set = _this.rec.set;
+          _this.$message.success(
+            '录制中：' +
+              set.type +
+              ' ' +
+              set.sampleRate +
+              'hz ' +
+              set.bitRate +
+              'kbps'
+          );
+        },
+        function (msg, isUserNotAllow) {
+          clearInterval(_this.dialogInt);
+          _this.$message.error(
+            (isUserNotAllow ? 'UserNotAllow，' : '') + '打开失败：' + msg,
+            1
+          );
+        }
+      );
+      _this.waitDialogClickFn = function () {
+        clearInterval(_this.dialogInt);
+        _this.$message.error('打开失败：权限请求被忽略，用户主动点击的弹窗', 1);
+      };
+    },
+    stopRecord: function () {
+      var _this = this;
+      var rec = _this.rec;
+      _this.rec = null;
+      if (!rec) {
+        _this.$message.error('未打开录音', 1);
+        return;
+      }
+      rec.stop(
+        function (blob, duration) {
+          _this.voiceRecord = {
+            blob: blob,
+            duration: duration,
+            rec: rec
+          };
+          _this.$message.info('已录制！');
+          _this.recDown();
+          _this.showVoiceWave = false;
+        },
+        function (s) {
+          _this.$message.error('结束出错：' + s);
+        },
+        true
+      ); // 自动close
+    },
+    recDown: function () {
+      if (this.voiceRecord) {
+        var name =
+        'rec-' +
+        this.voiceRecord.duration +
+        'ms-' +
+        (this.voiceRecord.rec.set.bitRate || '-') +
+        'kbps-' +
+        (this.voiceRecord.rec.set.sampleRate || '-') +
+        'hz.' +
+        (this.voiceRecord.rec.set.type || (/\w+$/.exec(this.voiceRecord.blob.type) || [])[0] || 'unknown');
+        let downA = document.createElement('A');
+        // eslint-disable-next-line no-undef
+        downA.href = window.URL.createObjectURL(this.voiceRecord.blob);
+        downA.download = name;
+        downA.click();
+      }
     }
   }
 };
