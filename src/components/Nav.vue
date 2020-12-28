@@ -2,10 +2,10 @@
   <el-row>
     <el-menu
       default-active='1'
-      class='el-menu-vertical-demo'
       background-color='#545c64'
       text-color='#fff'
-      active-text-color='#ffd04b'>
+      active-text-color='#ffd04b'
+      :collapse='collapse'>
       <el-menu-item index='1' @click='locationView(1)'>
         <i class='el-icon-location'/>
           <span slot='title'>会议室</span>
@@ -25,8 +25,19 @@
 <script>
 export default {
   name: 'Nav',
+  props: {
+    isCollapse: {
+      type: Boolean,
+      default: () => true
+    }
+  },
   mounted () {
     this.$router.push('/home/meetingRoom');
+  },
+  computed: {
+    collapse () {
+      return this.isCollapse;
+    }
   },
   methods: {
     locationView (index) {
@@ -46,5 +57,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>
