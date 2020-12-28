@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import ASR from '../components/ASR';
 import MeetingRoom from '../views/meetingRoom/MeetingRoomPage';
 import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail';
-import MyMeeting from '../views/MyMeeting/MyMetting';
+import MyMeeting from '../views/MyMeeting/MyMeeting';
 import Home from '../views/Home';
 import Test from '../views/Test';
 import MeetingRecords from '../views/meetingRecords/MeetingRecords';

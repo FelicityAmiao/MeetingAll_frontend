@@ -15,5 +15,6 @@ const formatterLanguage = (index) => {
 };
 
 export {
-  formatterLanguage
+  formatterLanguage,
+  languageTypes
 };

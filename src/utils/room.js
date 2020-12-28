@@ -44,5 +44,6 @@ const formatterRoomNum = (row) => {
 };
 
 export {
-  formatterRoomNum
+  formatterRoomNum,
+  roomOptions
 };

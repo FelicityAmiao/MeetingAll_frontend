@@ -12,7 +12,7 @@
       </el-menu-item>
       <el-menu-item index='2' @click='locationView(2)'>
         <i class='el-icon-date'/>
-          <span slot='title'>我的会议</span>
+          <span slot='title'>开会</span>
       </el-menu-item>
       <el-menu-item index='3' @click='locationView(3)'>
         <i class='el-icon-document'/>
