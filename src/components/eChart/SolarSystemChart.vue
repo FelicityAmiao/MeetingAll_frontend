@@ -1,12 +1,14 @@
 <template>
   <div style='width: 100%'>
 <!--    <div>{{getWidth}}</div>-->
-<!--    <div id='solarSystemChart' style='width: 100%;height: 100%'/>-->
+    <div id='solarSystemChart' style='width: 100%;height: 100%'/>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
+import elementResizeDetectorMaker from 'element-resize-detector';
+
 export default {
   name: 'SolarSystemChart',
   props: {
@@ -26,12 +28,21 @@ export default {
       chart: null
     };
   },
-  computed: {
-    getWidth () {
-      return _.get(document.getElementById('mainContainer'), 'offsetWidth');
-    }
-  },
   mounted () {
+    const _this = this;
+    const erd = elementResizeDetectorMaker();
+    erd.listenTo(document.getElementById('mainContainer'), element => {
+      document.getElementById('solarSystemChart').style.width = element.offsetWidth + 'px';
+      document.getElementById('solarSystemChart').style.height = element.offsetHeight + 'px';
+    });
+
+    erd.listenTo(document.getElementById('solarSystemChart'), element => {
+      _this.$nextTick(() => {
+        if (_this.chart) {
+          _this.chart.resize();
+        }
+      });
+    });
     this.genChart();
   },
   methods: {
@@ -217,12 +228,6 @@ export default {
         });
       });
       return meetingRoomItemList;
-    }
-  },
-  watch: {
-    getWidth (newVal) {
-      this.chart.realSize();
-      console.log(111111111);
     }
   }
 };
