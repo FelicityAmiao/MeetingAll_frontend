@@ -5,22 +5,22 @@
     </el-header>
     <el-container>
       <el-aside>
-        <Nav></Nav>
+        <Nav/>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import Nav from '../components/Nav.vue'
+import Nav from '../components/Nav.vue';
 
 export default {
   name: 'Home',
   components: { Nav }
-}
+};
 </script>
 
 <style scoped>

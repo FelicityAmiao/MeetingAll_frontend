@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import {queryMeetingRoomList} from '../../service/meetingRoom/index'
+import { queryMeetingRoomList } from '../../service/meetingRoom/index';
+import _ from 'lodash';
 
 export default {
   name: 'MeetingRoomPage',
@@ -23,31 +24,31 @@ export default {
     return {
       officeList: [],
       meetingRoomGroup: {}
-    }
+    };
   },
   created () {
-    this.queryMeetingRoomList()
+    this.queryMeetingRoomList();
   },
   methods: {
     async queryMeetingRoomList () {
-      let result = await queryMeetingRoomList()
+      let result = await queryMeetingRoomList();
       if (result) {
-        this.meetingRoomGroup = _.groupBy(result, 'office')
-        this.officeList = _.keys(this.meetingRoomGroup)
+        this.meetingRoomGroup = _.groupBy(result, 'office');
+        this.officeList = _.keys(this.meetingRoomGroup);
       }
       console.log(this.officeList);
     },
     selectMeetingRoom (office) {
-      const meetingRoomDetail = this.meetingRoomGroup[office]
+      const meetingRoomDetail = this.meetingRoomGroup[office];
       this.$router.push({
         path: '/home/meetingRoomDetail',
         query: {
           meetingRoomDetail
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>

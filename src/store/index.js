@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createLogger from 'vuex/dist/logger'
-import modules from './modules'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import createLogger from 'vuex/dist/logger';
+import modules from './modules';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules,
@@ -11,6 +11,6 @@ const store = new Vuex.Store({
     ...process.env.NODE_ENV === 'development' ? [ createLogger() ] : []
   ],
   strict: process.env.NODE_ENV !== 'production'
-})
+});
 
-export default store
+export default store;

@@ -1,4 +1,4 @@
-import {queryAllMeetingRooms} from '../../repository/meetingRoom'
+import { queryAllMeetingRooms } from '../../repository/meetingRoom';
 
 export const queryMeetingRoomList = () => {
   return queryAllMeetingRooms();

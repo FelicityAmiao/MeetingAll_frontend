@@ -1,7 +1,7 @@
-import { get } from '../utils/http'
+import { get } from '../utils/http';
 
-const prefix = '/test'
+const prefix = '/test';
 
 export function getTest () {
-  return get(`${prefix}/hello`)
+  return get(`${prefix}/hello`);
 }
