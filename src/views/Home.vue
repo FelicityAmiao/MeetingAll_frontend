@@ -17,7 +17,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-main>
+      <el-main id='mainContainer' style='padding: 0'>
         <router-view/>
       </el-main>
     </el-container>
@@ -40,21 +40,16 @@ export default {
     this.height = window.innerHeight;
     window.addEventListener('resize', () => {
       this.height = window.innerHeight;
-      console.log(this.height);
     });
   }
 };
 </script>
 
 <style scoped>
-h1{
-  margin-top: 14px;
-}
 .header-container {
   box-shadow: rgba(0, 21, 41, 0.08) 0 1px 4px;
   overflow: hidden;
   background: rgb(255, 255, 255);
-  height: 50px;
   display: flex;
   width: 100%;
 }

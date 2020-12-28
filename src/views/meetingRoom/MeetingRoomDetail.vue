@@ -1,53 +1,38 @@
 <template>
-  <div class='meeting-room-detail'>
-    <el-col class='card-group' :span='5' v-for='(item, index) in meetingRoomDetail' :key='index'>
-      <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>
-        <div slot='header' class='card-header'>
-          <el-row>
-            <el-col :span='20'><span>{{item.room}}</span></el-col>
-            <el-col :span='4' class='meeting-room-status'><div :class='`status-icon ${isBusyStatus(item.currentStatus) ? "icon-background-red" : "icon-background-green"}`'/></el-col>
-          </el-row>
-        </div>
-        <div class='card-body' @mouseenter='visible = true' @mouseleave='visible = false'>
-          <transition name='el-fade-in-linear'>
-            <el-row class='card-tool-bar' v-show='visible'>
-              <el-col :span='2' class='tool-bar-icon'><i class='el-icon-switch-button'/></el-col>
-            </el-row>
-          </transition>
-        </div>
-      </el-card>
-    </el-col>
-    <el-dialog
-      title='New Meeting'
-      :visible.sync='dialogVisible'
-      width='30%'>
-      <el-date-picker
-        v-model='value1'
-        type='datetime'
-        placeholder='select time'>
-      </el-date-picker>
-      <span slot='footer'>
-    <el-button @click='dialogVisible = false'>Cancel</el-button>
-    <el-button type='primary' @click='dialogVisible = false'>Save</el-button>
-  </span>
-    </el-dialog>
+  <div id='meetingRoomDetail' class='meeting-room-detail'>
+    <solar-system-chart :meeting-room-list='meetingRoomDetail' :width='width' :height='height'/>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
+import SolarSystemChart from '../../components/eChart/SolarSystemChart';
 export default {
   name: 'MeetingRoomDetail',
+  components: { SolarSystemChart },
   data () {
     return {
       visible: false,
       dialogVisible: false,
-      meetingRoomDetail: []
+      meetingRoomDetail: [],
+      width: 0,
+      height: 0
     };
   },
+  mounted () {
+    this.initStyle();
+    window.addEventListener('resize', () => {
+      this.$nextTick(() => {
+        this.initStyle();
+      });
+    });
+  },
   methods: {
-    isBusyStatus (status) {
-      return _.isEqual(status, '1');
+    initStyle () {
+      let element = document.getElementById('mainContainer');
+      if (element && element.style) {
+        this.width = element.offsetWidth;
+        this.height = element.offsetHeight;
+      }
     },
     newMeeting () {
       this.dialogVisible = true;
@@ -66,12 +51,6 @@ export default {
 </script>
 
 <style scoped>
-  .meeting-room-detail {
-    padding: 30px 30px;
-  }
-  .card-header {
-    height: 35px!important;
-  }
   .card-group {
     padding: 10px 0;
   }

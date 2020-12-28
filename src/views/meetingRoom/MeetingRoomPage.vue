@@ -5,9 +5,6 @@
         <div class='card-body' @click='selectMeetingRoom(item)'>
           <div class='card-label'>{{item}}</div>
           <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
-          <div class='status-bar'>
-            <div class='status-icon icon-background-green'/>
-          </div>
         </div>
       </el-card>
     </el-col>
