@@ -46,7 +46,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[1, 2, 30]"
+          :page-sizes="[10, 20, 30]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
@@ -107,7 +107,7 @@ export default {
       tableData: [],
       allData: [],
       total: 0,
-      pageSize: 1
+      pageSize: 10
     }
   },
 
