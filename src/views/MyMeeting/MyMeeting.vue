@@ -48,20 +48,17 @@
           </div>
           <div style='float: right;margin: 10px'>
             <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
-            <el-button type='primary' @click='startRecord' icon='el-icon-caret-right'>开始录音</el-button>
-            <el-button type='primary' @click='stopRecord' icon='el-icon-caret-right'>结束录音</el-button>
-            <el-button v-show='meeting.status==="新建"' type='primary' @click='startRecord' icon='el-icon-caret-right'>
-              录音
-            </el-button>
+            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音</el-button>
+            <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音</el-button>
             <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
           </div>
-        </el-card>
-        <div class='mainBox'>
-        <div
+          <div
           v-if='showVoiceWave'
-          style='height:100px;width:300px;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
+          style='height:100px;width:100%;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
           class='ctrlProcessWave'
         ></div>
+        </el-card>
+        <div class='mainBox'>
         <!-- <div
           style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
         >
@@ -117,6 +114,7 @@ import 'recorder-core/src/engine/mp3';
 import 'recorder-core/src/engine/wav';
 import 'recorder-core/src/engine/mp3-engine';
 import 'recorder-core/src/extensions/waveview';
+import { uploadAudio } from '../../repository/meetingRoom/index';
 
 export default {
   name: 'MyMeeting',
@@ -133,6 +131,7 @@ export default {
         subject: ''
       },
       meeting: {
+        id: '',
         meetingId: '',
         room: [],
         roomStr: '',
@@ -305,6 +304,7 @@ export default {
           };
           _this.$message.info('已录制！');
           _this.recDown();
+          _this.uploadFile(blob);
           _this.showVoiceWave = false;
         },
         function (s) {
@@ -329,6 +329,16 @@ export default {
         downA.href = window.URL.createObjectURL(this.voiceRecord.blob);
         downA.download = name;
         downA.click();
+      }
+    },
+    uploadFile: async function (fileBlob) {
+      let fd = new FormData();
+      fd.append('attachmentFile', fileBlob);
+      fd.append('meetingId', this.meeting.id);
+      try {
+        await uploadAudio(fd);
+      } catch (error) {
+        console.log(error);
       }
     }
   }
