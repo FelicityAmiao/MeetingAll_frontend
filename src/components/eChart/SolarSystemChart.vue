@@ -1,7 +1,6 @@
 <template>
   <div style='width: 100%'>
-<!--    <div>{{getWidth}}</div>-->
-    <div id='solarSystemChart' style='width: 100%;height: 100%'/>
+    <div id='solarSystemChart' style='height: 909px'/>
   </div>
 </template>
 
@@ -32,16 +31,13 @@ export default {
     const _this = this;
     const erd = elementResizeDetectorMaker();
     erd.listenTo(document.getElementById('mainContainer'), element => {
-      document.getElementById('solarSystemChart').style.width = element.offsetWidth + 'px';
-      document.getElementById('solarSystemChart').style.height = element.offsetHeight + 'px';
+      _this.resetWidth(element);
     });
 
     erd.listenTo(document.getElementById('solarSystemChart'), element => {
-      _this.$nextTick(() => {
-        if (_this.chart) {
-          _this.chart.resize();
-        }
-      });
+      if (_this.chart) {
+        _this.chart.resize();
+      }
     });
     this.genChart();
   },
@@ -166,6 +162,13 @@ export default {
       };
       this.$nextTick(() => {
         this.chart.setOption(option);
+        this.chart.on('mouseover', params => {
+          const room = _.find(this.meetingRoomList, { room: params.name }) || {};
+          if (_.isEmpty(room)) {
+            return;
+          }
+          this.$emit('select-room', room);
+        });
       });
     },
     roundData (num) {
@@ -228,11 +231,24 @@ export default {
         });
       });
       return meetingRoomItemList;
+    },
+    resetWidth (element) {
+      let doc = document.getElementById('solarSystemChart');
+      if (_.isEmpty(doc)) {
+        return;
+      }
+      doc.style.width = element.offsetWidth + 'px';
+    }
+  },
+  watch: {
+    meetingRoomList: {
+      handler: function (val) {
+        this.genChart();
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

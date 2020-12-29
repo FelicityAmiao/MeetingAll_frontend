@@ -33,7 +33,6 @@ export default {
         this.meetingRoomGroup = _.groupBy(result, 'office');
         this.officeList = _.keys(this.meetingRoomGroup);
       }
-      console.log(this.officeList);
     },
     selectMeetingRoom (office) {
       const meetingRoomDetail = this.meetingRoomGroup[office];
