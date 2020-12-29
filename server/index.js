@@ -42,9 +42,9 @@ https.createServer(httpsOption, app).listen(9999, function () {
   console.log('https: 9999');
 });
 
-// config http auto jump to https
-let http = require('http');
-http.createServer(app).listen(9999, function (request, response) {
-  response.writeHead(301, { 'Location': 'https://www.meetingall.info:9999' });
-  response.end();
-});
+// // config http auto jump to https
+// let http = require('http');
+// http.createServer(app).listen(9999, function (request, response) {
+//   response.writeHead(301, { 'Location': 'https://www.meetingall.info:9999' });
+//   response.end();
+// });
