@@ -15,13 +15,13 @@
             <el-form-item label='确认密码' prop='checkPwd'>
               <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' clearable></el-input>
             </el-form-item>
-            <el-form-item label='输入验证码' prop='authCode'>
+            <el-form-item label='邮箱验证码' prop='authCode'>
               <el-input :disabled='disableAuthCodeInput' v-model='newUserInfo.authCode' placeholder='验证码' clearable></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button @click='addUser' type='primary'>提交</el-button>
-              <el-button @click='goBack' type='primary' plain>返回登录</el-button>
+              <el-button @click='addUser' type='primary'>注册</el-button>
               <el-button @click='resetForm'>重置</el-button>
+              <el-button @click='goBack' type='primary' plain>返回登录</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -56,7 +56,6 @@ export default {
         } else {
           let url = `user/${value}`;
           get(url).then((res) => {
-            console.log('register:', res);
             if (!res.data) {
               callback(new Error('用户名已存在'));
             } else {
@@ -88,13 +87,14 @@ export default {
           let url = 'user/regist';
           post(url, {
             username: this.newUserInfo.username,
-            password: encryptedPwd
+            password: encryptedPwd,
+            authCode: this.newUserInfo.authCode
           }).then((res) => {
-            if (res.data.data) {
+            if (res.data.success) {
               this.$message.success('注册成功，请登录！');
               this.$router.push('login');
             } else {
-              this.$message.error(res.data.message);
+              this.$message.error(res.data.msg);
             }
           }).catch(() => {
             this.$message.error('注册失败，请重试！');
@@ -113,8 +113,18 @@ export default {
       this.$router.push('/login');
     },
     sendAuthCode () {
-      console.log('sendAuthCode');
       this.disableAuthCodeInput = false;
+      let username = this.newUserInfo.username;
+      let url = 'user/authcode';
+      post(url, {
+        username: username
+      }).then(response => {
+        if (response.data) {
+          this.$message.success('验证码已发送，请查收！');
+        } else {
+          this.$message.error('验证码发送失败，请重试！');
+        }
+      });
     }
   }
 };
