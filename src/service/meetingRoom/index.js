@@ -4,6 +4,6 @@ export const queryMeetingRoomList = () => {
   return queryAllMeetingRooms();
 };
 
-export const updateDevicePowerStatus = () => {
-  return updateDeviceStatus();
+export const updateDevicePowerStatus = content => {
+  return updateDeviceStatus(content);
 };
