@@ -1,7 +1,7 @@
 const configCrossOriginProxy = (app) => {
   const baseUrl = {
     dev: 'http://localhost:8077',
-    prod: 'http://121.89.203.245:8077'
+    prod: 'https://www.meetingall.info:8077/'
   };
   const mode = process.env.NODE_ENV;
   const proxy = require('http-proxy-middleware');
