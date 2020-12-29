@@ -52,7 +52,7 @@ export default {
       this.chart.clear();
 
       const option = {
-        backgroundColor: '#000',
+        backgroundColor: '#181F4E',
         title: {
           text: 'Solar System',
           top: 'center',

@@ -17,13 +17,22 @@
           <el-row type='flex'>
             <el-col :span='10'>Power Control: </el-col>
             <el-col :span='4' style='text-align: center'>
-              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @chagne='updateDeviceStatus'/>
+              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @change='updateDeviceStatus'/>
             </el-col>
           </el-row>
         </div>
       </el-card>
     </div>
-    <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
+    <div>
+      <keep-alive>
+        <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
+      </keep-alive>
+    </div>
+<!--    <div v-if=''>-->
+<!--      <keep-alive>-->
+<!--        <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>-->
+<!--      </keep-alive>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -42,6 +51,17 @@ export default {
       meetingRoomDetail: [],
       selectedRoom: null
     };
+  },
+  computed: {
+    // isChinaMeetingRoom () {
+    //   return _.isEqual();
+    // },
+    // isChinaMeetingRoom () {
+    //   return _.isEqual();
+    // },
+    // isChinaMeetingRoom () {
+    //   return _.isEqual();
+    // }
   },
   methods: {
     isBusyStatus (status) {
