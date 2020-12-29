@@ -6,6 +6,12 @@ export const queryAllMeetingRooms = async () => {
   return body.data;
 };
 
+export const updateDeviceStatus = async content => {
+  let url = `/meetingRooms`;
+  const body = await post(url, content);
+  return body.data;
+};
+
 export const uploadAudio = async (data) => {
   let url = `/myMeeting/upload/audio`;
   const body = await post(url, data);

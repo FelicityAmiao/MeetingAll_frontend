@@ -1,12 +1,13 @@
 <template>
   <div style='width: 100%'>
-<!--    <div>{{getWidth}}</div>-->
-<!--    <div id='solarSystemChart' style='width: 100%;height: 100%'/>-->
+    <div id='solarSystemChart' style='height: 909px'/>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
+import elementResizeDetectorMaker from 'element-resize-detector';
+
 export default {
   name: 'SolarSystemChart',
   props: {
@@ -26,12 +27,18 @@ export default {
       chart: null
     };
   },
-  computed: {
-    getWidth () {
-      return _.get(document.getElementById('mainContainer'), 'offsetWidth');
-    }
-  },
   mounted () {
+    const _this = this;
+    const erd = elementResizeDetectorMaker();
+    erd.listenTo(document.getElementById('mainContainer'), element => {
+      _this.resetWidth(element);
+    });
+
+    erd.listenTo(document.getElementById('solarSystemChart'), element => {
+      if (_this.chart) {
+        _this.chart.resize();
+      }
+    });
     this.genChart();
   },
   methods: {
@@ -155,6 +162,13 @@ export default {
       };
       this.$nextTick(() => {
         this.chart.setOption(option);
+        this.chart.on('mouseover', params => {
+          const room = _.find(this.meetingRoomList, { room: params.name }) || {};
+          if (_.isEmpty(room)) {
+            return;
+          }
+          this.$emit('select-room', room);
+        });
       });
     },
     roundData (num) {
@@ -217,17 +231,24 @@ export default {
         });
       });
       return meetingRoomItemList;
+    },
+    resetWidth (element) {
+      let doc = document.getElementById('solarSystemChart');
+      if (_.isEmpty(doc)) {
+        return;
+      }
+      doc.style.width = element.offsetWidth + 'px';
     }
   },
   watch: {
-    getWidth (newVal) {
-      this.chart.realSize();
-      console.log(111111111);
+    meetingRoomList: {
+      handler: function (val) {
+        this.genChart();
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

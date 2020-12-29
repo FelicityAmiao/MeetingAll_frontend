@@ -1,11 +1,37 @@
 <template>
   <div id='meetingRoomDetail' class='meeting-room-detail'>
-    <solar-system-chart :meeting-room-list='meetingRoomDetail' :width='width' :height='height'/>
+    <div class='status-tool-bar'>
+      <el-card v-if='selectedRoom !== null' class='box-card' shadow='hover'>
+        <div slot='header'>
+          <span>{{selectedRoom.office}}</span>
+        </div>
+        <div class='status-bar-body'>
+          <el-row type='flex'>
+            <el-col :span='10'>Room: </el-col>
+            <el-col :span='4' style='text-align: center'>{{selectedRoom.room}}</el-col>
+          </el-row>
+          <el-row type='flex'>
+            <el-col :span='10'>Status: </el-col>
+            <el-col :span='4' style='text-align: center'><div :class='`status-icon ${isBusyStatus(selectedRoom.currentStatus) ? "icon-background-red" : "icon-background-green"}`'/></el-col>
+          </el-row>
+          <el-row type='flex'>
+            <el-col :span='10'>Power Control: </el-col>
+            <el-col :span='4' style='text-align: center'>
+              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @chagne='updateDeviceStatus'/>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+    </div>
+    <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
   </div>
 </template>
 
 <script>
 import SolarSystemChart from '../../components/eChart/SolarSystemChart';
+import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
+import _ from 'lodash';
+
 export default {
   name: 'MeetingRoomDetail',
   components: { SolarSystemChart },
@@ -14,28 +40,23 @@ export default {
       visible: false,
       dialogVisible: false,
       meetingRoomDetail: [],
-      width: 0,
-      height: 0
+      selectedRoom: null
     };
   },
-  mounted () {
-    this.initStyle();
-    window.addEventListener('resize', () => {
-      this.$nextTick(() => {
-        this.initStyle();
-      });
-    });
-  },
   methods: {
-    initStyle () {
-      let element = document.getElementById('mainContainer');
-      if (element && element.style) {
-        this.width = element.offsetWidth;
-        this.height = element.offsetHeight;
-      }
+    isBusyStatus (status) {
+      return _.isEqual(status, '1');
     },
-    newMeeting () {
-      this.dialogVisible = true;
+    selectRoom (room) {
+      this.selectedRoom = room;
+    },
+    async updateDeviceStatus () {
+      await updateDevicePowerStatus(this.selectedRoom);
+      let index = _.findIndex(this.meetingRoomDetail, { id: this.selectedRoom.id });
+      if (index === -1) {
+        return;
+      }
+      this.$set(this.meetingRoomDetail, index, this.selectedRoom);
     }
   },
   watch: {
@@ -43,7 +64,6 @@ export default {
       immediate: true,
       handler: function (value) {
         this.meetingRoomDetail = value;
-        console.log(value);
       }
     }
   }
@@ -51,30 +71,31 @@ export default {
 </script>
 
 <style scoped>
-  .card-group {
-    padding: 10px 0;
-  }
-  .card-tool-bar {
+  .status-tool-bar {
     position: absolute;
-    width: 100%;
-    height: 30px;
-    bottom: 0;
-    padding: 5px;
-    background: rgba(51, 51, 51, 0.08);
+    color: white;
+    width: 20%;
+    height: 10%;
+    padding: 10px;
+    z-index: 99999;
   }
-  .meeting-room-card {
-    width: 90%;
-  }
-  .meeting-room-status {
-    float: right;
-  }
-  .meeting-time-range {
-    font-size: 12px;
-  }
-  .card-body {
+  .status-tool-footer {
+     position: absolute;
+     width: 100%;
+     height: 30px;
+     bottom: 0;
+     padding: 5px;
+     background: rgba(51, 51, 51, 0.08);
+   }
+  .status-bar-body {
     position: relative;
     width: 100%;
-    height: 150px;
+    height: 60px;
+  }
+  .tool-bar-icon {
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
   }
   .tool-bar-icon {
     cursor: pointer;
