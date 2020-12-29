@@ -17,7 +17,7 @@ export default {
   },
   async mounted () {
     const temp = await getTest();
-    this.greetLanguage = 'Test Webhook: Call backend test api success, the return result is: ' + temp.data;
+    this.greetLanguage = 'Test Github Webhook: Call backend test api success, the return result is: ' + temp.data;
   }
 };
 </script>
