@@ -67,7 +67,7 @@ export default {
   name: 'MeetingRecords',
   methods: {
     download (address) {
-      let url = 'http://localhost:8081/api/files/download/' + address;
+      let url = 'http://www.meetingall.info:8077/api/files/download/' + address;
       window.open(url);
     },
     convertTableRecord (record) {
