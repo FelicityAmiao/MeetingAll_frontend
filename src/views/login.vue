@@ -11,87 +11,124 @@
       class='loginContainer'
     >
       <h3 class='loginTitle'>Login</h3>
-      <el-form-item prop='username'>
+      <el-form-item prop='username' >
         <el-input
           size='normal'
           type='text'
           v-model='loginForm.username'
           auto-complete='off'
           placeholder='Pls input username'
+          clearable
         />
       </el-form-item>
-      <el-form-item prop='password'>
+      <el-form-item prop='password' style='margin-bottom: 40px'>
         <el-input
           size='normal'
           type='password'
           v-model='loginForm.password'
           auto-complete='off'
           placeholder='Pls input password'
+          clearable
+          @keyup.enter.native='submitLogin'
         />
+      </el-form-item>
+      <el-form-item>
+        <el-button type='text' @click='goToRegister'>没有账号？注册一个</el-button>
       </el-form-item>
       <el-button
         size='normal'
         type='primary'
         style='width: 100%;'
         @click='submitLogin'
-        >Login</el-button
+      >Login
+      </el-button
       >
     </el-form>
   </div>
 </template>
 
 <script>
+import { validatePwd, validateUsername } from '../utils/validate';
+import { post } from '../utils/http';
+import md5 from 'js-md5';
+
 export default {
   name: 'Login',
   data () {
     return {
       loading: false,
       loginForm: {
-        username: 'admin',
-        password: '123',
+        username: 'liujo5@oocl.com',
+        password: 'Password1',
         code: ''
       },
       checked: true,
       rules: {
         username: [
-          { required: true, message: 'Pls input username', trigger: 'blur' }
+          { validator: validateUsername, trigger: 'blur' }
         ],
-        password: [{ required: true, message: 'Pls input password', trigger: 'blur' }]
-      }
+        password: [
+          { validator: validatePwd, trigger: 'blur' }
+        ]
+      },
+      registerLink: 'http://localhost:8080/register'
     };
   },
   methods: {
     submitLogin () {
-
+      this.$refs['loginForm'].validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          let url = '/user/login';
+          let password = md5(this.loginForm.password);
+          let param = { username: this.loginForm.username, password: password };
+          post(url, param).then((response) => {
+            if (response.status === 200) {
+              this.$router.push('/home');
+            } else {
+              this.$message.error('用户名或密码不正确');
+            }
+            this.loading = false;
+          }).catch(() => {
+            this.$message.error('错误，请联系管理员。');
+            this.loading = false;
+          });
+        }
+      });
+    },
+    goToRegister: function () {
+      this.$router.push('register');
     }
   }
 };
 </script>
 
 <style scoped>
-.loginContainer {
-  border-radius: 15px;
-  background-clip: padding-box;
-  margin: 180px auto;
-  width: 350px;
-  padding: 15px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
-}
+  .loginContainer {
+    border-radius: 15px;
+    background-clip: padding-box;
+    margin: 180px auto;
+    width: 350px;
+    padding: 15px 35px 15px 35px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+  }
 
-.loginTitle {
-  margin: 15px auto 20px auto;
-  text-align: center;
-  color: #505458;
-}
+  .loginTitle {
+    margin: 15px auto 20px auto;
+    text-align: center;
+    color: #505458;
+  }
 
-.loginRemember {
-  text-align: left;
-  margin: 0px 0px 15px 0px;
-}
-.el-form-item__content {
-  display: flex;
-  align-items: center;
-}
+  .loginRemember {
+    text-align: left;
+    margin: 0px 0px 15px 0px;
+  }
+
+  .el-form-item__content {
+    display: flex;
+    align-items: center;
+  }
+
 </style>

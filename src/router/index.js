@@ -16,6 +16,7 @@ VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err);
 };
 const loginPage = () => import('../views/login');
+const registerPage = () => import('../views/register');
 const highFrequencyWordPage = () => import('../views/HighFrequencyWord');
 const recorderPage = () => import('../views/recorder');
 
@@ -25,9 +26,14 @@ const routes = [
     component: recorderPage
   },
   {
-    path: '/recorder',
+    path: '/login',
     component: loginPage
-  }, {
+  },
+  {
+    path: '/register',
+    component: registerPage
+  },
+  {
     path: '/highfrequencyword',
     component: highFrequencyWordPage
   },
