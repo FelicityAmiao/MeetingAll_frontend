@@ -50,17 +50,17 @@ export default {
       if (value === '') {
         callback(new Error('用户名不能为空'));
       } else {
-        var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+        var reg = /^[a-zA-Z0-9_.-]+@(oocl|cargosmart)+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
         if (!reg.test(value)) {
-          callback(new Error('用户名格式不正确'));
+          callback(new Error('用户名格式不正确，请使用oocl或cargosmart邮箱注册'));
         } else {
           let url = `user/${value}`;
           get(url).then((res) => {
-            if (!res.data) {
-              callback(new Error('用户名已存在'));
-            } else {
+            if (res.data) {
               this.disableAuthCodeButton = false;
             }
+          }).catch(err => {
+            this.$message.error(err.response.data);
           });
         }
         callback();

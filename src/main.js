@@ -5,7 +5,7 @@ import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import Echarts from 'echarts';
-
+import './permission';
 Vue.config.productionTip = false;
 
 Object.defineProperty(Vue.prototype, '$echarts', { value: Echarts });

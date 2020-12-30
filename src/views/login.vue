@@ -11,7 +11,7 @@
       class='loginContainer'
     >
       <h3 class='loginTitle'>Login</h3>
-      <el-form-item prop='username' >
+      <el-form-item prop='username'>
         <el-input
           size='normal'
           type='text'
@@ -49,7 +49,6 @@
 
 <script>
 import { validatePwd, validateUsername } from '../utils/validate';
-import { post } from '../utils/http';
 import md5 from 'js-md5';
 
 export default {
@@ -71,33 +70,52 @@ export default {
           { validator: validatePwd, trigger: 'blur' }
         ]
       },
-      registerLink: 'http://localhost:8080/register'
+      redirect: undefined,
+      otherQuery: {}
     };
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        const query = route.query;
+        if (query) {
+          this.redirect = query.redirect;
+          this.otherQuery = this.getOtherQuery(query);
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     submitLogin () {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          this.loading = true;
-          let url = '/user/login';
           let password = md5(this.loginForm.password);
-          let param = { username: this.loginForm.username, password: password };
-          post(url, param).then((response) => {
-            if (response.status === 200) {
-              this.$router.push('/home');
-            } else {
-              this.$message.error('用户名或密码不正确');
-            }
-            this.loading = false;
-          }).catch(() => {
-            this.$message.error('错误，请联系管理员。');
-            this.loading = false;
-          });
+          this.$store.dispatch('user/login', {
+            username: this.loginForm.username,
+            password: password
+          })
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
+              this.loading = false;
+            })
+            .catch((error) => {
+              this.$message.error(error.response.data);
+              this.loading = false;
+            });
         }
       });
     },
     goToRegister: function () {
       this.$router.push('register');
+    },
+    getOtherQuery (query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur];
+        }
+        return acc;
+      }, {});
     }
   }
 };

@@ -2,7 +2,7 @@ const validateUsername = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('用户名不能为空'));
   } else {
-    var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+    var reg = /^[a-zA-Z0-9_.-]+@(oocl|cargosmart)+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
     if (!reg.test(value)) {
       callback(new Error('用户名格式不正确'));
     }

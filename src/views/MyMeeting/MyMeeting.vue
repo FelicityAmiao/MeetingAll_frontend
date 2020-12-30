@@ -163,8 +163,7 @@ export default {
   },
   methods: {
     loadMeeting: function () {
-      let userId = '1';
-      let url = `/myMeeting/${userId}`;
+      let url = `/myMeeting`;
       get(url).then((response) => {
         if (response.data !== '') {
           this.formatterMeeting(response.data);
@@ -200,7 +199,6 @@ export default {
     saveMeeting: function () {
       let currMeeting = {};
       _.assign(currMeeting, this.newMeeting);
-      currMeeting.userId = '1';
       let url = '/myMeeting';
       post(url, currMeeting).then((response) => {
         let a = response.data;

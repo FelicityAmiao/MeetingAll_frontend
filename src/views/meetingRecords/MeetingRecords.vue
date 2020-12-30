@@ -119,8 +119,7 @@ export default {
     },
     loadMeetingRecords: function () {
       let that = this;
-      let userId = 1;
-      let url = `/myMeeting/meetingrecords/${userId}`;
+      let url = `/myMeeting/meetingrecords`;
       get(url).then(response => {
         that.allData = response.data;
         that.total = response.data.length;

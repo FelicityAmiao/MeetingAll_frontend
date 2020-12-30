@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as qs from 'qs';
-
+import store from '../store';
+import { getToken } from '../utils/auth';
 const http = axios.create({
   baseURL: '/api',
   timeout: 300000,
@@ -9,6 +10,9 @@ const http = axios.create({
 
 http.interceptors.request.use(
   requestConfig => {
+    if (store.getters.token) {
+      requestConfig.headers['Authorization'] = `Bearer ${getToken()}`;
+    }
     return requestConfig;
   },
   error => {
