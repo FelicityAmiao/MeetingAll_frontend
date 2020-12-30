@@ -15,7 +15,7 @@ const mutations = {
 const actions = {
   // connect
   connect (state) {
-    var socket = new SockJS('http://localhost:8077/api/connect');
+    var socket = new SockJS('/api/connect');
     state.socketClient = Stomp.over(socket);
     state.socketClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
