@@ -142,7 +142,7 @@ export default {
 
   data () {
     return {
-      title: '会议记录',
+      title: '历史会议记录',
       currentPage: 1,
       tableData: [],
       allData: [],
