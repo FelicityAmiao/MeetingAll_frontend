@@ -77,7 +77,7 @@ export default {
       isCollapse: false,
       showClose: false,
       height: '',
-      username: this.$store.getters.username,
+      username: sessionStorage.getItem('username'),
       changePasswordFormVisible: false,
       changePasswordFormLabelWidth: '100px',
       changePasswordForm: {
