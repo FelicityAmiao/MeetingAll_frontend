@@ -1,12 +1,12 @@
-import SockJS from '@/utils/sockjs-0.3.4.js';
-import Stomp from '@/utils/stomp.js';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 const state = {
   socketClient: null
 };
 
 const getters = {
-  socket: state => state.socket.socketClient
+  socketClient: state => state.socketClient
 };
 
 const mutations = {
@@ -15,7 +15,7 @@ const mutations = {
 const actions = {
   // connect
   connect (state) {
-    var socket = new SockJS('/hello');
+    var socket = new SockJS('http://localhost:8077/api/connect');
     state.socketClient = Stomp.over(socket);
     state.socketClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
