@@ -11,7 +11,7 @@
             prefix-icon='el-icon-search'
             v-model='search'
             size='small'
-            style='float: left;font-size: 18px'
+            style='float: left;font-size: 14px;margin-bottom: 5px'
             @input='filter'>
           </el-input>
         </el-col>
@@ -39,12 +39,13 @@
           prop='operation'
           label='操作'>
           <template slot-scope='scope'>
-            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null'>下载报告</el-button>
+            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null' v-if='scope.row.reportAddress != null'>下载报告</el-button>
+            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.audioAddress == null' v-if='scope.row.reportAddress == null'>生成报告</el-button>
             <el-button @click='download(scope.row.audioAddress)' icon='el-icon-service' type='text' size='small' :disabled='scope.row.audioAddress == null'>下载录音</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <div class='block'>
+      <div class='block' style='margin-top: 5px'>
         <el-pagination
           @size-change='handleSizeChange'
           @current-change='handleCurrentChange'
@@ -66,6 +67,13 @@ import { formatterLanguage } from '../../utils/language';
 export default {
   name: 'MeetingRecords',
   methods: {
+    generateReport: function (value) {
+      get(`/myMeeting/report/${value}`).then((response) => {
+        this.$message.success('正在生成报告！');
+      }).catch(() => {
+        this.$message.error('生成报告发生错误，请重试！', 1);
+      });
+    },
     download (address) {
       let url = 'http://www.meetingall.info:8077/api/files/download/' + address;
       window.open(url);
