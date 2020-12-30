@@ -28,6 +28,7 @@
         <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
       </keep-alive>
     </div>
+    <login-dialog :showLoginDialog='showLoginDialog' @closeDialog='closeLoginDialog'></login-dialog>
 <!--    <div v-if=''>-->
 <!--      <keep-alive>-->
 <!--        <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>-->
@@ -40,14 +41,15 @@
 import SolarSystemChart from '../../components/eChart/SolarSystemChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
-
+import LoginDialog from '../LoginDialog';
 export default {
   name: 'MeetingRoomDetail',
-  components: { SolarSystemChart },
+  components: { SolarSystemChart, LoginDialog },
   data () {
     return {
       visible: false,
       dialogVisible: false,
+      showLoginDialog: false,
       meetingRoomDetail: [],
       selectedRoom: null
     };
@@ -70,7 +72,14 @@ export default {
     selectRoom (room) {
       this.selectedRoom = room;
     },
+    closeLoginDialog () {
+      this.showLoginDialog = false;
+    },
     async updateDeviceStatus () {
+      if (this.$store.getters.token === undefined) {
+        this.showLoginDialog = true;
+        return;
+      }
       await updateDevicePowerStatus(this.selectedRoom);
       let index = _.findIndex(this.meetingRoomDetail, { id: this.selectedRoom.id });
       if (index === -1) {

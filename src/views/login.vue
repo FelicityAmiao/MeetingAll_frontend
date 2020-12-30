@@ -35,6 +35,9 @@
       <el-form-item>
         <el-button type='text' @click='goToRegister'>没有账号？注册一个</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type='text' @click='AsVisitor'>游客访问</el-button>
+      </el-form-item>
       <el-button
         size='normal'
         type='primary'
@@ -48,7 +51,7 @@
 </template>
 
 <script>
-import { validatePwd, validateUsername } from '../utils/validate';
+import { validateUsername } from '../utils/validate';
 import md5 from 'js-md5';
 
 export default {
@@ -67,7 +70,7 @@ export default {
           { validator: validateUsername, trigger: 'blur' }
         ],
         password: [
-          { validator: validatePwd, trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
       redirect: undefined,
@@ -96,7 +99,11 @@ export default {
             password: password
           })
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
+              if (this.redirect !== undefined) {
+                this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
+              } else {
+                this.$router.push('/meetingRoom');
+              }
               this.loading = false;
             })
             .catch((error) => {
@@ -108,6 +115,9 @@ export default {
     },
     goToRegister: function () {
       this.$router.push('register');
+    },
+    AsVisitor: function () {
+      this.$router.push('/meetingRoom');
     },
     getOtherQuery (query) {
       return Object.keys(query).reduce((acc, cur) => {

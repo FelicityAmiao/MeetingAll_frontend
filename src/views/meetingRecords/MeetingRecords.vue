@@ -161,7 +161,9 @@ export default {
   },
 
   mounted () {
-    this.loadMeetingRecords();
+    if (this.$store.getters.token !== undefined) {
+      this.loadMeetingRecords();
+    }
   }
 };
 </script>

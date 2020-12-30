@@ -100,6 +100,7 @@
         <el-button plain @click='resetForm'>取消</el-button>
       </div>
     </el-dialog>
+    <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
   </div>
 </template>
 
@@ -115,11 +116,14 @@ import 'recorder-core/src/engine/wav';
 import 'recorder-core/src/engine/mp3-engine';
 import 'recorder-core/src/extensions/waveview';
 import { uploadAudio, recording } from '../../repository/meetingRoom/index';
+import LoginDialog from '../LoginDialog';
 
 export default {
   name: 'MyMeeting',
+  components: { LoginDialog },
   data () {
     return {
+      showLoginDialog: false,
       dialogTitle: '会议信息',
       spanNum: 6,
       showAddDialog: false,
@@ -159,9 +163,14 @@ export default {
     };
   },
   mounted () {
-    this.loadMeeting();
+    if (this.$store.getters.token !== undefined) {
+      this.loadMeeting();
+    }
   },
   methods: {
+    closeLoginDialog () {
+      this.showLoginDialog = false;
+    },
     loadMeeting: function () {
       let url = `/myMeeting`;
       get(url).then((response) => {
@@ -189,6 +198,10 @@ export default {
       return val;
     },
     openDialog: function () {
+      if (this.$store.getters.token === undefined) {
+        this.showLoginDialog = true;
+        return;
+      }
       this.showAddDialog = true;
       this.dialogTitle = '添加会议';
     },

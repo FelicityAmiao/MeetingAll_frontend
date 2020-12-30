@@ -8,13 +8,18 @@
             <el-form-item label='用户名' prop='username'>
               <el-row class='demo-autocomplete'>
                 <el-col :span='20'>
-                  <el-input v-model='newUserInfo.username' placeholder='请输入用户名' clearable></el-input>
+                  <el-input v-model='newUserInfo.username' placeholder='请输入邮箱地址' clearable></el-input>
                 </el-col>
                 <el-col :span='4'>
                   <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode'>发送验证码</el-button>
                   <el-button v-if='!show' type='text' :disabled='true'>发送验证码({{count}})</el-button>
                 </el-col>
               </el-row>
+            </el-form-item>
+            <el-form-item label='邮箱验证码' prop='authCode'>
+              <el-col :span='20'>
+                <el-input :disabled='disableAuthCodeInput' v-model='newUserInfo.authCode' placeholder='验证码' clearable></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label='密码' prop='password'>
               <el-col :span='20'>
@@ -24,11 +29,6 @@
             <el-form-item label='确认密码' prop='checkPwd'>
               <el-col :span='20'>
                 <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' clearable></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label='邮箱验证码' prop='authCode'>
-              <el-col :span='20'>
-                <el-input :disabled='disableAuthCodeInput' v-model='newUserInfo.authCode' placeholder='验证码' clearable></el-input>
               </el-col>
             </el-form-item>
             <el-form-item>
