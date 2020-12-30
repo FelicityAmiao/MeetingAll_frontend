@@ -43,6 +43,7 @@ import ChinaMapChart from '../../components/eChart/ChinaMapChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
+import _ from 'lodash';
 export default {
   name: 'MeetingRoomDetail',
   components: { SolarSystemChart, LoginDialog, ChinaMapChart },
@@ -60,10 +61,10 @@ export default {
     //   return _.isEqual();
     // },
     isChinaMeetingRoom () {
-      return _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
     },
     isPlanetMeetingRoom () {
-      return _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
     }
   },
   methods: {
