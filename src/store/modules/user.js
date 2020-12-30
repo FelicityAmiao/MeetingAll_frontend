@@ -6,12 +6,15 @@ import MeetingRecords from '../../views/meetingRecords/MeetingRecords';
 import Home from '../../views/Home';
 const state = {
   token: getToken(),
-  name: ''
+  username: ''
 };
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_USERNAME: (state, username) => {
+    state.username = username;
   }
 };
 
@@ -20,7 +23,8 @@ const actions = {
   login ({ commit, dispatch }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(async response => {
-        commit('SET_TOKEN', response.data);
+        commit('SET_TOKEN', response.data.token);
+        commit('SET_USERNAME', response.data.username);
         setToken(response.data);
         const accessRoutes = [{
           path: '/home',
@@ -37,7 +41,6 @@ const actions = {
       });
     });
   },
-
   // get user info
   getInfo ({ commit }) {
     return new Promise((resolve, reject) => {
