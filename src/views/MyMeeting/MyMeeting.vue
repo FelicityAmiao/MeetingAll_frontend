@@ -222,7 +222,7 @@ export default {
           if (response.data) {
             if (this.meeting.status === '已录音') {
               //    询问是否生成报告
-              this.$confirm(`是否生成${this.meeting.languageStr}报告?`, '提示', {
+              this.$confirm(`是否现在生成${this.meeting.languageStr}报告?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
