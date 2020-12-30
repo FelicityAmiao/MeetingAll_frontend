@@ -34,8 +34,8 @@
         </keep-alive>
       </el-main>
     </el-container>
-    <el-dialog title='修改密码' :visible.sync='changePasswordFormVisible'>
-      <el-form :model='changePasswordForm' :rules='changePasswordRules' status-icon>
+    <el-dialog title='修改密码' :visible.sync='changePasswordFormVisible' width='30%' :show-close='showClose'>
+      <el-form ref='changePasswordForm' :model='changePasswordForm' :rules='changePasswordRules' status-icon>
         <el-form-item label='旧密码' :label-width='changePasswordFormLabelWidth' prop='originPassword'>
           <el-input type='password' v-model='changePasswordForm.originPassword' clearable></el-input>
         </el-form-item>
@@ -48,7 +48,7 @@
       </el-form>
       <div slot='footer' class='dialog-footer'>
         <el-button @click='changePasswordFormVisible = false'>取 消</el-button>
-        <el-button type='primary' @click='changePasswordFormVisible = false'>确 定</el-button>
+        <el-button type='primary' @click='changePassword'>确 定</el-button>
       </div>
     </el-dialog>
   </el-container>
@@ -57,6 +57,8 @@
 <script>
 import Nav from '../components/Nav.vue';
 import { validatePwd } from '../utils/validate';
+import md5 from 'js-md5';
+import { post } from '../utils/http';
 
 export default {
   name: 'Home',
@@ -73,6 +75,7 @@ export default {
     };
     return {
       isCollapse: false,
+      showClose: false,
       height: '',
       username: this.$store.getters.username,
       changePasswordFormVisible: false,
@@ -97,6 +100,33 @@ export default {
     this.connectWebSocket();
   },
   methods: {
+    changePassword () {
+      this.$refs['changePasswordForm'].validate((valid) => {
+        if (valid) {
+          let originPwd = md5(this.changePasswordForm.originPassword);
+          let newPwd = md5(this.changePasswordForm.newPassword);
+          let url = 'user/password';
+          post(url, {
+            username: this.$store.getters.username,
+            originPassword: originPwd,
+            newPassword: newPwd
+          }).then((res) => {
+            if (res.data.success) {
+              this.$message.success('密码重设成功，请重新登录！');
+              this.$store.dispatch('user/logout').then(() => {
+                this.$router.push('/login');
+              });
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          }).catch(() => {
+            this.$message.error('注册失败，请重试！');
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     connectWebSocket () {
       this.$store.dispatch('socket/connect');
     },
@@ -142,7 +172,6 @@ export default {
 .right-top-menu {
   position: absolute;
   right: 20px;
-  display: flex;
   height: 60px;
   vertical-align: middle;
   margin-top: 20px;
