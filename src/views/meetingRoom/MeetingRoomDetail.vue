@@ -56,9 +56,9 @@ export default {
     };
   },
   computed: {
-    // isChinaMeetingRoom () {
-    //   return _.isEqual();
-    // },
+    updatedRoom () {
+      return this.$store.getters['socket/GET_UPDATED_ROOM'];
+    },
     isChinaMeetingRoom () {
       return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
     },
@@ -88,6 +88,14 @@ export default {
         return;
       }
       this.$set(this.meetingRoomDetail, index, this.selectedRoom);
+    },
+    updateRoomStatus (value) {
+      const index = _.findIndex(this.meetingRoomDetail, { id: value.id });
+      if (index === -1) {
+        return;
+      }
+      this.selectedRoom = value;
+      this.$set(this.meetingRoomDetail, index, value);
     }
   },
   watch: {
@@ -95,6 +103,12 @@ export default {
       immediate: true,
       handler: function (value) {
         this.meetingRoomDetail = value;
+      }
+    },
+    updatedRoom: {
+      deep: true,
+      handler: function (value) {
+        this.updateRoomStatus(value);
       }
     }
   }
