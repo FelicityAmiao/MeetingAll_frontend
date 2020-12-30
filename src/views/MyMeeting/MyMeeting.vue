@@ -45,33 +45,35 @@
           </div>
           <div style='float: right;margin: 10px'>
             <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
-            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音</el-button>
-            <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音</el-button>
-            <el-button type='success' @click='finishMeeting' >结束会议</el-button>
+            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音
+            </el-button>
+            <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音
+            </el-button>
+            <el-button type='success' @click='finishMeeting'>结束会议</el-button>
           </div>
           <div
-          v-if='showVoiceWave'
-          style='height:100px;width:100%;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
-          class='ctrlProcessWave'
-        ></div>
+            v-if='showVoiceWave'
+            style='height:100px;width:100%;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
+            class='ctrlProcessWave'
+          ></div>
         </el-card>
         <div class='mainBox'>
-        <!-- <div
-          style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
-        >
-          <div
-            class='ctrlProcessX'
-            style='height:40px;background:#0B1;position:absolute;'
-            :style='{ width: powerLevel + "%" }'
-          ></div>
-          <div
-            class='ctrlProcessT'
-            style='padding-left:50px; line-height:40px; position: relative;'
+          <!-- <div
+            style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
           >
-            {{ duration + "/" + powerLevel }}
-          </div>
-        </div> -->
-      </div>
+            <div
+              class='ctrlProcessX'
+              style='height:40px;background:#0B1;position:absolute;'
+              :style='{ width: powerLevel + "%" }'
+            ></div>
+            <div
+              class='ctrlProcessT'
+              style='padding-left:50px; line-height:40px; position: relative;'
+            >
+              {{ duration + "/" + powerLevel }}
+            </div>
+          </div> -->
+        </div>
       </el-main>
     </el-container>
     <el-dialog :title='dialogTitle' :visible.sync='showAddDialog' :before-close='resetForm' center>
@@ -105,14 +107,14 @@
 import { get, post } from '../../utils/http';
 import _ from 'lodash';
 import { formatterLanguage, languageTypes } from '../../utils/language';
-import { formatterRoomNum, roomOptions } from '../../utils/room';
+import { formatterRoomNum } from '../../utils/room';
 
 import Recorder from 'recorder-core';
 import 'recorder-core/src/engine/mp3';
 import 'recorder-core/src/engine/wav';
 import 'recorder-core/src/engine/mp3-engine';
 import 'recorder-core/src/extensions/waveview';
-import { uploadAudio, recording } from '../../repository/meetingRoom/index';
+import { recording, uploadAudio } from '../../repository/meetingRoom/index';
 import LoginDialog from '../LoginDialog';
 
 export default {
@@ -142,7 +144,7 @@ export default {
         status: ''
       },
       languageTypes: languageTypes,
-      roomOptions: roomOptions,
+      roomOptions: [],
       dialogInt: null,
       wave: null,
       Rec: Recorder,
@@ -159,6 +161,8 @@ export default {
   },
   mounted () {
     if (this.$store.getters.token !== undefined) {
+      this.$store.dispatch('user/loadSupportData');
+      this.roomOptions = this.$store.getters.roomOptions;
       this.loadMeeting();
     }
   },
@@ -236,7 +240,7 @@ export default {
             }
             this.showMeeting = false;
           }
-        // this.formatterMeeting(response.data);
+          // this.formatterMeeting(response.data);
         }).catch(() => {
           this.errMessage('Finish meeting failed!');
         });
@@ -309,12 +313,12 @@ export default {
           let set = _this.rec.set;
           _this.$message.success(
             '录制中：' +
-              set.type +
-              ' ' +
-              set.sampleRate +
-              'hz ' +
-              set.bitRate +
-              'kbps'
+                                    set.type +
+                                    ' ' +
+                                    set.sampleRate +
+                                    'hz ' +
+                                    set.bitRate +
+                                    'kbps'
           );
           _this.meeting.status = '录音中';
           recording(_this.meeting);
@@ -362,14 +366,14 @@ export default {
     recDown: function () {
       if (this.voiceRecord) {
         var name =
-        'rec-' +
-        this.voiceRecord.duration +
-        'ms-' +
-        (this.voiceRecord.rec.set.bitRate || '-') +
-        'kbps-' +
-        (this.voiceRecord.rec.set.sampleRate || '-') +
-        'hz.' +
-        (this.voiceRecord.rec.set.type || (/\w+$/.exec(this.voiceRecord.blob.type) || [])[0] || 'unknown');
+                            'rec-' +
+                            this.voiceRecord.duration +
+                            'ms-' +
+                            (this.voiceRecord.rec.set.bitRate || '-') +
+                            'kbps-' +
+                            (this.voiceRecord.rec.set.sampleRate || '-') +
+                            'hz.' +
+                            (this.voiceRecord.rec.set.type || (/\w+$/.exec(this.voiceRecord.blob.type) || [])[0] || 'unknown');
         let downA = document.createElement('A');
         // eslint-disable-next-line no-undef
         downA.href = window.URL.createObjectURL(this.voiceRecord.blob);
