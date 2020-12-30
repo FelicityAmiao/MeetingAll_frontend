@@ -167,7 +167,7 @@ export default {
   },
 
   mounted () {
-    if (this.$store.getters.token !== undefined) {
+    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
       loadRoomOption().then(response => {
         this.roomOptions = response.data;
       });
