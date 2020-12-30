@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 export default {
   name: 'Nav',
   props: {
@@ -37,7 +38,11 @@ export default {
       return this.isCollapse;
     },
     defaultActive: function () {
-      return this.$route.path;
+      let active = this.$route.path;
+      if (!_.isEqual(active, '/meetingRoom') && _.isEqual(active, '/meetingRoomDetail')) {
+        return '/meetingRoom';
+      }
+      return active;
     }
   },
   methods: {

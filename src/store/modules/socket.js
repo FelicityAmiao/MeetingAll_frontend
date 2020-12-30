@@ -1,12 +1,13 @@
-import SockJS from '@/utils/sockjs-0.3.4.js';
-import Stomp from '@/utils/stomp.js';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 const state = {
-  socketClient: null
+  socketClient: null,
+  updatedRoom: {}
 };
 
 const getters = {
-  socket: state => state.socket.socketClient
+  socketClient: state => state.socketClient
 };
 
 const mutations = {
@@ -15,12 +16,12 @@ const mutations = {
 const actions = {
   // connect
   connect (state) {
-    var socket = new SockJS('/hello');
+    var socket = new SockJS('/api/connect');
     state.socketClient = Stomp.over(socket);
     state.socketClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
-      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (greeting) {
-        console.log(greeting);
+      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (room) {
+        state.updatedRoom = room;
       });
     });
   },
