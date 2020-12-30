@@ -9,6 +9,10 @@ const state = {
   name: ''
 };
 
+const getters = {
+  token: state => state.user.token
+};
+
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
@@ -66,6 +70,7 @@ const actions = {
 
 export default {
   namespaced: true,
+  getters,
   state,
   mutations,
   actions
