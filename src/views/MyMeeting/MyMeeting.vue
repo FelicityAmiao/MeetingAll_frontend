@@ -7,13 +7,10 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-card style='width: 50%;margin: auto;'>
+        <el-card style='width: 50%;margin: auto;' v-show='this.meeting.meetingId!==""'>
           <div slot='header' style='margin: auto;width: fit-content;'>
             <span>{{meeting.subject}}</span>
           </div>
-          <!--            <el-form-item label='会议主题'>-->
-          <!--              {{meeting.subject}}-->
-          <!--            </el-form-item>-->
           <div>
             <el-row type='flex' class='row-bg' justify='center'>
               <el-col :span='6'>会议室</el-col>
@@ -50,6 +47,7 @@
             <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
             <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音</el-button>
             <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音</el-button>
+            <el-button type='success' @click='finishMeeting' >结束会议</el-button>
             <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
           </div>
           <div
@@ -146,11 +144,9 @@ export default {
       },
       languageTypes: languageTypes,
       roomOptions: roomOptions,
-
       dialogInt: null,
       wave: null,
       Rec: Recorder,
-
       type: 'wav',
       bitRate: 16,
       sampleRate: 16000,
@@ -177,6 +173,8 @@ export default {
         if (response.data !== '') {
           this.formatterMeeting(response.data);
           this.showMeeting = true;
+        } else {
+          this.meeting.meetingId = '';
         }
       });
     },
@@ -208,6 +206,33 @@ export default {
     resetForm: function () {
       this.showAddDialog = false;
       this.$refs['newMeeting'].resetFields();
+    },
+    finishMeeting: function () {
+      this.$confirm('是否结束会议?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let url = `/myMeeting/${this.meeting.meetingId}`;
+        post(url).then((response) => {
+          console.log(response);
+          if (response.data) {
+            if (this.meeting.status === '已录音') {
+              //    询问是否生成报告
+            } else {
+              this.$message({
+                type: 'info',
+                message: '已结束会议，请至会议记录查看详情。'
+              });
+            }
+          }
+        // this.formatterMeeting(response.data);
+        }).catch(() => {
+          this.errMessage('Finish meeting failed!');
+        });
+      }).catch(() => {
+
+      });
     },
     saveMeeting: function () {
       let currMeeting = {};
