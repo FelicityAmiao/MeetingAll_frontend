@@ -39,8 +39,8 @@
           prop='operation'
           label='操作'>
           <template slot-scope='scope'>
-            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null' v-if='scope.row.reportAddress != null'>下载报告</el-button>
-            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.audioAddress == null' v-if='scope.row.reportAddress == null'>生成报告</el-button>
+            <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null' v-if='scope.row.reportAddress != null  || scope.row.status == "正在生成报告"'>下载报告</el-button>
+            <el-button @click='generateReport(scope.row.meetingId)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.audioAddress == null' v-if='scope.row.reportAddress == null && scope.row.status != "正在生成报告"'>生成报告</el-button>
             <el-button @click='download(scope.row.audioAddress)' icon='el-icon-service' type='text' size='small' :disabled='scope.row.audioAddress == null'>下载录音</el-button>
           </template>
         </el-table-column>
@@ -75,7 +75,7 @@ export default {
       });
     },
     download (address) {
-      let url = 'http://www.meetingall.info:8077/api/files/download/' + address;
+      let url = 'https://www.meetingall.info:8077/api/files/download/' + address;
       window.open(url);
     },
     convertTableRecord (record) {
