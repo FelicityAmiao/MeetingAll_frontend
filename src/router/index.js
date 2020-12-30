@@ -18,13 +18,8 @@ VueRouter.prototype.push = function push (location) {
 const loginPage = () => import('../views/login');
 const registerPage = () => import('../views/register');
 const highFrequencyWordPage = () => import('../views/HighFrequencyWord');
-const recorderPage = () => import('../views/recorder');
 
 const routes = [
-  {
-    path: '/',
-    component: recorderPage
-  },
   {
     path: '/login',
     component: loginPage
@@ -42,26 +37,14 @@ const routes = [
     component: ASR
   },
   {
-    path: '/meetingRoom',
-    component: MeetingRoom
-  },
-  {
-    path: '/meetingRoomDetail',
-    component: MeetingRoomDetail
-  },
-  {
-    path: '/home',
+    path: '/',
     component: Home,
     children: [
-      { path: 'meetingRoom', component: MeetingRoom },
-      { path: 'meetingRoomDetail', component: MeetingRoomDetail },
-      { path: 'myMeeting', component: MyMeeting },
-      { path: 'meetingRecords', component: MeetingRecords }
+      { path: '/meetingRoom', component: MeetingRoom },
+      { path: '/meetingRoomDetail', component: MeetingRoomDetail },
+      { path: '/myMeeting', component: MyMeeting },
+      { path: '/meetingRecords', component: MeetingRecords }
     ]
-  },
-  {
-    path: '/myMeeting',
-    component: MyMeeting
   },
   {
     path: '/test',

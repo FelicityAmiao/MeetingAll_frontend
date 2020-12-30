@@ -17,3 +17,9 @@ export const uploadAudio = async (data) => {
   const body = await post(url, data);
   return body.data;
 };
+
+export const recording = async (data) => {
+  let url = `/myMeeting/recording`;
+  const body = await post(url, data);
+  return body.data;
+};

@@ -1,20 +1,21 @@
 <template>
   <el-row>
     <el-menu
-      default-active='1'
+      router
       background-color='#545c64'
       text-color='#fff'
       active-text-color='#ffd04b'
+      :default-active='defaultActive'
       :collapse='collapse'>
-      <el-menu-item index='1' @click='locationView(1)'>
+      <el-menu-item index='/meetingRoom'>
         <i class='el-icon-location'/>
           <span slot='title'>会议室</span>
       </el-menu-item>
-      <el-menu-item index='2' @click='locationView(2)'>
+      <el-menu-item index='/myMeeting'>
         <i class='el-icon-date'/>
           <span slot='title'>开会</span>
       </el-menu-item>
-      <el-menu-item index='3' @click='locationView(3)'>
+      <el-menu-item index='/meetingRecords'>
         <i class='el-icon-document'/>
           <span slot='title'>会议记录</span>
       </el-menu-item>
@@ -31,28 +32,15 @@ export default {
       default: () => true
     }
   },
-  mounted () {
-    this.$router.push('/home/meetingRoom');
-  },
   computed: {
     collapse () {
       return this.isCollapse;
+    },
+    defaultActive: function () {
+      return this.$route.path;
     }
   },
   methods: {
-    locationView (index) {
-      switch (index) {
-        case 1:
-          this.$router.push('/home/meetingRoom');
-          break;
-        case 2:
-          this.$router.push('/home/myMeeting');
-          break;
-        case 3:
-          this.$router.push('/home/meetingRecords');
-          break;
-      }
-    }
   }
 };
 </script>
