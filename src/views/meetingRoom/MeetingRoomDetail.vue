@@ -43,7 +43,6 @@ import ChinaMapChart from '../../components/eChart/ChinaMapChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
-import _ from 'lodash';
 export default {
   name: 'MeetingRoomDetail',
   components: { SolarSystemChart, LoginDialog, ChinaMapChart },
