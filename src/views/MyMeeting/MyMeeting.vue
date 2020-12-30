@@ -45,7 +45,7 @@
           </div>
           <div style='float: right;margin: 10px'>
             <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
-            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音
+            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave || [`已录音`, `已结束`].includes(meeting.status)'>开始录音
             </el-button>
             <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音
             </el-button>
@@ -354,7 +354,7 @@ export default {
           };
           _this.$message.info('已录制！');
           _this.meeting.status = '已录音';
-          _this.recDown();
+          // _this.recDown();
           _this.uploadFile(blob);
           _this.showVoiceWave = false;
         },
@@ -366,17 +366,8 @@ export default {
     },
     recDown: function () {
       if (this.voiceRecord) {
-        var name =
-                            'rec-' +
-                            this.voiceRecord.duration +
-                            'ms-' +
-                            (this.voiceRecord.rec.set.bitRate || '-') +
-                            'kbps-' +
-                            (this.voiceRecord.rec.set.sampleRate || '-') +
-                            'hz.' +
-                            (this.voiceRecord.rec.set.type || (/\w+$/.exec(this.voiceRecord.blob.type) || [])[0] || 'unknown');
+        var name = 'rec-' + this.voiceRecord.duration + 'ms-' + (this.voiceRecord.rec.set.bitRate || '-') + 'kbps-' + (this.voiceRecord.rec.set.sampleRate || '-') + 'hz.' + (this.voiceRecord.rec.set.type || (/\w+$/.exec(this.voiceRecord.blob.type) || [])[0] || 'unknown');
         let downA = document.createElement('A');
-        // eslint-disable-next-line no-undef
         downA.href = window.URL.createObjectURL(this.voiceRecord.blob);
         downA.download = name;
         downA.click();
