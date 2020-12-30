@@ -18,7 +18,9 @@
         </el-row>
       </el-header>
       <el-main id='mainContainer' style='padding: 0'>
-        <router-view/>
+        <keep-alive>
+          <router-view/>
+        </keep-alive>
       </el-main>
     </el-container>
   </el-container>
