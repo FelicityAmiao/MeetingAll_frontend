@@ -64,6 +64,7 @@
 import { get } from '../../utils/http';
 import { formatterRoomNum } from '../../utils/room';
 import { formatterLanguage } from '../../utils/language';
+import { loadRoomOption } from '../../utils/global_func';
 export default {
   name: 'MeetingRecords',
   methods: {
@@ -84,7 +85,7 @@ export default {
         startDate: record.startDate,
         language: formatterLanguage(record.language),
         reportAddress: record.reportAddress,
-        room: formatterRoomNum(record.room),
+        room: formatterRoomNum(this.roomOptions, record.room),
         status: record.status,
         subject: record.subject,
         startTime: record.startTime,
@@ -157,12 +158,16 @@ export default {
         { key: 'startTime', value: '开始时间' },
         { key: 'endTime', value: '结束时间' },
         { key: 'duration', value: '耗时' }
-      ]
+      ],
+      roomOptions: []
     };
   },
 
   mounted () {
     if (this.$store.getters.token !== undefined) {
+      loadRoomOption().then(response => {
+        this.roomOptions = response.data;
+      });
       this.loadMeetingRecords();
     }
   },
