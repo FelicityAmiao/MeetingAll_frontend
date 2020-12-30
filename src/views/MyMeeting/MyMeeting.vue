@@ -114,7 +114,7 @@ import 'recorder-core/src/engine/mp3';
 import 'recorder-core/src/engine/wav';
 import 'recorder-core/src/engine/mp3-engine';
 import 'recorder-core/src/extensions/waveview';
-import { uploadAudio } from '../../repository/meetingRoom/index';
+import { uploadAudio, recording } from '../../repository/meetingRoom/index';
 
 export default {
   name: 'MyMeeting',
@@ -271,6 +271,8 @@ export default {
               set.bitRate +
               'kbps'
           );
+          _this.meeting.status = '录音中';
+          recording(_this.meeting);
         },
         function (msg, isUserNotAllow) {
           clearInterval(_this.dialogInt);
@@ -301,6 +303,7 @@ export default {
             rec: rec
           };
           _this.$message.info('已录制！');
+          _this.meeting.status = '已录音';
           _this.recDown();
           _this.uploadFile(blob);
           _this.showVoiceWave = false;
