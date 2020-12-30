@@ -16,7 +16,7 @@
             <div>Meeting All</div>
           </el-col>
         </el-row>
-        <div class='right-top-menu'>
+        <div class='right-top-menu' v-if='username != "" && username != null'>
           <el-dropdown @command='handleCommand'>
             <span class='el-dropdown-link'>
               {{username}}<i class='el-icon-arrow-down el-icon--right'></i>

@@ -1,5 +1,6 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import _ from 'lodash';
 
 const state = {
   socketClient: null,
@@ -8,10 +9,14 @@ const state = {
 };
 
 const getters = {
-  socketClient: state => state.socketClient
+  socketClient: state => state.socketClient,
+  GET_UPDATED_ROOM: state => state.updatedRoom
 };
 
 const mutations = {
+  SET_UPDATED_ROOM: (state, updatedRoom) => {
+    state.updatedRoom = updatedRoom;
+  }
 };
 
 const actions = {
@@ -21,8 +26,9 @@ const actions = {
     state.socketClient = Stomp.over(socket);
     state.socketClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
-      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (room) {
-        state.updatedRoom = room;
+      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (frame) {
+        const updatedRoom = JSON.parse(_.get(frame, 'body', {}));
+        state.commit('SET_UPDATED_ROOM', updatedRoom);
       });
       state.socketClient.subscribe('/user/queue/reportGeneration', function (room) {
         state.updatedMeetingRecord = room;

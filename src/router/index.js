@@ -7,7 +7,7 @@ import MyMeeting from '../views/MyMeeting/MyMeeting';
 import Home from '../views/Home';
 import Test from '../views/Test';
 import MeetingRecords from '../views/meetingRecords/MeetingRecords';
-import EChart from '../components/eChart/SolarSystemChart';
+import EChart from '../components/eChart/ChinaMapChart';
 
 Vue.use(VueRouter);
 // 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
@@ -39,6 +39,7 @@ const routes = [
   {
     path: '/',
     component: Home,
+    redirect: '/meetingRoom',
     children: [
       { path: '/meetingRoom', component: MeetingRoom },
       { path: '/meetingRoomDetail', component: MeetingRoomDetail },
