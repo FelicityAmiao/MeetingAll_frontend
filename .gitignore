@@ -24,3 +24,5 @@ pnpm-debug.log*
 
 # ignore package-lock.json, avoid code conflict
 package-lock.json
+/package-lock.json
+/workspace.code-workspace
