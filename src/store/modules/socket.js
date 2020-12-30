@@ -3,7 +3,8 @@ import Stomp from 'stompjs';
 
 const state = {
   socketClient: null,
-  updatedRoom: {}
+  updatedRoom: {},
+  updatedMeetingRecord: {}
 };
 
 const getters = {
@@ -23,9 +24,15 @@ const actions = {
       state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (room) {
         state.updatedRoom = room;
       });
+      state.socketClient.subscribe('/user/queue/reportGeneration', function (room) {
+        state.updatedMeetingRecord = room;
+      });
     });
   },
 
+  sendMessage (state, msg) {
+    state.socketClient.send('/app/updateMeeting', msg);
+  },
   // disconnect
   disconnect (state) {
     if (state.socketClient != null) {
