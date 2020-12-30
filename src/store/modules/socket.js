@@ -2,7 +2,8 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
 const state = {
-  socketClient: null
+  socketClient: null,
+  updatedRoom: {}
 };
 
 const getters = {
@@ -19,8 +20,8 @@ const actions = {
     state.socketClient = Stomp.over(socket);
     state.socketClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
-      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (greeting) {
-        console.log(greeting);
+      state.socketClient.subscribe('/topic/subscribeMeetingStatus', function (room) {
+        state.updatedRoom = room;
       });
     });
   },
