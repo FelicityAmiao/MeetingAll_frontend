@@ -126,17 +126,19 @@ export default {
       }
     },
     loadMeetingRecords: function () {
-      let that = this;
-      let url = `/myMeeting/meetingrecords`;
-      get(url).then(response => {
-        this.tableData = [];
-        that.allData = response.data;
-        that.total = response.data.length;
-        let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
-        for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
-          this.tableData.push(this.convertTableRecord(this.allData[i]));
-        }
-      });
+      if (this.$store.getters.token !== undefined) {
+        let that = this;
+        let url = `/myMeeting/meetingrecords`;
+        get(url).then(response => {
+          this.tableData = [];
+          that.allData = response.data;
+          that.total = response.data.length;
+          let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
+          for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
+            this.tableData.push(this.convertTableRecord(this.allData[i]));
+          }
+        });
+      }
     }
   },
 
@@ -162,15 +164,11 @@ export default {
   },
 
   mounted () {
-    if (this.$store.getters.token !== undefined) {
-      this.loadMeetingRecords();
-    }
+    this.loadMeetingRecords();
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (this.$store.getters.token !== undefined) {
-        await vm.loadMeetingRecords();
-      }
+      await vm.loadMeetingRecords();
     });
   }
 };
