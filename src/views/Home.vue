@@ -43,6 +43,12 @@ export default {
     window.addEventListener('resize', () => {
       this.height = window.innerHeight;
     });
+    this.connectWebSocket();
+  },
+  methods: {
+    connectWebSocket () {
+      this.$store.dispatch('socket/connect');
+    }
   }
 };
 </script>
