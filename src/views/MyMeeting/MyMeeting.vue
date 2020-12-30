@@ -374,6 +374,7 @@ export default {
       let fd = new FormData();
       fd.append('attachmentFile', fileBlob);
       fd.append('meetingId', this.meeting.id);
+      fd.append('meetingSubject', this.meeting.subject);
       try {
         await uploadAudio(fd);
       } catch (error) {

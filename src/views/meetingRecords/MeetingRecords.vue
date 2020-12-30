@@ -126,19 +126,17 @@ export default {
       }
     },
     loadMeetingRecords: function () {
-      if (this.$store.getters.token !== undefined) {
-        let that = this;
-        let url = `/myMeeting/meetingrecords`;
-        get(url).then(response => {
-          this.tableData = [];
-          that.allData = response.data;
-          that.total = response.data.length;
-          let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
-          for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
-            this.tableData.push(this.convertTableRecord(this.allData[i]));
-          }
-        });
-      }
+      let that = this;
+      let url = `/myMeeting/meetingrecords`;
+      get(url).then(response => {
+        this.tableData = [];
+        that.allData = response.data;
+        that.total = response.data.length;
+        let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
+        for (let i = this.pageSize * (this.currentPage - 1); i < count; i++) {
+          this.tableData.push(this.convertTableRecord(this.allData[i]));
+        }
+      });
     }
   },
 
@@ -164,11 +162,16 @@ export default {
   },
 
   mounted () {
-    this.loadMeetingRecords();
+    if (this.$store.getters.token !== undefined) {
+      this.loadMeetingRecords();
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
+      if (vm.$store.getters.token !== undefined) {
       await vm.loadMeetingRecords();
+        await vm.loadMeetingRecords();
+      }
     });
   }
 };
