@@ -24,27 +24,28 @@
       </el-card>
     <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
     </div>
-    <div>
+    <div v-if='isPlanetMeetingRoom'>
       <keep-alive>
         <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
       </keep-alive>
     </div>
-<!--    <div v-if=''>-->
-<!--      <keep-alive>-->
-<!--        <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>-->
-<!--      </keep-alive>-->
-<!--    </div>-->
+    <div v-if='isChinaMeetingRoom'>
+      <keep-alive>
+        <china-map-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
+      </keep-alive>
+    </div>
   </div>
 </template>
 
 <script>
 import SolarSystemChart from '../../components/eChart/SolarSystemChart';
+import ChinaMapChart from '../../components/eChart/ChinaMapChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
 export default {
   name: 'MeetingRoomDetail',
-  components: { SolarSystemChart, LoginDialog },
+  components: { SolarSystemChart, LoginDialog, ChinaMapChart },
   data () {
     return {
       visible: false,
@@ -58,12 +59,12 @@ export default {
     // isChinaMeetingRoom () {
     //   return _.isEqual();
     // },
-    // isChinaMeetingRoom () {
-    //   return _.isEqual();
-    // },
-    // isChinaMeetingRoom () {
-    //   return _.isEqual();
-    // }
+    isChinaMeetingRoom () {
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
+    },
+    isPlanetMeetingRoom () {
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
+    }
   },
   methods: {
     isBusyStatus (status) {

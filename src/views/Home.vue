@@ -17,7 +17,15 @@
           </el-col>
         </el-row>
         <div class='right-top-menu'>
-          <p>user</p>
+          <el-dropdown @command='handleCommand'>
+            <span class='el-dropdown-link'>
+              {{username}}<i class='el-icon-arrow-down el-icon--right'></i>
+            </span>
+            <el-dropdown-menu slot='dropdown'>
+              <el-dropdown-item command='changePassword'>修改密码</el-dropdown-item>
+              <el-dropdown-item command='logout'>退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </el-header>
       <el-main id='mainContainer' style='padding: 0'>
@@ -26,19 +34,62 @@
         </keep-alive>
       </el-main>
     </el-container>
+    <el-dialog title='修改密码' :visible.sync='changePasswordFormVisible' width='30%' :show-close='showClose'>
+      <el-form ref='changePasswordForm' :model='changePasswordForm' :rules='changePasswordRules' status-icon>
+        <el-form-item label='旧密码' :label-width='changePasswordFormLabelWidth' prop='originPassword'>
+          <el-input type='password' v-model='changePasswordForm.originPassword' clearable></el-input>
+        </el-form-item>
+        <el-form-item label='新密码' :label-width='changePasswordFormLabelWidth' prop='newPassword'>
+          <el-input type='password' v-model='changePasswordForm.newPassword' clearable></el-input>
+        </el-form-item>
+        <el-form-item label='确认密码' :label-width='changePasswordFormLabelWidth' prop='confirmPassword'>
+          <el-input type='password' v-model='changePasswordForm.confirmPassword' clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot='footer' class='dialog-footer'>
+        <el-button @click='changePasswordFormVisible = false'>取 消</el-button>
+        <el-button type='primary' @click='changePassword'>确 定</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
 <script>
 import Nav from '../components/Nav.vue';
+import { validatePwd } from '../utils/validate';
+import md5 from 'js-md5';
+import { post } from '../utils/http';
 
 export default {
   name: 'Home',
   components: { Nav },
   data () {
+    let validatePwd2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.changePasswordForm.newPassword) {
+        callback(new Error('两次输入密码不一致'));
+      } else {
+        callback();
+      }
+    };
     return {
       isCollapse: false,
-      height: ''
+      showClose: false,
+      height: '',
+      username: sessionStorage.getItem('username'),
+      changePasswordFormVisible: false,
+      changePasswordFormLabelWidth: '100px',
+      changePasswordForm: {
+        originPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      },
+      changePasswordRules: {
+        originPassword: [{ validator: validatePwd, trigger: 'blur' }],
+        newPassword: [{ validator: validatePwd, trigger: 'blur' }],
+        confirmPassword: [{ validator: validatePwd2, trigger: 'blur' }]
+      }
     };
   },
   mounted () {
@@ -49,8 +100,50 @@ export default {
     this.connectWebSocket();
   },
   methods: {
+    changePassword () {
+      this.$refs['changePasswordForm'].validate((valid) => {
+        if (valid) {
+          let originPwd = md5(this.changePasswordForm.originPassword);
+          let newPwd = md5(this.changePasswordForm.newPassword);
+          let url = 'user/password';
+          post(url, {
+            username: this.username,
+            originPassword: originPwd,
+            newPassword: newPwd
+          }).then((res) => {
+            if (res.data.success) {
+              this.$message.success('密码重设成功，请重新登录！');
+              this.$store.dispatch('user/logout').then(() => {
+                this.$router.push('/login');
+              });
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          }).catch(() => {
+            this.$message.error('密码重设失败，请重试！');
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     connectWebSocket () {
       this.$store.dispatch('socket/connect');
+    },
+    handleCommand (command) {
+      if (command === 'changePassword') {
+        this.changePasswordFormVisible = true;
+      } else {
+        this.$confirm('您是否要退出?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('user/logout').then(() => {
+            this.$router.push('/login');
+          });
+        });
+      }
     }
   }
 };
@@ -79,8 +172,15 @@ export default {
 .right-top-menu {
   position: absolute;
   right: 20px;
-  display: flex;
   height: 60px;
   vertical-align: middle;
+  margin-top: 20px;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>

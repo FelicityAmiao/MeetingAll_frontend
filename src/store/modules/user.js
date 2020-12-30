@@ -4,14 +4,18 @@ import router from '../../router';
 import MyMeeting from '../../views/MyMeeting/MyMeeting';
 import MeetingRecords from '../../views/meetingRecords/MeetingRecords';
 import Home from '../../views/Home';
+import { loadRoomOption } from '../../utils/global_func';
 const state = {
   token: getToken(),
-  name: ''
+  roomOptions: []
 };
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
+  },
+  SET_ROOM_OPTION: (state, roomOptions) => {
+    state.roomOptions = roomOptions;
   }
 };
 
@@ -20,8 +24,9 @@ const actions = {
   login ({ commit, dispatch }, userInfo) {
     return new Promise((resolve, reject) => {
       login(userInfo).then(async response => {
-        commit('SET_TOKEN', response.data);
-        setToken(response.data);
+        commit('SET_TOKEN', response.data.token);
+        sessionStorage.setItem('username', response.data.username);
+        setToken(response.data.token);
         const accessRoutes = [{
           path: '/home',
           component: Home,
@@ -38,6 +43,16 @@ const actions = {
     });
   },
 
+  loadSupportData ({ commit, dispatch }) {
+    return new Promise((resolve, reject) => {
+      loadRoomOption().then(async response => {
+        commit('SET_ROOM_OPTION', response.data);
+        resolve();
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
   // get user info
   getInfo ({ commit }) {
     return new Promise((resolve, reject) => {
@@ -50,6 +65,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '');
       removeToken();
+      sessionStorage.removeItem('username');
       resolve();
     });
   },
