@@ -37,7 +37,7 @@ export default {
     selectMeetingRoom (office) {
       const meetingRoomDetail = this.meetingRoomGroup[office];
       this.$router.push({
-        path: '/home/meetingRoomDetail',
+        path: '/meetingRoomDetail',
         query: {
           meetingRoomDetail
         }

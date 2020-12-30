@@ -129,6 +129,7 @@ export default {
       let that = this;
       let url = `/myMeeting/meetingrecords`;
       get(url).then(response => {
+        this.tableData = [];
         that.allData = response.data;
         that.total = response.data.length;
         let count = this.total < this.pageSize * this.currentPage ? this.total : this.pageSize * this.currentPage;
@@ -163,7 +164,12 @@ export default {
   mounted () {
     if (this.$store.getters.token !== undefined) {
       this.loadMeetingRecords();
-    }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next(async (vm) => {
+      await vm.loadMeetingRecords();
+    });
   }
 };
 </script>
