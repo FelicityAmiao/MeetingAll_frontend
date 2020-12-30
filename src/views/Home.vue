@@ -107,7 +107,7 @@ export default {
           let newPwd = md5(this.changePasswordForm.newPassword);
           let url = 'user/password';
           post(url, {
-            username: this.$store.getters.username,
+            username: this.username,
             originPassword: originPwd,
             newPassword: newPwd
           }).then((res) => {
@@ -120,7 +120,7 @@ export default {
               this.$message.error(res.data.msg);
             }
           }).catch(() => {
-            this.$message.error('注册失败，请重试！');
+            this.$message.error('密码重设失败，请重试！');
           });
         } else {
           return false;
