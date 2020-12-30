@@ -375,7 +375,7 @@ export default {
     uploadFile: async function (fileBlob) {
       let fd = new FormData();
       fd.append('attachmentFile', fileBlob);
-      fd.append('meetingId', this.meeting.id);
+      fd.append('meetingId', this.meeting.meetingId);
       fd.append('meetingSubject', this.meeting.subject);
       try {
         await uploadAudio(fd);
