@@ -17,7 +17,7 @@
       </el-menu-item>
       <el-menu-item index='/meetingRecords'>
         <i class='el-icon-document'/>
-          <span slot='title'>会议记录</span>
+          <span slot='title'>历史会议记录</span>
       </el-menu-item>
     </el-menu>
   </el-row>
