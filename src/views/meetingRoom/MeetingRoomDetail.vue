@@ -60,10 +60,10 @@ export default {
     //   return _.isEqual();
     // },
     isChinaMeetingRoom () {
-      return _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-1', _.get(this.meetingRoomDetail[0], 'office', ''));
     },
     isPlanetMeetingRoom () {
-      return _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
     }
   },
   methods: {
