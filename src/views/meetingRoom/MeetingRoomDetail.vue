@@ -22,13 +22,13 @@
           </el-row>
         </div>
       </el-card>
+    <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
     </div>
     <div>
       <keep-alive>
         <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
       </keep-alive>
     </div>
-    <login-dialog :showLoginDialog='showLoginDialog' @closeDialog='closeLoginDialog'></login-dialog>
 <!--    <div v-if=''>-->
 <!--      <keep-alive>-->
 <!--        <solar-system-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>-->
@@ -78,6 +78,7 @@ export default {
     async updateDeviceStatus () {
       if (this.$store.getters.token === undefined) {
         this.showLoginDialog = true;
+        this.selectedRoom.isDeviceStarted = !this.selectedRoom.isDeviceStarted;
         return;
       }
       await updateDevicePowerStatus(this.selectedRoom);
