@@ -14,12 +14,6 @@ export default {
     meetingRoomList: {
       type: Array,
       defaults: () => []
-    },
-    height: {
-      type: Number
-    },
-    width: {
-      type: Number
     }
   },
   data () {
@@ -181,47 +175,6 @@ export default {
       return data;
     },
     genMeetingRoomItemList () {
-      // [{
-      //   name: '2010年',
-      //   symbolSize: 10,
-      //   value: 10
-      // }, {
-      //   name: '2012年',
-      //   symbolSize: 15,
-      //   value: 15
-      // }, {
-      //   name: '2013年',
-      //   symbolSize: 20,
-      //   value: 20
-      // }, {
-      //   name: '2014年',
-      //   symbolSize: 25,
-      //   value: 25
-      // }, {
-      //   name: '2015年',
-      //   symbolSize: 30,
-      //   value: 30
-      // }, {
-      //   name: '2016年',
-      //   symbolSize: 35,
-      //   value: 35
-      // }, {
-      //   name: '2017年',
-      //   symbolSize: 40,
-      //   value: 40
-      // }, {
-      //   name: '2018年',
-      //   symbolSize: 45,
-      //   value: 45
-      // }, {
-      //   name: '2019年',
-      //   symbolSize: 50,
-      //   value: 50
-      // }, {
-      //   name: '2020年',
-      //   symbolSize: 55,
-      //   value: 55
-      // }]
       let meetingRoomItemList = [];
       _.forEach(this.meetingRoomList, it => {
         meetingRoomItemList.push({
