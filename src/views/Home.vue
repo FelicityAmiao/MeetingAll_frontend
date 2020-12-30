@@ -16,6 +16,9 @@
             <div>Meeting All</div>
           </el-col>
         </el-row>
+        <div class='right-top-menu'>
+          <p>user</p>
+        </div>
       </el-header>
       <el-main id='mainContainer' style='padding: 0'>
         <keep-alive>
@@ -72,5 +75,12 @@ export default {
 }
 >>> .el-menu {
   border-right: none!important;
+}
+.right-top-menu {
+  position: absolute;
+  right: 20px;
+  display: flex;
+  height: 60px;
+  vertical-align: middle;
 }
 </style>
