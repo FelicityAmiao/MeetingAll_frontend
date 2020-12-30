@@ -9,7 +9,7 @@ router.beforeEach(async (to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/home/myMeeting' });
+      next({ path: '/myMeeting' });
     } else {
       // determine whether the user has obtained his permission roles through getInfo
       next();

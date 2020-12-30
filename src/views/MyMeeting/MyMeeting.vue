@@ -7,7 +7,7 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-card style='width: 50%;margin: auto;' v-show='this.meeting.meetingId!==""'>
+        <el-card style='width: 50%;margin: auto;' v-show='this.showMeeting'>
           <div slot='header' style='margin: auto;width: fit-content;'>
             <span>{{meeting.subject}}</span>
           </div>
@@ -48,7 +48,6 @@
             <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave'>开始录音</el-button>
             <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音</el-button>
             <el-button type='success' @click='finishMeeting' >结束会议</el-button>
-            <el-button v-show='meeting.status==="已录音"' type='success' @click='generateReport'>生成报告</el-button>
           </div>
           <div
           v-if='showVoiceWave'
@@ -174,7 +173,7 @@ export default {
           this.formatterMeeting(response.data);
           this.showMeeting = true;
         } else {
-          this.meeting.meetingId = '';
+          this.showMeeting = false;
         }
       });
     },
@@ -215,23 +214,32 @@ export default {
       }).then(() => {
         let url = `/myMeeting/${this.meeting.meetingId}`;
         post(url).then((response) => {
-          console.log(response);
           if (response.data) {
             if (this.meeting.status === '已录音') {
               //    询问是否生成报告
+              this.$confirm(`是否生成${this.meeting.languageStr}报告?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.generateReport();
+                this.$message({
+                  type: 'info',
+                  message: '报告生成中，请至会议记录查看详情。'
+                });
+              });
             } else {
               this.$message({
                 type: 'info',
                 message: '已结束会议，请至会议记录查看详情。'
               });
             }
+            this.showMeeting = false;
           }
         // this.formatterMeeting(response.data);
         }).catch(() => {
           this.errMessage('Finish meeting failed!');
         });
-      }).catch(() => {
-
       });
     },
     saveMeeting: function () {
@@ -252,13 +260,12 @@ export default {
       this.showAddDialog = false;
       this.$refs['newMeeting'].resetFields();
     },
-    generateReport: function (value) {
+    generateReport: function () {
       get(`/myMeeting/report/${this.meeting.meetingId}`).then((response) => {
         this.formatterMeeting(response.data);
       }).catch(() => {
         this.errMessage('Failed!');
       });
-      console.log(value);
     },
     openEditDialog: function () {
       this.showAddDialog = true;
