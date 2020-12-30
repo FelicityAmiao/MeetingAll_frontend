@@ -168,7 +168,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (this.$store.getters.token !== undefined) {
+      if (vm.$store.getters.token !== undefined) {
         await vm.loadMeetingRecords();
       }
     });
