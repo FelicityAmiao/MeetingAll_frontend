@@ -7,16 +7,12 @@ import Home from '../../views/Home';
 import { loadRoomOption } from '../../utils/global_func';
 const state = {
   token: getToken(),
-  username: '',
   roomOptions: []
 };
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
-  },
-  SET_USERNAME: (state, username) => {
-    state.username = username;
   },
   SET_ROOM_OPTION: (state, roomOptions) => {
     state.roomOptions = roomOptions;
@@ -29,7 +25,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       login(userInfo).then(async response => {
         commit('SET_TOKEN', response.data.token);
-        commit('SET_USERNAME', response.data.username);
+        sessionStorage.setItem('username', response.data.username);
         setToken(response.data.token);
         const accessRoutes = [{
           path: '/home',
@@ -69,6 +65,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '');
       removeToken();
+      sessionStorage.removeItem('username');
       resolve();
     });
   },
