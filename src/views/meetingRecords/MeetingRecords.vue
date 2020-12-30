@@ -40,7 +40,7 @@
           label='操作'>
           <template slot-scope='scope'>
             <el-button @click='download(scope.row.reportAddress)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.reportAddress == null' v-if='scope.row.reportAddress != null  || scope.row.status == "正在生成报告"'>下载报告</el-button>
-            <el-button @click='generateReport(scope.row.meetingId)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.audioAddress == null' v-if='scope.row.reportAddress == null && scope.row.status != "正在生成报告"'>生成报告</el-button>
+            <el-button @click='generateReport(scope.row)' icon='el-icon-document' type='text' size='small' :disabled='scope.row.audioAddress == null' v-if='scope.row.reportAddress == null && scope.row.status != "正在生成报告"'>生成报告</el-button>
             <el-button @click='download(scope.row.audioAddress)' icon='el-icon-service' type='text' size='small' :disabled='scope.row.audioAddress == null'>下载录音</el-button>
           </template>
         </el-table-column>
@@ -64,18 +64,21 @@
 import { get } from '../../utils/http';
 import { formatterRoomNum } from '../../utils/room';
 import { formatterLanguage } from '../../utils/language';
+import { loadRoomOption } from '../../utils/global_func';
 export default {
   name: 'MeetingRecords',
   methods: {
-    generateReport: function (value) {
-      get(`/myMeeting/report/${value}`).then((response) => {
+    generateReport: function (data) {
+      let meetingId = data.meetingId;
+      get(`/myMeeting/report/${meetingId}`).then((response) => {
         this.$message.success('正在生成报告！');
+        data.status = response.data.status;
       }).catch(() => {
         this.$message.error('生成报告发生错误，请重试！', 1);
       });
     },
     download (address) {
-      let url = 'https://www.meetingall.info:8077/api/files/download/' + address;
+      let url = 'http://www.meetingall.info:8077/api/files/download/' + address;
       window.open(url);
     },
     convertTableRecord (record) {
@@ -84,12 +87,13 @@ export default {
         startDate: record.startDate,
         language: formatterLanguage(record.language),
         reportAddress: record.reportAddress,
-        room: formatterRoomNum(record.room),
+        room: formatterRoomNum(this.roomOptions, record.room),
         status: record.status,
         subject: record.subject,
         startTime: record.startTime,
         endTime: record.endTime,
-        duration: record.duration
+        duration: record.duration,
+        meetingId: record.meetingId
       };
     },
     filter () {
@@ -157,12 +161,16 @@ export default {
         { key: 'startTime', value: '开始时间' },
         { key: 'endTime', value: '结束时间' },
         { key: 'duration', value: '耗时' }
-      ]
+      ],
+      roomOptions: []
     };
   },
 
   mounted () {
     if (this.$store.getters.token !== undefined) {
+      loadRoomOption().then(response => {
+        this.roomOptions = response.data;
+      });
       this.loadMeetingRecords();
     }
   },

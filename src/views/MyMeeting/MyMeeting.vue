@@ -116,7 +116,7 @@ import 'recorder-core/src/engine/mp3-engine';
 import 'recorder-core/src/extensions/waveview';
 import { recording, uploadAudio } from '../../repository/meetingRoom/index';
 import LoginDialog from '../LoginDialog';
-
+import { loadRoomOption } from '../../utils/global_func';
 export default {
   name: 'MyMeeting',
   components: { LoginDialog },
@@ -161,8 +161,9 @@ export default {
   },
   mounted () {
     if (this.$store.getters.token !== undefined) {
-      this.$store.dispatch('user/loadSupportData');
-      this.roomOptions = this.$store.getters.roomOptions;
+      loadRoomOption().then(response => {
+        this.roomOptions = response.data;
+      });
       this.loadMeeting();
     }
   },
@@ -184,7 +185,7 @@ export default {
     formatterMeeting: function (res) {
       this.meeting = res;
       this.meeting.languageStr = formatterLanguage(this.meeting.language);
-      this.meeting.roomStr = formatterRoomNum(this.meeting.room);
+      this.meeting.roomStr = formatterRoomNum(this.roomOptions, this.meeting.room);
       this.meeting.time = this.formatterMeetingTime(this.meeting);
     },
     formatterMeetingTime: function (meeting) {
@@ -221,7 +222,7 @@ export default {
           if (response.data) {
             if (this.meeting.status === '已录音') {
               //    询问是否生成报告
-              this.$confirm(`是否生成${this.meeting.languageStr}报告?`, '提示', {
+              this.$confirm(`是否现在生成${this.meeting.languageStr}报告?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

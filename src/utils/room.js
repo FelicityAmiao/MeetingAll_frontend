@@ -1,8 +1,7 @@
 import _ from 'lodash';
-import store from '../store';
-const formatterRoomNum = (row) => {
+const formatterRoomNum = (roomOptions,row) => {
   let val = '';
-  store.getters.roomOptions.map((item) => {
+  roomOptions.map((item) => {
     if (item.value === row[0]) {
       val += item.label;
       val += '-';
