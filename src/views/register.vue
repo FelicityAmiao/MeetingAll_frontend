@@ -2,21 +2,34 @@
   <div class='background'>
     <el-container>
       <el-main>
-        <el-card shadow='always' style='width: 600px;height: 540px;margin:auto;'>
-          <h1 style='margin-top: 10px'>用户注册</h1>
-          <el-form ref='newUserInfo' :model='newUserInfo' :rules='addUserRules' label-width='100px' status-icon>
+        <el-card shadow='always' style='width: 620px;height: 450px;margin:auto;'>
+          <h1 class='title'>用户注册</h1>
+          <el-form ref='newUserInfo' :model='newUserInfo' :rules='addUserRules' label-position='right' label-width='100px' status-icon>
             <el-form-item label='用户名' prop='username'>
-              <el-input v-model='newUserInfo.username' placeholder='请输入用户名' clearable></el-input>
-              <el-button type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode'>发送验证码</el-button>
+              <el-row class='demo-autocomplete'>
+                <el-col :span='20'>
+                  <el-input v-model='newUserInfo.username' placeholder='请输入用户名' clearable></el-input>
+                </el-col>
+                <el-col :span='4'>
+                  <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode'>发送验证码</el-button>
+                  <el-button v-if='!show' type='text' :disabled='true'>发送验证码({{count}})</el-button>
+                </el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label='密码' prop='password'>
-              <el-input type='password' v-model='newUserInfo.password' placeholder='请输入密码' clearable></el-input>
+              <el-col :span='20'>
+                <el-input type='password' v-model='newUserInfo.password' placeholder='请输入密码' clearable></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label='确认密码' prop='checkPwd'>
-              <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' clearable></el-input>
+              <el-col :span='20'>
+                <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' clearable></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label='邮箱验证码' prop='authCode'>
-              <el-input :disabled='disableAuthCodeInput' v-model='newUserInfo.authCode' placeholder='验证码' clearable></el-input>
+              <el-col :span='20'>
+                <el-input :disabled='disableAuthCodeInput' v-model='newUserInfo.authCode' placeholder='验证码' clearable></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item>
               <el-button @click='addUser' type='primary'>注册</el-button>
@@ -67,6 +80,9 @@ export default {
       }
     };
     return {
+      show: true,
+      count: '',
+      timer: null,
       disableAuthCodeButton: true,
       disableAuthCodeInput: true,
       newUserInfo: {
@@ -121,6 +137,20 @@ export default {
       }).then(response => {
         if (response.data) {
           this.$message.success('验证码已发送，请查收！');
+          const TIME_COUNT = 60;
+          if (!this.timer) {
+            this.count = TIME_COUNT;
+            this.show = false;
+            this.timer = setInterval(() => {
+              if (this.count > 0 && this.count <= TIME_COUNT) {
+                this.count--;
+              } else {
+                this.show = true;
+                clearInterval(this.timer);
+                this.timer = null;
+              }
+            }, 1000);
+          }
         } else {
           this.$message.error('验证码发送失败，请重试！');
         }
@@ -135,5 +165,10 @@ export default {
     background-image: url("https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png");
     background-size: 100% 100%;
     height: 700px;
+  }
+  .title {
+    margin: 15px auto 20px auto;
+    text-align: center;
+    color: #505458;
   }
 </style>
