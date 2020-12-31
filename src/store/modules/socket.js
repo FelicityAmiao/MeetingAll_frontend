@@ -9,13 +9,20 @@ const state = {
 };
 
 const getters = {
-  socketClient: state => state.socketClient,
-  GET_UPDATED_ROOM: state => state.updatedRoom
+  SOCKET_CLIENT: state => state.socketClient,
+  GET_UPDATED_ROOM: state => state.updatedRoom,
+  GET_UPDATED_MEETING_RECORD: state => state.updatedMeetingRecord
 };
 
 const mutations = {
   SET_UPDATED_ROOM: (state, updatedRoom) => {
     state.updatedRoom = updatedRoom;
+  },
+  SET_UPDATE_MEETING_RECORD: (state, updateRecord) => {
+    state.updatedMeetingRecord = updateRecord;
+  },
+  SET_SOCKET_CLIENT: (state, client) => {
+    state.socketClient = client;
   }
 };
 
@@ -30,14 +37,11 @@ const actions = {
         const updatedRoom = JSON.parse(_.get(frame, 'body', {}));
         state.commit('SET_UPDATED_ROOM', updatedRoom);
       });
-      state.socketClient.subscribe('/user/queue/reportGeneration', function (room) {
-        state.updatedMeetingRecord = room;
+      state.socketClient.subscribe('/queue/reportGeneration', function (record) {
+        const updatedRecord = _.get(record, 'body', {});
+        state.commit('SET_UPDATE_MEETING_RECORD', updatedRecord);
       });
     });
-  },
-
-  sendMessage (state, msg) {
-    state.socketClient.send('/app/updateMeeting', msg);
   },
   // disconnect
   disconnect (state) {

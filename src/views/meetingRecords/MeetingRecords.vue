@@ -67,13 +67,14 @@ import { formatterLanguage } from '../../utils/language';
 export default {
   name: 'MeetingRecords',
   methods: {
+
     generateReport: function (data) {
       let meetingId = data.meetingId;
       get(`/myMeeting/report/${meetingId}`).then((response) => {
-        this.$message.success('正在生成报告！');
+        this.$message.success('正在生成报告');
         data.status = response.data.status;
       }).catch(() => {
-        this.$message.error('生成报告发生错误，请重试！', 1);
+        this.$message.error('生成报告发生错误，请重试', 1);
       });
     },
     download (address) {
@@ -172,7 +173,7 @@ export default {
       pageSize: 10,
       search: '',
       tableHeader: [
-        { key: 'room', value: '会议室' },
+        { key: 'room', value: '会议' },
         { key: 'subject', value: '会议主题' },
         { key: 'language', value: '语言' },
         { key: 'startDate', value: '会议日期' },
@@ -185,6 +186,26 @@ export default {
   },
   mounted () {
     this.loadMeetingRecords();
+  },
+  computed: {
+    updatedRecord () {
+      return this.$store.getters['socket/GET_UPDATED_MEETING_RECORD'];
+    }
+  },
+  watch: {
+    updatedRecord: {
+      deep: true,
+      handler: function (val) {
+        let record = JSON.parse(val);
+        for (let data of this.allData) {
+          if (record.meetingId === data.meetingId) {
+            data.status = record.status;
+            data.reportAddress = record.reportAddress;
+            this.handleSizeChange(this.pageSize);
+          }
+        }
+      }
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
