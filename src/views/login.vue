@@ -3,7 +3,7 @@
     <el-container>
       <el-main style='margin: 120px auto'>
         <h1 align='center' class='title'>Meeting All</h1>
-        <h1 align='center' class='subTitle'>all in your hands</h1>
+        <h1 align='center' class='subTitle'>All in your hands</h1>
         <el-card shadow='always' class='loginContainer'>
           <h1 class='loginTitle'>Login</h1>
           <el-form
