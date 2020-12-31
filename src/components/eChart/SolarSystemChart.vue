@@ -46,9 +46,9 @@ export default {
       this.chart.clear();
 
       const option = {
-        backgroundColor: '#181F4E',
+        backgroundColor: '#000f1e',
         title: {
-          text: 'Solar System',
+          text: _.get(this.getSunRoom(), 'room', ''),
           top: 'center',
           left: 'center',
           textStyle: {
@@ -69,7 +69,7 @@ export default {
             tooltip: {},
             ribbonType: true,
             layout: 'circular',
-            hoverAnimation: false,
+            hoverAnimation: true,
             z: 0,
             width: '60%',
             height: '10%',
@@ -85,7 +85,7 @@ export default {
                 },
                 borderColor: '#e3e3e3',
                 borderWidth: '.1',
-                color: 'rgba(0, 255, 255, .03)'
+                color: 'rgba(255,130,14,0.1)'
               },
               emphasis: {
                 label: {
@@ -96,14 +96,42 @@ export default {
           },
           {
             type: 'graph',
+            tooltip: {},
             ribbonType: true,
             layout: 'circular',
-            width: '60%',
-            height: '60%',
+            hoverAnimation: false,
+            z: 0,
+            width: '75%',
+            height: '75%',
             circular: {
               rotateLabel: true
             },
-            symbolSize: 30,
+            // 这里可以调出不同效果
+            symbolSize: 4,
+            data: this.roundData(100),
+            itemStyle: {
+              normal: {
+                label: {
+                  show: false
+                },
+                color: '#e3e3e3'
+              },
+              emphasis: {
+                label: {
+                  show: false
+                }
+              }
+            } },
+          {
+            type: 'graph',
+            ribbonType: true,
+            layout: 'circular',
+            width: '75%',
+            height: '75%',
+            circular: {
+              rotateLabel: true
+            },
+            symbolSize: 80,
             label: {
               normal: {
                 position: 'center',
@@ -138,10 +166,10 @@ export default {
                   color: '#fff'
                 }, {
                   offset: 0.3,
-                  color: '#1ffdfd'
+                  color: '#8b8d90'
                 }, {
                   offset: 1,
-                  color: '#096869'
+                  color: 'rgba(0,0,0,0.21)'
                 }])
               },
               emphasis: {
@@ -157,6 +185,10 @@ export default {
       this.$nextTick(() => {
         this.chart.setOption(option);
         this.chart.on('mouseover', params => {
+          if (_.startsWith(params.name, 'circle')) {
+            const sunRoom = _.find(this.meetingRoomList, { room: '太阳' }) || {};
+            this.$emit('select-room', sunRoom);
+          }
           const room = _.find(this.meetingRoomList, { room: params.name }) || {};
           if (_.isEmpty(room)) {
             return;
@@ -176,7 +208,7 @@ export default {
     },
     genMeetingRoomItemList () {
       let meetingRoomItemList = [];
-      _.forEach(this.meetingRoomList, it => {
+      _.forEach(_.reject(this.meetingRoomList, { room: '太阳' }), it => {
         meetingRoomItemList.push({
           name: it.room,
           symbolSize: 40,
@@ -191,6 +223,9 @@ export default {
         return;
       }
       doc.style.width = element.offsetWidth + 'px';
+    },
+    getSunRoom () {
+      return _.find(this.meetingRoomList, { room: '太阳' });
     }
   },
   watch: {
