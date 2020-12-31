@@ -162,7 +162,7 @@ export default {
 
 <style scoped>
   .background {
-    background-image: url("https://images.wallpaperscraft.com/image/chip_circuit_processor_140251_1920x1080.jpg");
+    background-image: url("../assets/register_background.jpg");
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;

@@ -142,7 +142,7 @@ export default {
 
 <style scoped>
   .background {
-    background-image: url("https://images.wallpaperscraft.com/image/keyboard_telephone_desktop_179668_1920x1080.jpg");
+    background-image: url("../assets/login_background.jpg");
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
