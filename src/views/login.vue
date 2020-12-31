@@ -1,52 +1,61 @@
 <template>
-  <div>
-    <el-form
-      :rules='rules'
-      ref='loginForm'
-      v-loading='loading'
-      element-loading-text='Login...'
-      element-loading-spinner='el-icon-loading'
-      element-loading-background='rgba(0, 0, 0, 0.8)'
-      :model='loginForm'
-      class='loginContainer'
-    >
-      <h3 class='loginTitle'>Login</h3>
-      <el-form-item prop='username'>
-        <el-input
-          size='normal'
-          type='text'
-          v-model='loginForm.username'
-          auto-complete='off'
-          placeholder='Pls input username'
-          clearable
-        />
-      </el-form-item>
-      <el-form-item prop='password' style='margin-bottom: 40px'>
-        <el-input
-          size='normal'
-          type='password'
-          v-model='loginForm.password'
-          auto-complete='off'
-          placeholder='Pls input password'
-          clearable
-          @keyup.enter.native='submitLogin'
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type='text' @click='goToRegister'>没有账号？注册一个</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type='text' @click='AsVisitor'>游客访问</el-button>
-      </el-form-item>
-      <el-button
-        size='normal'
-        type='primary'
-        style='width: 100%;'
-        @click='submitLogin'
-      >Login
-      </el-button
-      >
-    </el-form>
+  <div class='background'>
+    <el-container>
+      <el-main style='margin: 120px auto'>
+        <h1 align='center' class='title'>Meeting All</h1>
+        <h1 align='center' class='subTitle'>all in your hands</h1>
+        <el-card shadow='always' class='loginContainer'>
+          <h1 class='loginTitle'>Login</h1>
+          <el-form
+            :rules='rules'
+            ref='loginForm'
+            v-loading='loading'
+            element-loading-text='Login...'
+            element-loading-spinner='el-icon-loading'
+            element-loading-background='rgba(0, 0, 0, 0.8)'
+            :model='loginForm'
+          >
+            <el-form-item prop='username'>
+              <el-input
+                size='normal'
+                type='text'
+                v-model='loginForm.username'
+                auto-complete='off'
+                placeholder='请输入邮箱'
+                clearable
+              />
+            </el-form-item>
+            <el-form-item prop='password' style='margin-bottom: 10px'>
+              <el-input
+                size='normal'
+                type='password'
+                v-model='loginForm.password'
+                auto-complete='off'
+                placeholder='请输入密码'
+                clearable
+                @keyup.enter.native='submitLogin'
+              />
+            </el-form-item>
+            <el-row justify='space-between' style='margin-bottom: 10px;'>
+              <el-col :span='12'>
+                <el-button type='text' @click='AsVisitor'>游客访问</el-button>
+              </el-col>
+              <el-col :span='12'>
+                <el-button type='text' style='float: right' @click='goToRegister'>没有账号？注册一个</el-button>
+              </el-col>
+            </el-row>
+            <el-button
+              size='normal'
+              type='primary'
+              style='width: 100%;'
+              @click='submitLogin'
+            >Login
+            </el-button
+            >
+          </el-form>
+        </el-card>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -132,19 +141,38 @@ export default {
 </script>
 
 <style scoped>
+  .background {
+    background-image: url("https://images.wallpaperscraft.com/image/keyboard_telephone_desktop_179668_1920x1080.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+  }
   .loginContainer {
     border-radius: 15px;
     background-clip: padding-box;
-    margin: 180px auto;
+    margin: 10px auto;
     width: 350px;
-    padding: 15px 35px 15px 35px;
+    padding: 0 35px 15px;
     background: #fff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 25px #2b2828;
   }
-
+ .title{
+   font-size: 5em;
+   color: white;
+   font-family: cursive;
+   margin: auto;
+ }
+ .subTitle{
+   font-size: 2em;
+   color: white;
+   font-family: cursive;
+   margin: auto;
+ }
   .loginTitle {
-    margin: 15px auto 20px auto;
+    margin: 10px auto 20px auto;
     text-align: center;
     color: #505458;
   }
@@ -158,5 +186,7 @@ export default {
     display: flex;
     align-items: center;
   }
-
+.el-button--text:focus, .el-button--text:hover {
+    color: #505458;
+}
 </style>

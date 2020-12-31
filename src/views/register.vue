@@ -2,16 +2,16 @@
   <div class='background'>
     <el-container>
       <el-main>
-        <el-card shadow='always' style='width: 620px;height: 450px;margin:auto;'>
+        <el-card shadow='always' class='registerContainer' >
           <h1 class='title'>用户注册</h1>
           <el-form ref='newUserInfo' :model='newUserInfo' :rules='addUserRules' label-position='right' label-width='100px' status-icon>
-            <el-form-item label='用户名' prop='username'>
+            <el-form-item label='邮箱' prop='username'>
               <el-row class='demo-autocomplete'>
                 <el-col :span='20'>
                   <el-input v-model='newUserInfo.username' placeholder='请输入邮箱地址' clearable></el-input>
                 </el-col>
                 <el-col :span='4'>
-                  <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode'>发送验证码</el-button>
+                  <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode' style='margin-left: 10px;'>发送验证码</el-button>
                   <el-button v-if='!show' type='text' :disabled='true'>发送验证码({{count}})</el-button>
                 </el-col>
               </el-row>
@@ -61,11 +61,11 @@ export default {
     };
     let validateUsername = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('用户名不能为空'));
+        callback(new Error('邮箱不能为空'));
       } else {
         var reg = /^[a-zA-Z0-9_.-]+@(oocl|cargosmart)+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
         if (!reg.test(value)) {
-          callback(new Error('用户名格式不正确，请使用oocl或cargosmart邮箱注册'));
+          callback(new Error('邮箱格式不正确，请使用oocl或cargosmart邮箱注册'));
         } else {
           let url = `user/${value}`;
           get(url).then((res) => {
@@ -162,13 +162,26 @@ export default {
 
 <style scoped>
   .background {
-    background-image: url("https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png");
-    background-size: 100% 100%;
-    height: 700px;
+    background-image: url("https://images.wallpaperscraft.com/image/chip_circuit_processor_140251_1920x1080.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
   }
   .title {
     margin: 15px auto 20px auto;
     text-align: center;
     color: #505458;
+  }
+  .registerContainer {
+    border-radius: 15px;
+    background-clip: padding-box;
+    margin: 180px auto;
+    width: 550px;
+    padding: 15px 25px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #2b2828;
   }
 </style>
