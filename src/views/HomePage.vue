@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id='homePage' class='home-page'>
     <div class='header'>
       <el-col :span='8'>
         <div class='system-icon'>Meeting All</div>
@@ -18,35 +18,33 @@
         </div>
       </el-col>
     </div>
-      <div class='meeting-room-panel'>
-        <el-carousel :interval='4000' type='card' height='360px'>
-          <el-carousel-item v-for='(item, index) in officeList' :key='index'>
-            <div @click='selectMeetingRoom(item)'>
-              <h3 class='office-label'>{{item}}</h3>
-              <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
+    <div>
+      <div class='tool-bar' v-if='!isDefaultRoute'>
+        <el-button class='circle-btn' icon='el-icon-s-home' circle size='small' @click='$router.push({path: "/meetingRoom"})'/>
       </div>
-      <div class='menu-btn-group'>
-        <el-col :span='8'>
-          <el-dropdown>
-            <el-button class='menu-btn' icon='el-icon-location' type='primary'>
-              会议室
-              <i class='el-icon-arrow-down el-icon--right'></i>
-            </el-button>
-            <el-dropdown-menu slot='dropdown' v-for='(item, index) in officeList' :key='index'>
-              <el-dropdown-item @click.native='selectMeetingRoom(item)'>{{item}}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-col>
-        <el-col :span='8'>
-          <el-button class='menu-btn' icon='el-icon-service' type='primary'>开会</el-button>
-        </el-col>
-        <el-col :span='8'>
-          <el-button class='menu-btn' icon='el-icon-document' type='primary'>会议记录</el-button>
-        </el-col>
-      </div>
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </div>
+    <div class='menu-btn-group' v-if='isDefaultRoute'>
+      <el-col :span='8'>
+        <el-dropdown>
+          <el-button class='menu-btn' icon='el-icon-location'>
+            会议室
+            <i class='el-icon-arrow-down el-icon--right'></i>
+          </el-button>
+          <el-dropdown-menu slot='dropdown'>
+            <el-dropdown-item v-for='(item, index) in officeList' :key='index' @click.native='selectMeetingRoom(item)'>{{item}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+      <el-col :span='8'>
+        <el-button class='menu-btn' icon='el-icon-service' @click='$router.push({path: "/myMeeting"})'>开会</el-button>
+      </el-col>
+      <el-col :span='8'>
+        <el-button class='menu-btn' icon='el-icon-document' @click='$router.push({path: "/meetingRecords"})'>会议记录</el-button>
+      </el-col>
+    </div>
     </div>
 </template>
 
@@ -92,10 +90,13 @@ export default {
   created () {
     this.queryMeetingRoomList();
   },
+  computed: {
+    isDefaultRoute () {
+      const active = this.$route.path;
+      return _.isEqual(active, '/meetingRoom');
+    }
+  },
   mounted () {
-    // window.addEventListener('resize', () => {
-    //   this.height = window.innerHeight;
-    // });
     this.connectWebSocket();
   },
   methods: {
@@ -165,6 +166,15 @@ export default {
 </script>
 
 <style scoped>
+  .home-page {
+    background-image: url("../assets/login_background.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+  }
+
   .header {
     width: 100%;
     height: 65px;
@@ -172,12 +182,8 @@ export default {
     box-shadow: rgba(0, 21, 41, 0.08) 0 1px 4px;
     overflow: hidden;
     background: rgba(116, 137, 158, 0.3);
-    display: flex;
-  }
-
-  .meeting-room-panel {
-    text-align: center;
-    padding: 100px;
+    position: fixed;
+    z-index: 9999;
   }
 
   .menu-btn-group {
@@ -187,9 +193,15 @@ export default {
   }
 
   .menu-btn {
-    background: rgba(116, 137, 158, 0.3);
-    border: rgba(116, 137, 158, 0.3);
+    background: rgba(116, 137, 158, 0.8);
+    border: rgba(0, 21, 41, 0.08);
     width: 150px;
+    color: white;
+  }
+
+  .menu-btn:hover {
+    background-color: white;
+    color: rgba(116, 137, 158, 0.8);
   }
 
   .office-label {
@@ -202,11 +214,6 @@ export default {
   .el-dropdown-link {
     cursor: pointer;
     color: white;
-  }
-
-  .meeting-room-img {
-    width: 100%;
-    height: 100%;
   }
 
   .right-top-menu {
@@ -226,6 +233,26 @@ export default {
     margin-top: 20px;
     font-size: 18px;
     font-style: revert;
+  }
+
+  .tool-bar {
+    position: absolute;
+    padding: 10px;
+    z-index: 9999;
+    bottom: 10px;
+  }
+
+  .circle-btn {
+    background: rgba(116, 137, 158, 0.8);
+    border: rgba(0, 21, 41, 0.08);
+    color: white;
+    margin-bottom: 20px;
+    margin-left: 20px;
+  }
+
+  .circle-btn:hover {
+    background-color: white;
+    color: rgba(116, 137, 158, 0.8);
   }
 
 </style>

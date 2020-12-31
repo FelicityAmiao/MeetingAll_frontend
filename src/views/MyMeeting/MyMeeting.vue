@@ -392,4 +392,7 @@ export default {
   .el-row {
     margin-bottom: 10px;
   }
+  .block {
+     padding-top: 75px;
+   }
 </style>

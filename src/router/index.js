@@ -4,7 +4,7 @@ import ASR from '../components/ASR';
 import MeetingRoom from '../views/meetingRoom/MeetingRoomPage';
 import MeetingRoomDetail from '../views/meetingRoom/MeetingRoomDetail';
 import MyMeeting from '../views/MyMeeting/MyMeeting';
-import Home from '../views/Home';
+import Home from '../views/HomePage';
 import Test from '../views/Test';
 import MeetingRecords from '../views/meetingRecords/MeetingRecords';
 import EChart from '../components/eChart/ChinaMapChart';

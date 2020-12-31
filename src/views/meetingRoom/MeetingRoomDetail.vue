@@ -1,5 +1,5 @@
 <template>
-  <div id='meetingRoomDetail' class='meeting-room-detail'>
+  <div id='meetingRoomDetail'>
     <div class='status-tool-bar'>
       <el-card v-if='selectedRoom !== null' shadow='hover'>
         <div slot='header'>
@@ -123,6 +123,7 @@ export default {
     height: 10%;
     padding: 10px;
     z-index: 99999;
+    margin-top: 75px;
   }
   .status-tool-footer {
      position: absolute;

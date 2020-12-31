@@ -25,7 +25,7 @@ export default {
   mounted () {
     const _this = this;
     const erd = elementResizeDetectorMaker();
-    erd.listenTo(document.getElementById('mainContainer'), element => {
+    erd.listenTo(document.getElementById('homePage'), element => {
       _this.resetWidth(element);
     });
 
@@ -40,8 +40,8 @@ export default {
     genChart () {
       let doc = document.getElementById('chinaMapChart');
       this.chart = this.$echarts.init(doc);
-      const width = _.get(document.getElementById('mainContainer'), 'offsetWidth') || '';
-      const height = _.get(document.getElementById('mainContainer'), 'offsetHeight') || '';
+      const width = _.get(document.getElementById('homePage'), 'offsetWidth') || '';
+      const height = _.get(document.getElementById('homePage'), 'offsetHeight') || '';
       doc.style.width = `${width}px`;
       doc.style.height = `${height}px`;
       this.chart.clear();
@@ -109,11 +109,11 @@ export default {
             type: 'effectScatter',
             coordinateSystem: 'geo',
             zlevel: 2,
-            symbolSize: 10,
+            symbolSize: 20,
             rippleEffect: { // 坐标点动画
               period: 3,
               scale: 5,
-              brushType: 'fill'
+              brushType: 'stroke'
             },
             label: {
               normal: {

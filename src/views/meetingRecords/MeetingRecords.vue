@@ -1,9 +1,9 @@
 <template>
-  <el-container>
+  <el-container class='meeting-records'>
     <el-main>
       <el-row class='demo-autocomplete'>
         <el-col :span='20'>
-          <label style='float: left;font-size: 18px'>{{title}}</label>
+          <label style='float: left;font-size: 18px;color: white'>{{title}}</label>
         </el-col>
         <el-col :span='4'>
           <el-input
@@ -217,3 +217,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .meeting-records {
+    padding-top: 75px;
+  }
+</style>

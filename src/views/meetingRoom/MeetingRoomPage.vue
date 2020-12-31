@@ -1,13 +1,20 @@
 <template>
   <div class='meeting-room-panel'>
-    <el-col class='card-group' :span='8' v-for='(item, index) in officeList' :key='index'>
-      <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>
-        <div class='card-body' @click='selectMeetingRoom(item)'>
-          <div class='card-label'>{{item}}</div>
-          <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
+    <el-carousel :interval='4000' type='card' height='360px'>
+      <el-carousel-item v-for='(item, index) in officeList' :key='index'>
+        <div @click='selectMeetingRoom(item)'>
+          <h3 class='office-label'>{{item}}</h3>
         </div>
-      </el-card>
-    </el-col>
+      </el-carousel-item>
+    </el-carousel>
+<!--    <el-col class='card-group' :span='8' v-for='(item, index) in officeList' :key='index'>-->
+<!--      <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>-->
+<!--        <div class='card-body' @click='selectMeetingRoom(item)'>-->
+<!--          <div class='card-label'>{{item}}</div>-->
+<!--          <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>-->
+<!--        </div>-->
+<!--      </el-card>-->
+<!--    </el-col>-->
   </div>
 </template>
 
@@ -49,7 +56,7 @@ export default {
 
 <style scoped>
   .meeting-room-panel {
-    padding: 30px 30px;
+    padding: 140px 50px;
   }
   .card-group {
     padding: 10px 0;
