@@ -18,6 +18,7 @@
       </el-row>
       <el-table
         :data='tableData'
+        @header-click='sortData'
         :default-sort = '{prop: "startDate", order: "descending"}'
         border
         style='width: 100%'>
@@ -139,6 +140,25 @@ export default {
           this.tableData.push(this.convertTableRecord(this.allData[i]));
         }
       });
+    },
+    compare: function (direction) {
+      return function (obj1, obj2) {
+        var val1 = obj1['startDate'];
+        var val2 = obj2['startDate'];
+        if (val1 < val2) {
+          return direction === 'descending' ? 1 : -1;
+        } else if (val1 > val2) {
+          return direction === 'descending' ? -1 : 1;
+        } else {
+          return 0;
+        }
+      };
+    },
+    sortData: function (column, event) {
+      if (column.property === 'startDate') {
+        this.allData.sort(this.compare(column.order));
+        this.handleSizeChange(this.pageSize);
+      }
     }
   },
 
