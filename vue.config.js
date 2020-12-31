@@ -35,5 +35,8 @@ module.exports = {
   },
   configureWebpack: config => {	// 不管是否打包都可以压缩压缩
     defaultPlugins.forEach(plugin => config.plugins.push(plugin));
+  },
+  watchOptions: {
+    ignored: /node_modules/
   }
 };
