@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-row>
-          <el-button icon='el-icon-circle-plus' type='primary' @click='openDialog'>新建会议</el-button>
+          <el-button icon='el-icon-circle-plus' type='primary' @click='openDialog' v-show='!this.showMeeting'>新建会议</el-button>
         </el-row>
       </el-header>
       <el-main>
@@ -25,12 +25,12 @@
               <el-col :span='6'>{{meeting.startDate}}</el-col>
             </el-row>
             <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>会议时间</el-col>
-              <el-col :span='6'>{{meeting.time}}</el-col>
+              <el-col :span='6'>开始时间</el-col>
+              <el-col :span='6'>{{meeting.startTime}}</el-col>
             </el-row>
             <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>耗时</el-col>
-              <el-col :span='6'>{{meeting.duration}}</el-col>
+              <el-col :span='6'>结束时间</el-col>
+              <el-col :span='6'>{{meeting.endTime}}</el-col>
             </el-row>
             <el-row type='flex' class='row-bg' justify='center'>
               <el-col :span='6'>状态</el-col>
@@ -229,13 +229,13 @@ export default {
               }).then(() => {
                 this.generateReport();
                 this.$message({
-                  type: 'info',
+                  type: 'success',
                   message: '报告生成中，请至会议记录查看详情。'
                 });
               });
             } else {
               this.$message({
-                type: 'info',
+                type: 'success',
                 message: '已结束会议，请至会议记录查看详情。'
               });
             }
