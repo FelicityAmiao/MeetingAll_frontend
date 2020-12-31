@@ -1,7 +1,7 @@
 <template>
   <div id='meetingRoomDetail' class='meeting-room-detail'>
     <div class='status-tool-bar'>
-      <el-card v-if='selectedRoom !== null' class='box-card' shadow='hover'>
+      <el-card v-if='selectedRoom !== null' shadow='hover'>
         <div slot='header'>
           <span>{{selectedRoom.office}}</span>
         </div>
@@ -159,5 +159,16 @@ export default {
   }
   .icon-background-green {
     background: #3AA329;
+  }
+  >>>.el-card {
+    border: 1.5px solid #0e7393;
+    background-color: rgba(45,68,121,0.15);
+    color: white;
+    transition: .3s;
+  }
+  >>>.el-card__header {
+    padding: 18px 20px;
+    border-bottom: 1.5px solid #0e7393;
+    box-sizing: border-box;
   }
 </style>

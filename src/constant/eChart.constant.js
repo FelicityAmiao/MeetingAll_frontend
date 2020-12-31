@@ -12124,61 +12124,38 @@ const CHINA_MAP = {
 
 const CHINA_MEETING_ROOMS = [
   {
-    name: '北京',
-    value: [116.24, 39.55, 100]
+    name: '广州',
+    value: [113.14, 23.08],
+    position: 'left'
   },
   {
-    name: '深圳',
-    value: [114.271522, 22.753644]
-  },
-
-  {
-    name: '重庆',
-    value: [106.54, 29.59]
+    name: '宁波',
+    value: [121.33, 29.52],
+    position: 'right'
   },
   {
-    name: '浙江',
-    value: [120.19, 30.26]
-  }
-];
-
-const CHINA_MEETING_ROOMS_LABEL = [
-  {
-    name: '北京',
-    coords: [
-      [116.24, 39.55, 100],
-      [120.24, 46.55, 100]
-    ], // 线条位置[开始位置，结束位置]
-    value: [10.21, 1.20]
+    name: '汕头',
+    value: [116.41, 23.22],
+    position: 'right'
   },
   {
-    name: '深圳',
-    coords: [
-      [114.271522, 22.753644],
-      [118.24, 18.55, 100]
-    ], // 线条位置[开始位置，结束位置]
-    value: [10.21, 1.20]
+    name: '珠海',
+    value: [112.939, 21.983],
+    position: 'left'
   },
   {
-    name: '重庆',
-    coords: [
-      [106.54, 29.59],
-      [100.24, 40.55]
-    ], // 线条位置[开始位置，结束位置]
-    value: [10.21, 1.20]
+    name: '上海',
+    value: [121.29, 31.53],
+    position: 'right'
   },
   {
-    name: '浙江',
-    coords: [
-      [120.19, 30.26],
-      [128.24, 35.55, 100]
-    ], // 线条位置[开始位置，结束位置]
-    value: [10.21, 1.20]
+    name: '香港',
+    value: [114.15, 22.15],
+    position: 'bottom'
   }
 ];
 
 module.exports = {
   CHINA_MAP,
-  CHINA_MEETING_ROOMS,
-  CHINA_MEETING_ROOMS_LABEL
+  CHINA_MEETING_ROOMS
 };
