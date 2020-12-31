@@ -57,13 +57,6 @@ module.exports = {
       config.optimization.splitChunks({	// 将大文件的代码分割成两个文件，如app.js(9.5M)分割成app.js(2.5M)+venders~app.js(7M)
         chunks: 'all'
       });
-      config.externals({
-        'vue': 'Vue',
-        'vuex': 'Vuex',
-        'vue-router': 'VueRouter',
-        'mint-ui': 'MINT', // 需用MINT
-        'axios': 'axios'
-      });
     }
   },
   configureWebpack: config => {	// 不管是否打包都可以压缩压缩
