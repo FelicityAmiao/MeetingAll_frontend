@@ -4,15 +4,24 @@
       <el-main>
         <el-card shadow='always' class='registerContainer' >
           <h1 class='title'>用户注册</h1>
-          <el-form ref='newUserInfo' :model='newUserInfo' :rules='addUserRules' label-position='right' label-width='100px' status-icon>
+          <el-form
+            ref='newUserInfo'
+            :model='newUserInfo'
+            :rules='addUserRules'
+            label-position='right'
+            label-width='100px'
+            v-loading='loading'
+            element-loading-text='Register...'
+            element-loading-spinner='el-icon-loading'
+            status-icon>
             <el-form-item label='邮箱' prop='username'>
               <el-row class='demo-autocomplete'>
                 <el-col :span='20'>
-                  <el-input v-model='newUserInfo.username' placeholder='请输入邮箱地址' clearable></el-input>
+                  <el-input v-model='newUserInfo.username' placeholder='请输入邮箱地址' @keyup.enter.native='sendAuthCode' clearable></el-input>
                 </el-col>
                 <el-col :span='4'>
-                  <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' @click='sendAuthCode' style='margin-left: 10px;'>发送验证码</el-button>
-                  <el-button v-if='!show' type='text' :disabled='true'>发送验证码({{count}})</el-button>
+                  <el-button v-if='show' type='text' :disabled='disableAuthCodeButton' :loading='authCodeLoading' @click='sendAuthCode' style='margin-left: 10px;'>发送验证码</el-button>
+                  <el-button v-if='!show' type='text' :disabled='true' >发送验证码({{count}})</el-button>
                 </el-col>
               </el-row>
             </el-form-item>
@@ -28,7 +37,7 @@
             </el-form-item>
             <el-form-item label='确认密码' prop='checkPwd'>
               <el-col :span='20'>
-                <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' clearable></el-input>
+                <el-input type='password' v-model='newUserInfo.checkPwd' placeholder='请再次输入密码' @keyup.enter.native='addUser' clearable></el-input>
               </el-col>
             </el-form-item>
             <el-form-item>
@@ -80,6 +89,8 @@ export default {
       }
     };
     return {
+      loading: false,
+      authCodeLoading: false,
       show: true,
       count: '',
       timer: null,
@@ -99,6 +110,7 @@ export default {
     addUser () {
       this.$refs['newUserInfo'].validate((valid) => {
         if (valid) {
+          this.loading = true;
           let encryptedPwd = md5(this.newUserInfo.password);
           let url = 'user/regist';
           post(url, {
@@ -112,30 +124,31 @@ export default {
             } else {
               this.$message.error(res.data.msg);
             }
+            this.loading = false;
           }).catch(() => {
             this.$message.error('注册失败，请重试！');
+            this.loading = false;
           });
-        } else {
-          return false;
         }
       });
     },
     resetForm: function () {
       this.$refs['newUserInfo'].resetFields();
       this.disableAuthCodeButton = true;
-      this.disableAuthCodeInput = true;
     },
     goBack () {
       this.$router.push('/login');
     },
     sendAuthCode () {
       this.disableAuthCodeInput = false;
+      this.authCodeLoading = true;
       let username = this.newUserInfo.username;
       let url = 'user/authcode';
       post(url, {
         username: username
       }).then(response => {
         if (response.data) {
+          this.authCodeLoading = false;
           this.$message.success('验证码已发送，请查收！');
           const TIME_COUNT = 60;
           if (!this.timer) {

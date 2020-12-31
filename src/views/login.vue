@@ -12,7 +12,6 @@
             v-loading='loading'
             element-loading-text='Login...'
             element-loading-spinner='el-icon-loading'
-            element-loading-background='rgba(0, 0, 0, 0.8)'
             :model='loginForm'
           >
             <el-form-item prop='username'>
@@ -102,6 +101,7 @@ export default {
     submitLogin () {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
+          this.loading = true;
           let password = md5(this.loginForm.password);
           this.$store.dispatch('user/login', {
             username: this.loginForm.username,
@@ -149,6 +149,7 @@ export default {
     background-position: center center;
     height: 100%;
   }
+
   .loginContainer {
     border-radius: 15px;
     background-clip: padding-box;
@@ -159,18 +160,21 @@ export default {
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #2b2828;
   }
- .title{
-   font-size: 5em;
-   color: white;
-   font-family: cursive;
-   margin: auto;
- }
- .subTitle{
-   font-size: 2em;
-   color: white;
-   font-family: cursive;
-   margin: auto;
- }
+
+  .title {
+    font-size: 5em;
+    color: white;
+    font-family: cursive;
+    margin: auto;
+  }
+
+  .subTitle {
+    font-size: 2em;
+    color: white;
+    font-family: cursive;
+    margin: auto;
+  }
+
   .loginTitle {
     margin: 10px auto 20px auto;
     text-align: center;
@@ -186,7 +190,9 @@ export default {
     display: flex;
     align-items: center;
   }
-.el-button--text:focus, .el-button--text:hover {
+
+  .el-button--text:focus, .el-button--text:hover {
     color: #505458;
-}
+  }
+
 </style>
