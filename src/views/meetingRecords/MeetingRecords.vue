@@ -62,9 +62,7 @@
 
 <script>
 import { get } from '../../utils/http';
-import { formatterRoomNum } from '../../utils/room';
 import { formatterLanguage } from '../../utils/language';
-import { loadRoomOption } from '../../utils/global_func';
 export default {
   name: 'MeetingRecords',
   methods: {
@@ -87,7 +85,7 @@ export default {
         startDate: record.startDate,
         language: formatterLanguage(record.language),
         reportAddress: record.reportAddress,
-        room: formatterRoomNum(this.roomOptions, record.room),
+        room: record.room[0] + '-' + record.room[1],
         status: record.status,
         subject: record.subject,
         startTime: record.startTime,
@@ -165,14 +163,8 @@ export default {
       roomOptions: []
     };
   },
-
   mounted () {
-    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
-      loadRoomOption().then(response => {
-        this.roomOptions = response.data;
-      });
-      this.loadMeetingRecords();
-    }
+    this.loadMeetingRecords();
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {

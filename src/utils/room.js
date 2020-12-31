@@ -1,5 +1,5 @@
 import _ from 'lodash';
-const formatterRoomNum = (roomOptions,row) => {
+const formatterRoomNum = (roomOptions, row) => {
   let val = '';
   roomOptions.map((item) => {
     if (item.value === row[0]) {
