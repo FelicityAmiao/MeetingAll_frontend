@@ -17,7 +17,8 @@
           <el-row type='flex'>
             <el-col :span='10'>Power Control: </el-col>
             <el-col :span='4' style='text-align: center'>
-              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @change='updateDeviceStatus'/>
+              <li :class='`el-icon-switch-button tool-bar-icon  ${selectedRoom.isDeviceStarted ? "power-on" : ""}`' @click='updateDeviceStatus'/>
+<!--              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @change='updateDeviceStatus'/>-->
             </el-col>
           </el-row>
         </div>
@@ -82,6 +83,9 @@ export default {
         this.selectedRoom.isDeviceStarted = !this.selectedRoom.isDeviceStarted;
         return;
       }
+      if (this.selectedRoom.isDeviceStarted) {
+        return;
+      }
       await updateDevicePowerStatus(this.selectedRoom);
       let index = _.findIndex(this.meetingRoomDetail, { id: this.selectedRoom.id });
       if (index === -1) {
@@ -102,7 +106,8 @@ export default {
     '$route.query.meetingRoomDetail': {
       immediate: true,
       handler: function (value) {
-        this.meetingRoomDetail = value;
+        this.selectedRoom = null;
+        this.meetingRoomDetail = JSON.parse(value);
       }
     },
     updatedRoom: {
@@ -140,13 +145,6 @@ export default {
   }
   .tool-bar-icon {
     cursor: pointer;
-    float: right;
-    margin-right: 10px;
-  }
-  .tool-bar-icon {
-    cursor: pointer;
-    float: right;
-    margin-right: 10px;
   }
   .status-icon {
     width: 14px;
@@ -160,6 +158,10 @@ export default {
   }
   .icon-background-green {
     background: #3AA329;
+  }
+  .power-on {
+    color: #ffd008;
+    cursor: not-allowed;
   }
   >>>.el-card {
     border: 1.5px solid #0e7393;
