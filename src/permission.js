@@ -16,7 +16,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       // other pages that do not have permission to access are redirected to the login page.
       if (confirm('该功能需登陆操作，是否登录?')) {
-        next(`/login?redirect=${to.path}`);
+        next(`/login?redirect=meetingRoom`);
       }
     }
   } else {
