@@ -40,7 +40,7 @@ export default {
       // console.log('path', this.$route.path);
       // console.log('params', this.$route.params);
       // console.log('query', this.$route.query);
-      this.$router.push(`/login?redirect=${this.$route.path}`);
+      this.$router.push(`/login?redirect=meetingRoom`);
     }
   }
 };
