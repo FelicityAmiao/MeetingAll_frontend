@@ -390,6 +390,6 @@ export default {
     margin-bottom: 10px;
   }
   .block {
-     padding-top: 80px;
+     padding-top: 180px;
    }
 </style>
