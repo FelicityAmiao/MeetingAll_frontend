@@ -1,30 +1,11 @@
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-const compress = new CompressionWebpackPlugin(
-  {
-    filename: info => {
-      return `${info.path}.gz${info.query}`;
-    },
-    algorithm: 'gzip',
-    threshold: 10240,
-    test: new RegExp(
-      '\\.(' +
-      ['js'].join('|') +
-      ')$'
-    ),
-    minRatio: 0.8,
-    deleteOriginalAssets: false
-  }
-);
-
 const defaultPlugins = [
-  // change to gzip, but seems same
-  // new CompressionWebpackPlugin({
-  //   test: /\.js$|\.html$|\.css$/,
-  //   threshold: 10240,
-  //   minRatio: 0.8
-  // }),
-  compress
+  new CompressionWebpackPlugin({
+    test: /\.js$|\.html$|\.css$/,
+    threshold: 10240,
+    minRatio: 0.8
+  })
 ];
 
 module.exports = {
@@ -32,13 +13,6 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV !== 'production',
   runtimeCompiler: true,
   devServer: {
-    before (app, server) {
-      app.get(/.*.(js)$/, (req, res, next) => {
-        req.url = req.url + '.gz';
-        res.set('Content-Encoding', 'gzip');
-        next();
-      });
-    },
     disableHostCheck: process.env.NODE_ENV !== 'production',
     proxy: {
       '/api': {
@@ -61,8 +35,5 @@ module.exports = {
   },
   configureWebpack: config => {	// 不管是否打包都可以压缩压缩
     defaultPlugins.forEach(plugin => config.plugins.push(plugin));
-  },
-  css: { // 提取css from app.vender.js
-    extract: true
   }
 };
