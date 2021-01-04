@@ -157,7 +157,7 @@ export default {
     };
   },
   mounted () {
-    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
+    if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
       loadRoomOption().then(response => {
         this.roomOptions = response.data;
       });
@@ -197,7 +197,7 @@ export default {
       return val;
     },
     openDialog: function () {
-      if (this.$store.getters.token === undefined || this.$store.getters.token === '') {
+      if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
         this.showLoginDialog = true;
         return;
       }

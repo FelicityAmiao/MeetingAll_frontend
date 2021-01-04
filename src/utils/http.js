@@ -10,7 +10,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
   requestConfig => {
-    if (store.getters.token) {
+    if (store.getters['user/token']) {
       requestConfig.headers['Authorization'] = `Bearer ${getToken()}`;
     }
     return requestConfig;

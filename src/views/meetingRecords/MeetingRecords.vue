@@ -184,7 +184,7 @@ export default {
     };
   },
   mounted () {
-    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
+    if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
       this.loadMeetingRecords();
     }
   },
@@ -210,7 +210,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (vm.$store.getters.token !== undefined && this.$store.getters.token !== '') {
+      if (vm.$store.getters['user/token'] !== undefined && vm.$store.getters['user/token'] !== '') {
         await vm.loadMeetingRecords();
         await vm.loadMeetingRecords();
       }

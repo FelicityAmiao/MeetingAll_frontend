@@ -112,7 +112,7 @@ export default {
       this.showLoginDialog = false;
     },
     async updateDeviceStatus () {
-      if (this.$store.getters.token === undefined || this.$store.getters.token === '') {
+      if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
         this.showLoginDialog = true;
         this.selectedRoom.isDeviceStarted = !this.selectedRoom.isDeviceStarted;
         return;
