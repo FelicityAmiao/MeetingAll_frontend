@@ -50,6 +50,14 @@ export default {
 
       let option = {
         backgroundColor: '#000f1e',
+        title: {
+          text: 'B5-5F-1',
+          left: 'left',
+          padding: [90, 0, 0, 20],
+          textStyle: {
+            color: '#fff'
+          }
+        },
         geo: {
           map: 'chinaMap',
           aspectScale: 0.85,
@@ -112,7 +120,7 @@ export default {
             symbolSize: 20,
             rippleEffect: { // 坐标点动画
               period: 3,
-              scale: 5,
+              scale: 3,
               brushType: 'stroke'
             },
             label: {
@@ -137,12 +145,16 @@ export default {
               }
             }
           }
-        ]
+        ],
+        tooltip: {
+          trigger: 'item',
+          formatter: this.toolTipFormatter
+        }
       };
 
       this.$nextTick(() => {
         this.chart.setOption(option);
-        this.chart.on('mouseover', params => {
+        this.chart.on('click', params => {
           const room = _.find(this.meetingRoomList, { room: params.name }) || {};
           if (_.isEmpty(room)) {
             return;
@@ -168,6 +180,19 @@ export default {
         return;
       }
       doc.style.width = element.offsetWidth + 'px';
+    },
+    toolTipFormatter (params) {
+      let statusMarker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.data.status ? 'red' : 'green'};"></span>`;
+      let roomMarker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color: #0f59a4;};"></span>`;
+      let htmlStr = '';
+      htmlStr += roomMarker;
+      htmlStr += '会议室名：' + params.data.room;
+      htmlStr += '<br/>';
+      htmlStr += ' ';
+      htmlStr += statusMarker;
+      htmlStr += '状态：';
+      htmlStr += params.data.status ? '占用' : '空闲';
+      return htmlStr;
     }
   },
   watch: {
