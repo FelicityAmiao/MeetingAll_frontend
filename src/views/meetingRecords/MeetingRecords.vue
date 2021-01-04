@@ -18,7 +18,6 @@
       </el-row>
       <el-table
         :data='tableData'
-        :default-sort = '{prop: "startDate", order: "descending"}'
         border
         style='width: 100%'>
         <el-table-column
