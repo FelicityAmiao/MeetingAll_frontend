@@ -1,28 +1,25 @@
 import router from './router';
 import { getToken } from './utils/auth'; // get token from cookie
 
-const whiteList = ['/login', '/register', '/meetingRoom', '/meetingRoomDetail', '/myMeeting', '/meetingRecords']; // no redirect whitelist
-
 router.beforeEach(async (to, from, next) => {
   // determine whether the user has logged in
   const hasToken = getToken();
-  if (hasToken) {
-    if (to.path === '/login') {
-      // if is logged in, redirect to the home page
-      next({ path: '/myMeeting' });
-    } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      next();
-    }
-  } else {
-    /* has no token */
-
-    if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
-      next();
+  if (to.matched.some(record => record.meta.requireLogin)) {
+    if (hasToken) {
+      if (to.path === '/login') {
+        // if is logged in, redirect to the home page
+        next({ path: '/myMeeting' });
+      } else {
+        // determine whether the user has obtained his permission roles through getInfo
+        next();
+      }
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`);
+      if (confirm('该功能需登陆操作，是否登录?')) {
+        next(`/login?redirect=${to.path}`);
+      }
     }
+  } else {
+    next();
   }
 });

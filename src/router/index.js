@@ -43,8 +43,16 @@ const routes = [
     children: [
       { path: '/meetingRoom', component: MeetingRoom },
       { path: '/meetingRoomDetail', component: MeetingRoomDetail },
-      { path: '/myMeeting', component: MyMeeting },
-      { path: '/meetingRecords', component: MeetingRecords }
+      { path: '/myMeeting',
+        meta: {
+          requireLogin: true
+        },
+        component: MyMeeting },
+      { path: '/meetingRecords',
+        meta: {
+          requireLogin: true
+        },
+        component: MeetingRecords }
     ]
   },
   {
