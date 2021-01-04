@@ -92,7 +92,7 @@
       </el-form>
       <div style='text-align: right'>
         <el-button type='primary' @click='saveMeeting'>保存</el-button>
-        <el-button plain @click='resetForm'>取消</el-button>
+        <el-button plain @click='resetForm'>重置</el-button>
       </div>
       </div>
     </el-card>
@@ -205,7 +205,6 @@ export default {
       this.dialogTitle = '添加会议';
     },
     resetForm: function () {
-      this.showAddDialog = false;
       this.$refs['newMeeting'].resetFields();
     },
     finishMeeting: function () {

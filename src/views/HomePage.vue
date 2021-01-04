@@ -157,7 +157,7 @@ export default {
       this.$router.push({
         path: '/meetingRoomDetail',
         query: {
-          meetingRoomDetail: JSON.parse(meetingRoomDetail)
+          meetingRoomDetail: JSON.stringify(meetingRoomDetail)
         }
       });
     }
