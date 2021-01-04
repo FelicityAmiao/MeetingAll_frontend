@@ -12125,33 +12125,31 @@ const CHINA_MAP = {
 const CHINA_MEETING_ROOMS = [
   {
     name: '广州',
-    value: [113.14, 23.08],
-    position: 'left'
+    value: [113.14, 23.08]
   },
   {
     name: '宁波',
-    value: [121.33, 29.52],
-    position: 'right'
+    value: [121.33, 29.52]
   },
   {
     name: '汕头',
-    value: [116.41, 23.22],
-    position: 'right'
+    value: [116.41, 23.22]
   },
   {
     name: '珠海',
-    value: [112.939, 21.983],
-    position: 'left'
+    value: [112.939, 21.983]
   },
   {
     name: '上海',
-    value: [121.29, 31.53],
-    position: 'right'
+    value: [121.29, 31.53]
   },
   {
     name: '香港',
-    value: [114.15, 22.15],
-    position: 'bottom'
+    value: [114.15, 22.15]
+  },
+  {
+    name: '东莞',
+    value: [114.50, 23.50]
   }
 ];
 
