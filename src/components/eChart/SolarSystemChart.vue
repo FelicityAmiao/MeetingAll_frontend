@@ -44,6 +44,7 @@ export default {
       doc.style.width = `${width}px`;
       doc.style.height = `${height}px`;
       this.chart.clear();
+      const _this = this;
 
       const option = {
         backgroundColor: '#000f1e',
@@ -161,16 +162,18 @@ export default {
                     color: '#0ff'
                   }
                 },
-                color: new this.$echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                  offset: 0,
-                  color: '#fff'
-                }, {
-                  offset: 0.3,
-                  color: '#8b8d90'
-                }, {
-                  offset: 1,
-                  color: 'rgba(0,0,0,0.21)'
-                }])
+                color: function (params) {
+                  return new _this.$echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: '#fff'
+                  }, {
+                    offset: 0.3,
+                    color: _.isEqual(params.data.currentStatus, '0') ? 'rgba(73,168,4,0.59)' : 'rgba(210,30,14,0.73)'
+                  }, {
+                    offset: 1,
+                    color: 'rgba(0,0,0,0.21)'
+                  }]);
+                }
               },
               emphasis: {
                 label: {
@@ -211,6 +214,7 @@ export default {
       _.forEach(_.reject(this.meetingRoomList, { room: '太阳' }), it => {
         meetingRoomItemList.push({
           name: it.room,
+          currentStatus: it.currentStatus,
           symbolSize: 40,
           value: 40
         });
