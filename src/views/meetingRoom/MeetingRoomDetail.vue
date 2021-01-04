@@ -111,12 +111,11 @@ export default {
       this.showLoginDialog = false;
     },
     async updateDeviceStatus () {
-      if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
-        this.showLoginDialog = true;
-        this.selectedRoom.isDeviceStarted = !this.selectedRoom.isDeviceStarted;
+      if (this.selectedRoom.isDeviceStarted) {
         return;
       }
-      if (this.selectedRoom.isDeviceStarted) {
+      if (this.$store.getters['user/token'] === undefined || this.$store.getters['user/token'] === '') {
+        this.showLoginDialog = true;
         return;
       }
       await updateDevicePowerStatus(this.selectedRoom);
