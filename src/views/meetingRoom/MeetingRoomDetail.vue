@@ -73,6 +73,7 @@ import WorldMapChart from '../../components/eChart/WorldChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
+
 export default {
   name: 'MeetingRoomDetail',
   components: { SolarSystemChart, LoginDialog, ChinaMapChart, WorldMapChart },
@@ -118,6 +119,7 @@ export default {
         this.showLoginDialog = true;
         return;
       }
+      this.selectedRoom.isDeviceStarted = true;
       let result = await updateDevicePowerStatus(this.selectedRoom);
       if (result.status !== 200) {
         this.$message.error('Device failed to start');
@@ -127,8 +129,9 @@ export default {
       if (index === -1) {
         return;
       }
-      this.$message.error('Device started successfully');
+      this.$message.success('Device started successfully');
       this.$set(this.meetingRoomDetail, index, this.selectedRoom);
+      localStorage.setItem('meetingRoomDetail', JSON.stringify(this.meetingRoomDetail));
     },
     updateRoomStatus (value) {
       const index = _.findIndex(this.meetingRoomDetail, { id: value.id });
@@ -137,15 +140,21 @@ export default {
       }
       this.selectedRoom = value;
       this.$set(this.meetingRoomDetail, index, value);
-      this.$route.query.meetingRoomDetail = JSON.stringify(this.meetingRoomDetail);
+      localStorage.setItem('meetingRoomDetail', JSON.stringify(this.meetingRoomDetail));
+    },
+    initMeetingRoomDetail () {
+      this.meetingRoomDetail = JSON.parse(localStorage.getItem('meetingRoomDetail'));
     }
   },
   watch: {
-    '$route.query.meetingRoomDetail': {
+    '$route.path': {
       immediate: true,
       handler: function (value) {
+        if (!_.isEqual('/meetingRoomDetail', value)) {
+          return;
+        }
         this.selectedRoom = null;
-        this.meetingRoomDetail = _.isEmpty(value) ? [] : JSON.parse(value);
+        this.initMeetingRoomDetail();
       }
     },
     updatedRoom: {
