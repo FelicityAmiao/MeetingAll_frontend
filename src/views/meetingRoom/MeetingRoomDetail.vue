@@ -118,11 +118,16 @@ export default {
         this.showLoginDialog = true;
         return;
       }
-      await updateDevicePowerStatus(this.selectedRoom);
+      let result = await updateDevicePowerStatus(this.selectedRoom);
+      if (result.status !== 200) {
+        this.$message.error('Device failed to start');
+        return;
+      }
       let index = _.findIndex(this.meetingRoomDetail, { id: this.selectedRoom.id });
       if (index === -1) {
         return;
       }
+      this.$message.error('Device started successfully');
       this.$set(this.meetingRoomDetail, index, this.selectedRoom);
     },
     updateRoomStatus (value) {
@@ -132,6 +137,7 @@ export default {
       }
       this.selectedRoom = value;
       this.$set(this.meetingRoomDetail, index, value);
+      this.$route.query.meetingRoomDetail = JSON.stringify(this.meetingRoomDetail);
     }
   },
   watch: {
@@ -193,7 +199,7 @@ export default {
   }
   .power-on {
     color: #ffd008;
-    cursor: not-allowed;
+    cursor: not-allowed!important;
   }
   >>>.el-card {
     border: 1.5px solid #0e7393;
