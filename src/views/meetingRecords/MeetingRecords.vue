@@ -180,12 +180,13 @@ export default {
         { key: 'startTime', value: '开始时间' },
         { key: 'endTime', value: '结束时间' },
         { key: 'duration', value: '耗时' }
-      ],
-      roomOptions: []
+      ]
     };
   },
   mounted () {
-    this.loadMeetingRecords();
+    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
+      this.loadMeetingRecords();
+    }
   },
   computed: {
     updatedRecord () {
@@ -209,7 +210,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (vm.$store.getters.token !== undefined) {
+      if (vm.$store.getters.token !== undefined && this.$store.getters.token !== '') {
         await vm.loadMeetingRecords();
         await vm.loadMeetingRecords();
       }
