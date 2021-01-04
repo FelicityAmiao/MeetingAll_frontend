@@ -222,4 +222,12 @@ export default {
   .meeting-records {
     padding-top: 75px;
   }
+
+  >>>.el-pagination__total {
+    color: #f3f4f7;
+  }
+
+  >>>.el-pagination__jump {
+    color: white!important;
+  }
 </style>
