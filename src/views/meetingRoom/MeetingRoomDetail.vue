@@ -1,29 +1,52 @@
 <template>
   <div id='meetingRoomDetail'>
+  <!-- <el-drawer
+      size='300px'
+      :visible.sync='isShowDrawer'
+      :show-close='false'
+      :modal='true'
+    >
+      <div slot='title'>
+        <span>{{ selectedRoom.room }}</span>
+      </div>
+      <div>
+        <el-form label-width='100px'>
+          <el-form-item label='位置：'>
+            <span>{{ selectedRoom.office }}</span>
+          </el-form-item>
+          <el-form-item label='人数：'>
+            <span>{{ selectedRoom.size }}</span>
+          </el-form-item>
+          <el-form-item label='电源控制：'>
+            <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @change='updateDeviceStatus'/>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-drawer> -->
     <div class='status-tool-bar'>
-      <el-card v-if='selectedRoom !== null' shadow='hover'>
+      <el-card v-if='isShowCard' shadow='hover'>
         <div slot='header'>
           <span>{{selectedRoom.office}}</span>
         </div>
         <div class='status-bar-body'>
           <el-row type='flex'>
-            <el-col :span='10'>Room: </el-col>
-            <el-col :span='4' style='text-align: center'>{{selectedRoom.room}}</el-col>
+            <el-col :span='6' style='text-align: right'>会议室: </el-col>
+            <el-col :span='8' style='text-align: center'>{{selectedRoom.room}}</el-col>
           </el-row>
           <el-row type='flex'>
-            <el-col :span='10'>Status: </el-col>
-            <el-col :span='4' style='text-align: center'><div :class='`status-icon ${isBusyStatus(selectedRoom.currentStatus) ? "icon-background-red" : "icon-background-green"}`'/></el-col>
+            <el-col :span='6' style='text-align: right'>状态: </el-col>
+            <el-col :span='8' style='text-align: center'><div :class='`status-icon ${isBusyStatus(selectedRoom.currentStatus) ? "icon-background-red" : "icon-background-green"}`'/></el-col>
           </el-row>
           <el-row type='flex'>
-            <el-col :span='10'>Power Control: </el-col>
-            <el-col :span='4' style='text-align: center'>
+            <el-col :span='6' style='text-align: right'>电源控制: </el-col>
+            <el-col :span='8' style='text-align: center'>
               <li :class='`el-icon-switch-button tool-bar-icon  ${selectedRoom.isDeviceStarted ? "power-on" : ""}`' @click='updateDeviceStatus'/>
 <!--              <el-switch v-model='selectedRoom.isDeviceStarted' active-color='#3AA329' @change='updateDeviceStatus'/>-->
             </el-col>
           </el-row>
         </div>
       </el-card>
-    <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
+      <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
     </div>
     <div v-if='isPlanetMeetingRoom'>
       <keep-alive>
@@ -35,25 +58,32 @@
         <china-map-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
       </keep-alive>
     </div>
+    <div v-if='isSeaMeetingRoom'>
+      <keep-alive>
+        <world-map-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
+      </keep-alive>
+    </div>
   </div>
 </template>
 
 <script>
 import SolarSystemChart from '../../components/eChart/SolarSystemChart';
 import ChinaMapChart from '../../components/eChart/ChinaMapChart';
+import WorldMapChart from '../../components/eChart/WorldChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
 export default {
   name: 'MeetingRoomDetail',
-  components: { SolarSystemChart, LoginDialog, ChinaMapChart },
+  components: { SolarSystemChart, LoginDialog, ChinaMapChart, WorldMapChart },
   data () {
     return {
       visible: false,
       dialogVisible: false,
       showLoginDialog: false,
       meetingRoomDetail: [],
-      selectedRoom: null
+      selectedRoom: {},
+      isShowCard: false
     };
   },
   computed: {
@@ -65,6 +95,9 @@ export default {
     },
     isPlanetMeetingRoom () {
       return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B6-5F', _.get(this.meetingRoomDetail[0], 'office', ''));
+    },
+    isSeaMeetingRoom () {
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-2', _.get(this.meetingRoomDetail[0], 'office', ''));
     }
   },
   methods: {
@@ -72,6 +105,7 @@ export default {
       return _.isEqual(status, '1');
     },
     selectRoom (room) {
+      this.isShowCard = room !== null;
       this.selectedRoom = room;
     },
     closeLoginDialog () {
@@ -128,7 +162,7 @@ export default {
     height: 10%;
     padding: 10px;
     z-index: 99999;
-    margin-top: 75px;
+    margin-top: 110px;
   }
   .status-tool-footer {
      position: absolute;
@@ -174,4 +208,18 @@ export default {
     border-bottom: 1.5px solid #0e7393;
     box-sizing: border-box;
   }
+  /* >>>.el-drawer:focus {
+    outline: none;
+  }
+  .drawer-font {
+    color: '#606266' !important;
+  }
+  >>>.el-drawer__container {
+    height: 300px !important;
+  }
+  >>>.el-drawer.rtl {
+    border-radius: 5px !important;
+    top: 33px;
+    background: rgba(116, 137, 158, 0.3);
+  } */
 </style>
