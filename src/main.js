@@ -13,8 +13,9 @@ Object.defineProperty(Vue.prototype, '$echarts', { value: Echarts });
 
 Vue.use(ElementUI);
 
-new Vue({
+const app = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app');
+export default app;
