@@ -158,7 +158,7 @@ export default {
         { key: 'startDate', value: '会议日期' },
         { key: 'startTime', value: '开始时间' },
         { key: 'endTime', value: '结束时间' },
-        { key: 'duration', value: '耗时' }
+        { key: 'duration', value: '耗时/分钟' }
       ]
     };
   },
