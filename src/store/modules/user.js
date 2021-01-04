@@ -9,6 +9,11 @@ const state = {
   token: getToken(),
   roomOptions: []
 };
+const getters = {
+  token: state => state.token,
+  username: state => state.username,
+  roomOptions: state => state.roomOptions
+};
 
 const mutations = {
   SET_TOKEN: (state, token) => {
@@ -83,6 +88,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

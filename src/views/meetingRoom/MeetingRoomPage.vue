@@ -1,13 +1,21 @@
 <template>
   <div class='meeting-room-panel'>
-    <el-col class='card-group' :span='8' v-for='(item, index) in officeList' :key='index'>
-      <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>
-        <div class='card-body' @click='selectMeetingRoom(item)'>
-          <div class='card-label'>{{item}}</div>
-          <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
+    <el-carousel :interval='4000' type='card' height='420px'>
+      <el-carousel-item v-for='(item, index) in officeList' :key='index'>
+        <div @click='selectMeetingRoom(item.office)'>
+         <div class='office-label'>{{item.office}}</div>
+          <el-image style='width: 100%;height: 420px' :src='item.image' fit='fit'/>
         </div>
-      </el-card>
-    </el-col>
+      </el-carousel-item>
+    </el-carousel>
+<!--    <el-col class='card-group' :span='8' v-for='(item, index) in officeList' :key='index'>-->
+<!--      <el-card class='meeting-room-card' :body-style='{padding: "0px"}'>-->
+<!--        <div class='card-body' @click='selectMeetingRoom(item)'>-->
+<!--          <div class='card-label'>{{item}}</div>-->
+<!--          <img class='meeting-room-img' src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>-->
+<!--        </div>-->
+<!--      </el-card>-->
+<!--    </el-col>-->
   </div>
 </template>
 
@@ -31,15 +39,35 @@ export default {
       let result = await queryMeetingRoomList();
       if (result) {
         this.meetingRoomGroup = _.groupBy(result, 'office');
-        this.officeList = _.keys(this.meetingRoomGroup);
+        this.genOfficeList(_.keys(this.meetingRoomGroup));
       }
+    },
+    genOfficeList (keys) {
+      _.forEach(keys, key => {
+        let office = { office: key };
+        switch (key) {
+          case 'B5-5F-1':
+            office.image = require('../../assets/china.jpeg');
+            break;
+          case 'B5-5F-2':
+            office.image = require('../../assets/ocean.jpeg');
+            break;
+          case 'B6-3F':
+            office.image = require('../../assets/number.jpeg');
+            break;
+          case 'B6-5F':
+            office.image = require('../../assets/planet.jpeg');
+            break;
+        }
+        this.officeList.push(office);
+      });
     },
     selectMeetingRoom (office) {
       const meetingRoomDetail = this.meetingRoomGroup[office];
       this.$router.push({
         path: '/meetingRoomDetail',
         query: {
-          meetingRoomDetail
+          meetingRoomDetail: JSON.stringify(meetingRoomDetail)
         }
       });
     }
@@ -49,8 +77,21 @@ export default {
 
 <style scoped>
   .meeting-room-panel {
-    padding: 30px 30px;
+    padding: 140px 50px;
   }
+  .office-label {
+    position: fixed!important;
+    padding: 30px;
+    color: white;
+    font-weight: bolder;
+    font-size: 30px;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    border: rgba(0, 21, 41, 0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+  }
+
   .card-group {
     padding: 10px 0;
   }
@@ -91,8 +132,9 @@ export default {
     background: #3AA329;
   }
   .meeting-room-img {
+    position: relative;
     width: 100%;
-    height: 100%;
+    top: -240px;
     transition: all 0.2s linear;
   }
   .meeting-room-img:hover {

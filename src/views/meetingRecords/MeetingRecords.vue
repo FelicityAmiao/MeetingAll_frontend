@@ -1,9 +1,9 @@
 <template>
-  <el-container>
+  <el-container class='meeting-records'>
     <el-main>
       <el-row class='demo-autocomplete'>
         <el-col :span='20'>
-          <label style='float: left;font-size: 18px'>{{title}}</label>
+          <label style='float: left;font-size: 18px;color: white'>{{title}}</label>
         </el-col>
         <el-col :span='4'>
           <el-input
@@ -180,12 +180,13 @@ export default {
         { key: 'startTime', value: '开始时间' },
         { key: 'endTime', value: '结束时间' },
         { key: 'duration', value: '耗时' }
-      ],
-      roomOptions: []
+      ]
     };
   },
   mounted () {
-    this.loadMeetingRecords();
+    if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
+      this.loadMeetingRecords();
+    }
   },
   computed: {
     updatedRecord () {
@@ -209,7 +210,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async (vm) => {
-      if (vm.$store.getters.token !== undefined) {
+      if (vm.$store.getters['user/token'] !== undefined && vm.$store.getters['user/token'] !== '') {
         await vm.loadMeetingRecords();
         await vm.loadMeetingRecords();
       }
@@ -217,3 +218,16 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .meeting-records {
+    padding-top: 75px;
+  }
+
+  >>>.el-pagination__total {
+    color: #f3f4f7;
+  }
+
+  >>>.el-pagination__jump {
+    color: white!important;
+  }
+</style>

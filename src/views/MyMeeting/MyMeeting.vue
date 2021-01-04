@@ -1,104 +1,101 @@
 <template>
   <div class='block'>
-    <el-container>
-      <el-header>
-        <el-row>
-          <el-button icon='el-icon-circle-plus' type='primary' @click='openDialog' v-show='!this.showMeeting'>新建会议</el-button>
+    <el-card style='width: 50%;margin: auto;' v-show='!showAddDialog && this.showMeeting'>
+      <div slot='header' style='margin: auto;width: fit-content;'>
+        <span>{{meeting.subject}}</span>
+      </div>
+      <div>
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>会议室</el-col>
+          <el-col :span='6'>{{meeting.roomStr}}</el-col>
         </el-row>
-      </el-header>
-      <el-main>
-        <el-card style='width: 50%;margin: auto;' v-show='this.showMeeting'>
-          <div slot='header' style='margin: auto;width: fit-content;'>
-            <span>{{meeting.subject}}</span>
-          </div>
-          <div>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>会议室</el-col>
-              <el-col :span='6'>{{meeting.roomStr}}</el-col>
-            </el-row>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>语言类型</el-col>
-              <el-col :span='6'>{{meeting.languageStr}}</el-col>
-            </el-row>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>日期</el-col>
-              <el-col :span='6'>{{meeting.startDate}}</el-col>
-            </el-row>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>开始时间</el-col>
-              <el-col :span='6'>{{meeting.startTime}}</el-col>
-            </el-row>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>结束时间</el-col>
-              <el-col :span='6'>{{meeting.endTime}}</el-col>
-            </el-row>
-            <el-row type='flex' class='row-bg' justify='center'>
-              <el-col :span='6'>状态</el-col>
-              <el-col :span='6'>
-                <el-tag v-if='meeting.status==="新建"' type='success'>{{meeting.status}}</el-tag>
-                <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>
-                  {{meeting.status}}
-                </el-tag>
-                <el-tag v-else>{{meeting.status}}</el-tag>
-              </el-col>
-            </el-row>
-          </div>
-          <div style='float: right;margin: 10px'>
-            <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
-            <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave || [`已录音`, `已结束`].includes(meeting.status)'>开始录音
-            </el-button>
-            <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音
-            </el-button>
-            <el-button type='success' @click='finishMeeting'>结束会议</el-button>
-          </div>
-          <div
-            v-if='showVoiceWave'
-            style='height:100px;width:100%;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
-            class='ctrlProcessWave'
-          ></div>
-        </el-card>
-        <div class='mainBox'>
-          <!-- <div
-            style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
-          >
-            <div
-              class='ctrlProcessX'
-              style='height:40px;background:#0B1;position:absolute;'
-              :style='{ width: powerLevel + "%" }'
-            ></div>
-            <div
-              class='ctrlProcessT'
-              style='padding-left:50px; line-height:40px; position: relative;'
-            >
-              {{ duration + "/" + powerLevel }}
-            </div>
-          </div> -->
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>语言类型</el-col>
+          <el-col :span='6'>{{meeting.languageStr}}</el-col>
+        </el-row>
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>日期</el-col>
+          <el-col :span='6'>{{meeting.startDate}}</el-col>
+        </el-row>
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>开始时间</el-col>
+          <el-col :span='6'>{{meeting.startTime}}</el-col>
+        </el-row>
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>结束时间</el-col>
+          <el-col :span='6'>{{meeting.endTime}}</el-col>
+        </el-row>
+        <el-row type='flex' class='row-bg' justify='center'>
+          <el-col :span='6'>状态</el-col>
+          <el-col :span='6'>
+            <el-tag v-if='meeting.status==="新建"' type='success'>{{meeting.status}}</el-tag>
+            <el-tag v-else-if='meeting.status==="正在录音"||meeting.status==="正在生成报告"' type='warning'>
+              {{meeting.status}}
+            </el-tag>
+            <el-tag v-else>{{meeting.status}}</el-tag>
+          </el-col>
+        </el-row>
+      </div>
+      <div style='float: right;margin: 10px'>
+        <el-button v-show='meeting.status==="新建"' type='warning' @click='openEditDialog'>编辑</el-button>
+        <el-button type='primary' @click='startRecord' icon='el-icon-video-play' :disabled='showVoiceWave || [`已录音`, `已结束`].includes(meeting.status)'>开始录音
+        </el-button>
+        <el-button type='danger' @click='stopRecord' icon='el-icon-video-pause' :disabled='!showVoiceWave'>结束录音
+        </el-button>
+        <el-button type='success' @click='finishMeeting'>结束会议</el-button>
+      </div>
+      <div
+        v-if='showVoiceWave'
+        style='height:100px;width:100%;border:1px solid #ccc;box-sizing: border-box;display:inline-block;vertical-align:bottom'
+        class='ctrlProcessWave'
+      ></div>
+    </el-card>
+    <!-- <div class='mainBox'> -->
+      <!-- <div
+        style='height:40px;width:300px;display:inline-block;background:#999;position:relative;vertical-align:bottom'
+      >
+        <div
+          class='ctrlProcessX'
+          style='height:40px;background:#0B1;position:absolute;'
+          :style='{ width: powerLevel + "%" }'
+        ></div>
+        <div
+          class='ctrlProcessT'
+          style='padding-left:50px; line-height:40px; position: relative;'
+        >
+          {{ duration + "/" + powerLevel }}
         </div>
-      </el-main>
-    </el-container>
-    <el-dialog :title='dialogTitle' :visible.sync='showAddDialog' :before-close='resetForm' center>
-      <el-form :model='newMeeting' label-width='100px' ref='newMeeting'>
-        <el-form-item label='会议主题' prop='subject'>
-          <el-input type='textarea' :rows='2' v-model='newMeeting.subject' style='width: 400px'></el-input>
+      </div> -->
+    <!-- </div> -->
+    <el-card v-show='showAddDialog' style='width: 50%;margin: auto;'>
+      <div slot='header' style='margin: auto;width: fit-content;'>
+        <span>新建会议</span>
+      </div>
+      <div>
+        <el-form :model='newMeeting' label-width='250px' ref='newMeeting' label-position='right'>
+        <el-form-item label='会议主题：' prop='subject'>
+          <el-input type='textarea' :rows='2' v-model='newMeeting.subject' style='width: 80%'></el-input>
         </el-form-item>
-        <el-form-item label='会议室' prop='room'>
+        <el-form-item label='会议室：' prop='room'>
           <el-cascader
+            style='width: 80%'
             v-model='newMeeting.room'
             :options='roomOptions'></el-cascader>
         </el-form-item>
-        <el-form-item label='语言类型' prop='language'>
-          <el-select v-model='newMeeting.language'>
+        <el-form-item label='语言类型：' prop='language'>
+          <el-select v-model='newMeeting.language' style='width: 80%'>
             <el-option v-for='type in languageTypes' :key='type.value' :label='type.name' :value='type.value'>
               <span style='float: left'>{{ type.name }}</span>
             </el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot='footer'>
+      <div style='text-align: right'>
         <el-button type='primary' @click='saveMeeting'>保存</el-button>
         <el-button plain @click='resetForm'>取消</el-button>
       </div>
-    </el-dialog>
+      </div>
+    </el-card>
     <login-dialog :showLoginDialog='showLoginDialog' @closeLoginDialog='closeLoginDialog'></login-dialog>
   </div>
 </template>
@@ -125,7 +122,7 @@ export default {
       showLoginDialog: false,
       dialogTitle: '会议信息',
       spanNum: 6,
-      showAddDialog: false,
+      showAddDialog: true,
       showMeeting: false,
       newMeeting: {
         meetingId: '',
@@ -160,7 +157,7 @@ export default {
     };
   },
   mounted () {
-    if (this.$store.getters.token !== undefined && this.$store.getters.token !== '') {
+    if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
       loadRoomOption().then(response => {
         this.roomOptions = response.data;
       });
@@ -200,7 +197,7 @@ export default {
       return val;
     },
     openDialog: function () {
-      if (this.$store.getters.token === undefined || this.$store.getters.token === '') {
+      if (this.$store.getters['user/token'] !== undefined && this.$store.getters['user/token'] !== '') {
         this.showLoginDialog = true;
         return;
       }
@@ -240,6 +237,7 @@ export default {
               });
             }
             this.showMeeting = false;
+            this.showAddDialog = true;
           }
           // this.formatterMeeting(response.data);
         }).catch(() => {
@@ -392,4 +390,7 @@ export default {
   .el-row {
     margin-bottom: 10px;
   }
+  .block {
+     padding-top: 80px;
+   }
 </style>
