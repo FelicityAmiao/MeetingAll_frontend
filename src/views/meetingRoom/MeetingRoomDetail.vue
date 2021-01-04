@@ -24,7 +24,7 @@
       </div>
     </el-drawer> -->
     <div class='status-tool-bar'>
-      <el-card v-if='isShowCard' shadow='hover'>
+      <el-card v-if='selectedRoom !== null' shadow='hover'>
         <div slot='header'>
           <span>{{selectedRoom.office}}</span>
         </div>
@@ -105,7 +105,6 @@ export default {
       return _.isEqual(status, '1');
     },
     selectRoom (room) {
-      this.isShowCard = room !== null;
       this.selectedRoom = room;
     },
     closeLoginDialog () {
@@ -141,7 +140,7 @@ export default {
       immediate: true,
       handler: function (value) {
         this.selectedRoom = null;
-        this.meetingRoomDetail = JSON.parse(value);
+        this.meetingRoomDetail = _.isEmpty(value) ? [] : JSON.parse(value);
       }
     },
     updatedRoom: {
