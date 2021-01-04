@@ -2,7 +2,7 @@
   <div id='homePage' class='home-page'>
     <div class='header'>
       <el-col :span='8'>
-        <div class='system-icon'>Meeting All</div>
+        <div class='system-icon' @click='$router.push({path: "/meetingRoom"})'>Meeting All</div>
       </el-col>
       <el-col :span='16'>
         <div class='right-top-menu' v-if='username !== "" && username != null'>
@@ -20,7 +20,7 @@
     </div>
     <div>
       <div class='tool-bar' v-if='!isDefaultRoute'>
-        <el-button class='circle-btn' icon='el-icon-s-home' circle size='small' @click='$router.push({path: "/meetingRoom"})'/>
+        <el-button class='circle-btn' icon='el-icon-s-home' circle @click='$router.push({path: "/meetingRoom"})'/>
       </div>
       <keep-alive>
         <router-view/>
@@ -233,6 +233,7 @@ export default {
     margin-top: 20px;
     font-size: 18px;
     font-style: revert;
+    cursor: pointer;
   }
 
   .tool-bar {

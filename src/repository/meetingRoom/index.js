@@ -8,8 +8,7 @@ export const queryAllMeetingRooms = async () => {
 
 export const updateDeviceStatus = async content => {
   let url = `/meetingRooms`;
-  const body = await post(url, content);
-  return body.data;
+  return post(url, content);
 };
 
 export const uploadAudio = async (data) => {

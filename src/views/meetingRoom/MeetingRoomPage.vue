@@ -47,16 +47,16 @@ export default {
         let office = { office: key };
         switch (key) {
           case 'B5-5F-1':
-            office.image = require('../../assets/china.jpeg');
+            // office.image = require('../../assets/china.jpeg');
             break;
           case 'B5-5F-2':
-            office.image = require('../../assets/ocean.jpeg');
+            // office.image = require('../../assets/ocean.jpeg');
             break;
           case 'B6-3F':
-            office.image = require('../../assets/number.jpeg');
+            // office.image = require('../../assets/number.jpeg');
             break;
           case 'B6-5F':
-            office.image = require('../../assets/planet.jpeg');
+            // office.image = require('../../assets/planet.jpeg');
             break;
         }
         this.officeList.push(office);
@@ -77,7 +77,7 @@ export default {
 
 <style scoped>
   .meeting-room-panel {
-    padding: 140px 50px;
+    padding: 180px 180px;
   }
   .office-label {
     position: fixed!important;
