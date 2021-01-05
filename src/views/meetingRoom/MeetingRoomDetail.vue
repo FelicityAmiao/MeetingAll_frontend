@@ -63,6 +63,11 @@
         <world-map-chart :meeting-room-list='meetingRoomDetail' @select-room='selectRoom'/>
       </keep-alive>
     </div>
+    <div v-if='isDigitMeetingRoom'>
+      <keep-alive>
+        <digit-chart :meeting-room-list='meetingRoomDetail'/>
+      </keep-alive>
+    </div>
   </div>
 </template>
 
@@ -70,13 +75,14 @@
 import SolarSystemChart from '../../components/eChart/SolarSystemChart';
 import ChinaMapChart from '../../components/eChart/ChinaMapChart';
 import WorldMapChart from '../../components/eChart/WorldChart';
+import DigitChart from '../../components/eChart/DigitChart';
 import { updateDevicePowerStatus } from '../../service/meetingRoom/index';
 import _ from 'lodash';
 import LoginDialog from '../LoginDialog';
 
 export default {
   name: 'MeetingRoomDetail',
-  components: { SolarSystemChart, LoginDialog, ChinaMapChart, WorldMapChart },
+  components: { SolarSystemChart, LoginDialog, ChinaMapChart, WorldMapChart, DigitChart },
   data () {
     return {
       visible: false,
@@ -99,6 +105,9 @@ export default {
     },
     isSeaMeetingRoom () {
       return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B5-5F-2', _.get(this.meetingRoomDetail[0], 'office', ''));
+    },
+    isDigitMeetingRoom () {
+      return !_.isEmpty(this.meetingRoomDetail) && _.isEqual('B6-3F', _.get(this.meetingRoomDetail[0], 'office', ''));
     }
   },
   methods: {

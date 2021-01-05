@@ -53,7 +53,7 @@ export default {
             // office.image = require('../../assets/ocean.jpeg');
             break;
           case 'B6-3F':
-            // office.image = require('../../assets/number.jpeg');
+            office.image = require('../../assets/digit.png');
             break;
           case 'B6-5F':
             // office.image = require('../../assets/planet.jpeg');
