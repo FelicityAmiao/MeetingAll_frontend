@@ -154,11 +154,9 @@ export default {
     },
     selectMeetingRoom (office) {
       const meetingRoomDetail = this.meetingRoomGroup[office];
+      localStorage.setItem('meetingRoomDetail', JSON.stringify(meetingRoomDetail));
       this.$router.push({
-        path: '/meetingRoomDetail',
-        query: {
-          meetingRoomDetail: JSON.stringify(meetingRoomDetail)
-        }
+        path: '/meetingRoomDetail'
       });
     }
   }
