@@ -3,14 +3,14 @@
     <el-col class='card-group' :span='4' v-for='(item, index) in roomList' :key='index'>
       <el-card class='meeting-room-card'>
         <div>
-          <div class="box"  :class="flip[index] ? 'flipped' : '' ">
-            <div class="card front">
+          <div class='box'  :class='flip[index] ? "flipped" : "" '>
+            <div class='card front'>
               <span :class='`status-icon-front ${isBusyStatus(item.currentStatus) ? "icon-background-red" : "icon-background-green"}`'></span>
-              <div :class="flip[index] ? '' : 'roomFont' "><i>{{getRoomDescriptionByRoomName(item.room)}}</i></div>
+              <div :class='flip[index] ?"" : "roomFont" '><i>{{getRoomDescriptionByRoomName(item.room)}}</i></div>
             </div>
-            <div class="card back">
-              <el-row class="meeting-room-detail">
-                <div class="meeting-room-name"><i>{{getRoomDescriptionByRoomName(item.room)}}</i></div>
+            <div class='card back'>
+              <el-row class='meeting-room-detail'>
+                <div class='meeting-room-name'><i>{{getRoomDescriptionByRoomName(item.room)}}</i></div>
                 <el-row>
                   <el-col :span='8'>Room:</el-col>
                   <el-col :span='12'>{{item.room}}</el-col>
@@ -39,111 +39,111 @@
 </template>
 
 <script>
-  import {queryMeetingRoomList} from '../../service/meetingRoom';
-  import {updateDevicePowerStatus} from '../../service/meetingRoom';
-  import LoginDialog from '../../views/LoginDialog';
-  import _ from 'lodash';
+import { queryMeetingRoomList, updateDevicePowerStatus } from '../../service/meetingRoom';
 
-  export default {
-    name: 'MeetingRoomPage',
-    components: {LoginDialog},
-    props: {
-      meetingRoomList: {
-        type: Array,
-        defaults: () => []
+import LoginDialog from '../../views/LoginDialog';
+import _ from 'lodash';
+
+export default {
+  name: 'MeetingRoomPage',
+  components: { LoginDialog },
+  props: {
+    meetingRoomList: {
+      type: Array,
+      defaults: () => []
+    }
+  },
+  data () {
+    return {
+      roomList: this.meetingRoomList,
+      flip: [],
+      showLoginDialog: false,
+      meetingRoomDetail: [],
+      meetingRoomGroup: {},
+      meetingRoomNameMap: [
+        {
+          room: '1',
+          description: '意'
+        },
+        {
+          room: '2',
+          description: '耳'
+        }, {
+          room: '3',
+          description: '叁'
+        }, {
+          room: '4',
+          description: '思'
+        }, {
+          room: '5',
+          description: '悟'
+        }, {
+          room: '6',
+          description: '溜'
+        }, {
+          room: '7',
+          description: '奇'
+        }, {
+          room: '8',
+          description: '霸'
+        }, {
+          room: '9',
+          description: '就'
+        }, {
+          room: '10',
+          description: '實'
+        }
+      ]
+    };
+  },
+  created () {
+    this.queryMeetingRoomList().then(val => {
+      this.init();
+    });
+  },
+  methods: {
+    async queryMeetingRoomList () {
+      let result = await queryMeetingRoomList();
+      if (result) {
+        this.meetingRoomGroup = _.groupBy(result, 'office');
+        this.roomList = this.meetingRoomGroup['B6-3F'];
       }
     },
-    data() {
-      return {
-        roomList: this.meetingRoomList,
-        flip: [],
-        showLoginDialog: false,
-        meetingRoomDetail: [],
-        meetingRoomGroup: {},
-        meetingRoomNameMap: [
-          {
-            room: '1',
-            description: '壹'
-          },
-          {
-            room: '2',
-            description: '贰'
-          },{
-            room: '3',
-            description: '叁'
-          },{
-            room: '4',
-            description: '思'
-          },{
-            room: '5',
-            description: '悟'
-          },{
-            room: '6',
-            description: '陆'
-          },{
-            room: '7',
-            description: '奇'
-          },{
-            room: '8',
-            description: '霸'
-          },{
-            room: '9',
-            description: '就'
-          },{
-            room: '10',
-            description: '拾'
-          },
-        ]
-      };
+    closeLoginDialog () {
+      this.showLoginDialog = false;
     },
-    created() {
-      this.queryMeetingRoomList().then(val => {
-        this.init();
+    flipCard (currentStatus, index) {
+      if (currentStatus === '0') {
+        this.$set(this.flip, index, !this.flip[index]);
+      }
+    },
+    init () {
+      this.roomList.forEach(room => room.currentStatus === '1' ? this.flip.push(false) : this.flip.push(true));
+    },
+    isBusyStatus (status) {
+      return _.isEqual(status, '1');
+    },
+    async updateDeviceStatus (room) {
+      console.log(room.isDeviceStarted);
+      if (room.isDeviceStarted) {
+        if (this.$store.getters['user/token'] === undefined || this.$store.getters['user/token'] === '') {
+          this.showLoginDialog = true;
+          return;
+        }
+        await updateDevicePowerStatus(room);
+        this.$message.success('Device started successfully');
+      }
+    },
+    getRoomDescriptionByRoomName (roomName) {
+      let result = this.meetingRoomNameMap.filter(val => {
+        return val.room === roomName;
       });
-    },
-    methods: {
-      async queryMeetingRoomList() {
-        let result = await queryMeetingRoomList();
-        if (result) {
-          this.meetingRoomGroup = _.groupBy(result, 'office');
-          this.roomList = this.meetingRoomGroup['B6-3F'];
-        }
-      },
-      closeLoginDialog() {
-        this.showLoginDialog = false;
-      },
-      flipCard(currentStatus, index) {
-        if (currentStatus === '0') {
-          this.$set(this.flip, index, !this.flip[index]);
-        }
-      },
-      init() {
-        this.roomList.forEach(room => room.currentStatus == '1' ? this.flip.push(false) : this.flip.push(true));
-      },
-      isBusyStatus(status) {
-        return _.isEqual(status, '1');
-      },
-      async updateDeviceStatus(room) {
-        console.log(room.isDeviceStarted);
-        if (room.isDeviceStarted) {
-          if (this.$store.getters['user/token'] === undefined || this.$store.getters['user/token'] === '') {
-            this.showLoginDialog = true;
-            return;
-          }
-          await updateDevicePowerStatus(room);
-          this.$message.success('Device started successfully');
-        }
-      },
-      getRoomDescriptionByRoomName (roomName) {
-        let result = this.meetingRoomNameMap.filter(val => {
-          return val.room === roomName
-        });
-        if (result[0]) {
-          return result[0].description;
-        }
+      if (result[0]) {
+        return result[0].description;
       }
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
