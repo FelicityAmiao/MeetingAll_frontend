@@ -97,9 +97,7 @@ export default {
     };
   },
   created () {
-    this.queryMeetingRoomList().then(val => {
-      this.init();
-    });
+    this.queryMeetingRoomList();
   },
   methods: {
     async queryMeetingRoomList () {
@@ -118,13 +116,14 @@ export default {
       }
     },
     init () {
-      this.roomList.forEach(room => room.currentStatus === '1' ? this.flip.push(false) : this.flip.push(true));
+      this.roomList.forEach((room, index) => {
+        room.currentStatus === '1' ? this.flip[index] = false : this.flip[index] = true;
+      });
     },
     isBusyStatus (status) {
       return _.isEqual(status, '1');
     },
     async updateDeviceStatus (room) {
-      console.log(room.isDeviceStarted);
       if (room.isDeviceStarted) {
         if (this.$store.getters['user/token'] === undefined || this.$store.getters['user/token'] === '') {
           room.isDeviceStarted = !room.isDeviceStarted;
@@ -141,6 +140,33 @@ export default {
       });
       if (result[0]) {
         return result[0].description;
+      }
+    },
+    updateRoomStatus (value) {
+      const index = _.findIndex(this.roomList, { id: value.id });
+      if (index === -1) {
+        return;
+      }
+      this.$emit('select-room');
+      this.$set(this.roomList, index, value);
+    }
+  },
+  computed: {
+    updatedRoom () {
+      return this.$store.getters['socket/GET_UPDATED_ROOM'];
+    }
+  },
+  watch: {
+    updatedRoom: {
+      deep: true,
+      handler: function (value) {
+        this.updateRoomStatus(value);
+      }
+    },
+    roomList: {
+      deep: true,
+      handler: function (value) {
+        this.init();
       }
     }
   }

@@ -151,7 +151,7 @@ export default {
       doc.style.width = element.offsetWidth + 'px';
     },
     toolTipFormatter (params) {
-      let statusMarker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.data.status ? 'red' : 'green'};"></span>`;
+      let statusMarker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.data.currentStatus === '1' ? 'red' : 'green'};"></span>`;
       let roomMarker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color: #0f59a4;};"></span>`;
       let htmlStr = '';
       htmlStr += roomMarker;

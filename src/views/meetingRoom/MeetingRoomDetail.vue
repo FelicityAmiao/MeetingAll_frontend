@@ -65,7 +65,7 @@
     </div>
     <div v-if='isDigitMeetingRoom'>
       <keep-alive>
-        <digit-chart :meeting-room-list='meetingRoomDetail'/>
+        <digit-chart :meeting-room-list='meetingRoomDetail' @select-room='selectDigitRoom'/>
       </keep-alive>
     </div>
   </div>
@@ -116,6 +116,9 @@ export default {
     },
     selectRoom (room) {
       this.selectedRoom = room;
+    },
+    selectDigitRoom () {
+      this.selectedRoom = null;
     },
     closeLoginDialog () {
       this.showLoginDialog = false;
