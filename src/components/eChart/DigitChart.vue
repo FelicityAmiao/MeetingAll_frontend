@@ -127,6 +127,7 @@ export default {
       console.log(room.isDeviceStarted);
       if (room.isDeviceStarted) {
         if (this.$store.getters['user/token'] === undefined || this.$store.getters['user/token'] === '') {
+          room.isDeviceStarted = !room.isDeviceStarted;
           this.showLoginDialog = true;
           return;
         }
