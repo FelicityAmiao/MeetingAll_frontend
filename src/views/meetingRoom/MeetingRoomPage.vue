@@ -47,16 +47,16 @@ export default {
         let office = { office: key };
         switch (key) {
           case 'B5-5F-1':
-            // office.image = require('../../assets/china.jpeg');
+            office.image = require('../../assets/china.png');
             break;
           case 'B5-5F-2':
-            // office.image = require('../../assets/ocean.jpeg');
+            office.image = require('../../assets/ocean.png');
             break;
           case 'B6-3F':
             office.image = require('../../assets/digit.png');
             break;
           case 'B6-5F':
-            // office.image = require('../../assets/planet.jpeg');
+            office.image = require('../../assets/planet.png');
             break;
         }
         this.officeList.push(office);
@@ -86,6 +86,7 @@ export default {
     z-index: 3;
     width: 100%;
     height: 100%;
+    background-color: rgba(77, 79, 82, 0.08);
     border: rgba(0, 21, 41, 0.08);
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
